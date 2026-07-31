@@ -6,14 +6,13 @@ const AudioEngine = (function() {
   'use strict';
 
   // Sound file mappings (relative paths)
-  // Uses existing don-gian-anh-yeu-em.mp3 to avoid 404 errors
   const SOUND_PATHS = {
-    background: ['./sounds/don-gian-anh-yeu-em.mp3'],
-    typing: [],
-    click: [],
-    open: [],
-    fireworks: [],
-    ending: []
+    background: ['./sounds/don-gian-anh-yeu-em.mp3', './sounds/background.mp3'],
+    typing: ['./sounds/typing.mp3'],
+    click: ['./sounds/click.mp3'],
+    open: ['./sounds/open.mp3'],
+    fireworks: ['./sounds/fireworks.mp3'],
+    ending: ['./sounds/ending.mp3']
   };
 
   let audioContext = null;
@@ -21,8 +20,9 @@ const AudioEngine = (function() {
   let isMuted = false;
   let isUnlocked = false;
 
-  // Initialize Web Audio API Context
+  // Initialize Web Audio API Context (ONLY after user gesture unlock)
   function getAudioContext() {
+    if (!isUnlocked) return null;
     if (!audioContext) {
       const AudioContextClass = window.AudioContext || window.webkitAudioContext;
       if (AudioContextClass) {
@@ -47,10 +47,12 @@ const AudioEngine = (function() {
       document.removeEventListener('click', unlockHandler);
       document.removeEventListener('touchstart', unlockHandler);
       document.removeEventListener('keydown', unlockHandler);
+      document.removeEventListener('pointerdown', unlockHandler);
     };
     document.addEventListener('click', unlockHandler);
     document.addEventListener('touchstart', unlockHandler);
     document.addEventListener('keydown', unlockHandler);
+    document.addEventListener('pointerdown', unlockHandler);
   }
 
   // One-time AudioContext initialization on first user gesture
@@ -63,53 +65,12 @@ const AudioEngine = (function() {
 
   // Start / resume background music
   function bgPlay() {
-    if (!bgAudio || isMuted) return;
+    if (!bgAudio || isMuted || !isUnlocked) return;
     bgAudio.play().then(() => {
       updateUIState(true);
-    }).catch(() => {
-      startSynthesizedAmbient();
+    }).catch(err => {
+      console.log('Autoplay blocked, synth mode:', err);
     });
-  }
-
-  let synthInterval = null;
-  function startSynthesizedAmbient() {
-    if (synthInterval || isMuted || !isUnlocked) return;
-    const ctx = getAudioContext();
-    if (!ctx) return;
-
-    const chords = [
-      [261.63, 329.63, 392.00, 493.88], // Cmaj7
-      [220.00, 261.63, 329.63, 392.00], // Am7
-      [174.61, 220.00, 261.63, 329.63], // Fmaj7
-      [196.00, 246.94, 293.66, 349.23]  // G7
-    ];
-    let chordIdx = 0;
-
-    function playChordStep() {
-      if (isMuted) return;
-      const now = ctx.currentTime;
-      const currentChord = chords[chordIdx % chords.length];
-      chordIdx++;
-
-      currentChord.forEach((freq, i) => {
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(freq, now + i * 0.15);
-
-        gain.gain.setValueAtTime(0, now);
-        gain.gain.linearRampToValueAtTime(0.04, now + 1.0);
-        gain.gain.exponentialRampToValueAtTime(0.0001, now + 4.5);
-
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.start(now + i * 0.15);
-        osc.stop(now + 4.5);
-      });
-    }
-
-    playChordStep();
-    synthInterval = setInterval(playChordStep, 4000);
   }
 
   // Play Sound Effects (only after user has unlocked audio)
@@ -185,10 +146,6 @@ const AudioEngine = (function() {
     if (bgAudio) {
       if (isMuted) {
         bgAudio.pause();
-        if (synthInterval) {
-          clearInterval(synthInterval);
-          synthInterval = null;
-        }
       } else {
         if (!isUnlocked) {
           unlockAudio();
