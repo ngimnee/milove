@@ -1,0 +1,92 @@
+/* ==========================================================================
+   CINEMATIC INTRO SECTION STYLES
+   ========================================================================== */
+#intro-section {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 9000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(6, 5, 14, 0.85);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 1.5s ease, visibility 1.5s ease;
+}
+
+#intro-section.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+#intro-section.fade-out {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.intro-content {
+  max-width: 800px;
+  padding: 40px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+}
+
+.intro-text-line {
+  font-family: var(--font-serif);
+  font-size: 2.5rem;
+  font-weight: 300;
+  line-height: 1.6;
+  color: var(--accent-warm-white);
+  opacity: 0;
+  transform: translateY(20px) scale(0.96);
+  filter: blur(8px);
+  transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+  text-shadow: 0 0 20px rgba(255, 105, 180, 0.4);
+}
+
+.intro-text-line.show {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  filter: blur(0);
+}
+
+.intro-text-highlight {
+  font-family: var(--font-romantic);
+  font-size: 3.4rem;
+  color: var(--accent-pink);
+  display: block;
+  margin-top: 10px;
+  text-shadow: 0 0 25px rgba(255, 105, 180, 0.8), 0 0 40px rgba(155, 81, 224, 0.5);
+}
+
+.intro-enter-btn {
+  margin-top: 40px;
+  opacity: 0;
+  transform: scale(0.9);
+  transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.intro-enter-btn.show {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Subtle sparkle line divider */
+.intro-divider {
+  width: 120px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent-pink), transparent);
+  margin: 15px 0;
+  opacity: 0.6;
+}

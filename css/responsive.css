@@ -1,0 +1,68 @@
+/* ==========================================================================
+   RESPONSIVE OVERRIDES (MOBILE, TABLET, DESKTOP)
+   ========================================================================== */
+
+/* Large Screens & Laptops */
+@media screen and (max-width: 1200px) {
+  .galaxy-title { font-size: 3.2rem; }
+  .romantic-heading { font-size: 2.6rem; }
+  .gallery-grid { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+}
+
+/* Medium Tablets & iPads */
+@media screen and (max-width: 992px) {
+  .galaxy-title { font-size: 2.8rem; }
+  .intro-text-line { font-size: 2.1rem; }
+  .intro-text-highlight { font-size: 2.8rem; }
+
+  /* Timeline adjustment for tablet */
+  .timeline-line { left: 30px; }
+  .timeline-item { width: 100%; padding-left: 80px; padding-right: 20px; }
+  .timeline-item.left, .timeline-item.right { left: 0; text-align: left; }
+  .timeline-item.left .timeline-node, .timeline-item.right .timeline-node { left: 14px; right: auto; }
+
+  .countdown-box { gap: 16px; }
+  .time-card { min-width: 100px; padding: 18px 12px; }
+  .time-number { font-size: 2.2rem; }
+}
+
+/* Mobile Phones (Portrait & Small Screens) */
+@media screen and (max-width: 600px) {
+  html { font-size: 14px; }
+  
+  .galaxy-title { font-size: 2.2rem; letter-spacing: 2px; }
+  .galaxy-subtitle { font-size: 1.6rem; }
+  
+  .intro-content { padding: 20px; }
+  .intro-text-line { font-size: 1.6rem; }
+  .intro-text-highlight { font-size: 2.2rem; }
+
+  /* Envelope mobile size */
+  .envelope-container { width: 290px; height: 205px; }
+  .envelope-flap { border-left-width: 145px; border-right-width: 145px; border-top-width: 110px; }
+  .pocket-left, .pocket-bottom { border-left-width: 145px; }
+  .pocket-right, .pocket-bottom { border-right-width: 145px; }
+  .pocket-left, .pocket-right { border-bottom-width: 105px; }
+  .pocket-bottom { border-bottom-width: 105px; }
+
+  .letter-paper-wrapper { padding: 32px 20px 24px; border-radius: 20px; }
+  .letter-header-title { font-size: 2.1rem; }
+  .letter-body { font-size: 1.05rem; line-height: 1.8; }
+
+  .gallery-grid { grid-template-columns: 1fr; }
+  .gallery-card { height: 320px; }
+
+  .quote-text { font-size: 1.4rem; min-height: 140px; }
+  .ending-title { font-size: 2.5rem; }
+  .ending-card { padding: 40px 20px; }
+
+  /* Disable heavy hover trails on mobile for maximum battery/60fps performance */
+  #custom-cursor, #custom-cursor-follower { display: none !important; }
+  *, *::before, *::after { cursor: auto !important; }
+}
+
+/* Touch devices orientation adjustments */
+@media (hover: none) and (pointer: coarse) {
+  .btn-romantic:hover { transform: none; }
+  .gallery-card:hover { transform: none; }
+}

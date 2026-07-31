@@ -1,0 +1,57 @@
+/* ==========================================================================
+   GALAXY & THREE.JS CONTAINER STYLES
+   ========================================================================== */
+.galaxy-section {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  z-index: 10;
+}
+
+#galaxy-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.galaxy-header {
+  text-align: center;
+  margin-bottom: 40px;
+  z-index: 20;
+  padding: 0 20px;
+  animation: floatHeader 6s ease-in-out infinite alternate;
+}
+
+.galaxy-title {
+  font-family: var(--font-title);
+  font-size: 3.8rem;
+  letter-spacing: 4px;
+  font-weight: 700;
+  text-transform: uppercase;
+  background: linear-gradient(135deg, #ffffff 20%, var(--accent-pink) 60%, var(--accent-cyan) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 15px rgba(255, 105, 180, 0.4));
+}
+
+.galaxy-subtitle {
+  font-family: var(--font-romantic);
+  font-size: 2.2rem;
+  color: var(--accent-warm-white);
+  margin-top: 8px;
+  opacity: 0.9;
+  text-shadow: 0 0 15px rgba(255, 105, 180, 0.6);
+}
+
+@keyframes floatHeader {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-10px); }
+}

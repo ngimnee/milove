@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>MiLove — Dành Riêng Cho Em</title>
+  <meta name="description" content="Trang web lãng mạn, điện ảnh gửi gắm những lời tâm sự chân thành nhất từ trái tim.">
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Nhật Ký Iu — Dành Riêng Cho Em">
+  <meta property="og:description" content="Có những lời anh đã muốn nói từ rất lâu... Hôm nay anh viết tất cả ở đây">
+  <meta property="og:image" content="./assets/images/memory1.svg">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="./favicon.ico">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Cinzel:wght@500;700&family=Dancing+Script:wght@600;700&family=Playfair+Display:ital,wght@0,500;0,700;1,400&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome Icons CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Custom Stylesheets (Strict Relative Paths) -->
+  <link rel="stylesheet" href="./css/style.css">
+  <link rel="stylesheet" href="./css/loading.css">
+  <link rel="stylesheet" href="./css/intro.css">
+  <link rel="stylesheet" href="./css/galaxy.css">
+  <link rel="stylesheet" href="./css/letter.css">
+  <link rel="stylesheet" href="./css/gallery.css">
+  <link rel="stylesheet" href="./css/timeline.css">
+  <link rel="stylesheet" href="./css/effects.css">
+  <link rel="stylesheet" href="./css/responsive.css">
+
+  <!-- External Libraries CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.19/bundled/lenis.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+
+  <!-- Custom Glowing Cursor & Trail -->
+  <div id="custom-cursor"></div>
+  <div id="custom-cursor-follower"></div>
+
+  <!-- Background Canvases & Aurora Effect Layer -->
+  <div id="bg-canvas-container">
+    <canvas id="galaxy-canvas"></canvas>
+    <canvas id="effects-canvas"></canvas>
+    <canvas id="fireworks-canvas"></canvas>
+    <div class="aurora-overlay"></div>
+  </div>
+
+  <!-- Audio Player Floating Widget -->
+  <div id="audio-widget">
+    <button id="audio-widget-btn" class="audio-btn" aria-label="Audio Control">
+      <i id="audio-icon" class="fas fa-music"></i>
+    </button>
+    <div class="sound-waves">
+      <span class="sound-bar"></span>
+      <span class="sound-bar"></span>
+      <span class="sound-bar"></span>
+      <span class="sound-bar"></span>
+    </div>
+    <span class="music-title-track">Nhạc Nền Lãng Mạn</span>
+  </div>
+
+  <!-- LOADING SCREEN -->
+  <section id="loading-screen">
+    <div class="loader-container">
+      <div class="orbit-ring">
+        <i class="fas fa-heart loader-heart"></i>
+      </div>
+      <div id="loading-percent" class="loading-percent">0%</div>
+      <div class="loading-subtext">Đang chuẩn bị một điều đặc biệt...</div>
+      <div class="progress-bar-wrapper">
+        <div id="progress-bar-fill" class="progress-bar-fill"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CINEMATIC INTRO OVERLAY -->
+  <section id="intro-section">
+    <div class="intro-content">
+      <div class="intro-text-line">Có những lời...</div>
+      <div class="intro-text-line">Anh đã muốn nói từ rất lâu...</div>
+      <div class="intro-divider"></div>
+      <div class="intro-text-line">
+        Hôm nay...
+        <span class="intro-text-highlight">Anh viết tất cả ở đây.</span>
+      </div>
+      <button id="intro-enter-btn" class="btn-romantic intro-enter-btn">
+        Khám Phá Bức Tâm Thư <i class="fas fa-heart-pulse"></i>
+      </button>
+    </div>
+  </section>
+
+  <!-- MAIN SCROLLABLE CONTENT WRAPPER -->
+  <main id="main-content">
+
+    <!-- GALAXY & 3D ENVELOPE SECTION -->
+    <section id="galaxy-section" class="galaxy-section">
+      <div class="galaxy-header">
+        <h1 class="galaxy-title">Bức Tâm Thư</h1>
+        <p class="galaxy-subtitle">Gửi em, tất cả những chân thành</p>
+      </div>
+
+      <!-- 3D Interactive Envelope -->
+      <div id="envelope-container" class="envelope-container">
+        <div id="envelope" class="envelope">
+          <div class="envelope-flap"></div>
+          <div class="envelope-pocket">
+            <div class="pocket-left"></div>
+            <div class="pocket-right"></div>
+            <div class="pocket-bottom"></div>
+          </div>
+          <div class="wax-seal">
+            <i class="fas fa-heart"></i>
+          </div>
+        </div>
+      </div>
+      <div class="envelope-hint">
+        <i class="fas fa-hand-pointer"></i> Chạm nhẹ vào phong bì để mở bức thư
+      </div>
+    </section>
+
+    <!-- EXPANDED FULL-SCREEN LETTER MODAL -->
+    <div id="letter-modal">
+      <div class="letter-paper-wrapper">
+        <button id="letter-close-btn" class="letter-close-btn" aria-label="Close Letter">
+          <i class="fas fa-times"></i>
+        </button>
+        <h2 class="letter-header-title">Gửi Em...</h2>
+        <div id="letter-body" class="letter-body">
+          <span id="letter-typewriter-text"></span>
+          <span id="typewriter-cursor" class="typewriter-cursor"></span>
+        </div>
+        <div id="letter-signature" class="letter-footer-signature"></div>
+
+        <!-- Typewriter Control Bar -->
+        <div class="typewriter-controls">
+          <button id="btn-type-pause" class="control-btn"><i class="fas fa-pause"></i> Tạm dừng</button>
+          <button id="btn-type-replay" class="control-btn"><i class="fas fa-redo"></i> Đọc lại</button>
+          <button id="btn-type-skip" class="control-btn"><i class="fas fa-forward"></i> Đọc hết</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- LOVE MEMORY GALLERY SECTION -->
+    <section id="gallery-section" class="gallery-section">
+      <div class="section-header">
+        <span class="section-tag">Kỷ Niệm Đáng Nhớ</span>
+        <h2 class="section-title">Những Khoảnh Khắc Đẹp Nhất</h2>
+      </div>
+
+      <div class="gallery-grid">
+        <!-- Photo Card 1 -->
+        <div class="gallery-card">
+          <div class="gallery-img-wrapper">
+            <img src="./assets/images/memory1.svg" alt="Khoảnh khắc đầu tiên" class="gallery-img">
+            <div class="gallery-overlay">
+              <span class="gallery-card-date">17 Tháng 03</span>
+              <h3 class="gallery-card-title">Khoảnh Khắc Đầu Tiên</h3>
+              <p class="gallery-card-desc">Ngày kỳ diệu khi ánh mắt chúng ta chạm nhau, bắt đầu cho một hành trình dịu dàng.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Photo Card 2 -->
+        <div class="gallery-card">
+          <div class="gallery-img-wrapper">
+            <img src="./assets/images/memory2.svg" alt="Ngày đầu đi chơi" class="gallery-img">
+            <div class="gallery-overlay">
+              <span class="gallery-card-date">25 Tháng 03</span>
+              <h3 class="gallery-card-title">Ngày đầu đi chơi</h3>
+              <p class="gallery-card-desc">Cùng nhau rảo bước qua từng con phố quen, tận hưởng những món ngon và tiếng cười rộn rã.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Photo Card 3 -->
+        <div class="gallery-card">
+          <div class="gallery-img-wrapper">
+            <img src="./assets/images/memory3.svg" alt="Bó hoa đầu tiên tặng em" class="gallery-img">
+            <div class="gallery-overlay">
+              <span class="gallery-card-date">05 Tháng 04</span>
+              <h3 class="gallery-card-title">Bó Hoa Đầu Tiên Tặng Em</h3>
+              <p class="gallery-card-desc">Trao em đóa hoa tươi thắm cùng tất cả sự dịu dàng và nâng niu chân thành nhất.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Photo Card 4 -->
+        <div class="gallery-card">
+          <div class="gallery-img-wrapper">
+            <img src="./assets/images/memory5.svg" alt="Date cùng Thái Bình" class="gallery-img">
+            <div class="gallery-overlay">
+              <span class="gallery-card-date">30 Tháng 04</span>
+              <h3 class="gallery-card-title">Date cùng Thái Bình</h3>
+              <p class="gallery-card-desc">Hành trình bình yên về lại mảnh đất thân thương của cả hai chúng ta, lưu giữ bao ấm áp.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Photo Card 5 -->
+        <div class="gallery-card">
+          <div class="gallery-img-wrapper">
+            <img src="./assets/images/memory4.svg" alt="Lời tỏ tình chân thành" class="gallery-img">
+            <div class="gallery-overlay">
+              <span class="gallery-card-date">08 Tháng 05</span>
+              <h3 class="gallery-card-title">Lời Tỏ Tình Chân Thành</h3>
+              <p class="gallery-card-desc">Dưới bầu trời đêm đầy sao, khoảnh khắc anh lấy hết can đảm trao em trái tim này.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Photo Card 6 -->
+        <div class="gallery-card">
+          <div class="gallery-img-wrapper">
+            <img src="./assets/images/memory6.svg" alt="Cafe & nặn đất sét" class="gallery-img">
+            <div class="gallery-overlay">
+              <span class="gallery-card-date">19 Tháng 07</span>
+              <h3 class="gallery-card-title">Cafe & Nặn Đất Sét</h3>
+              <p class="gallery-card-desc">Góc nhỏ bình yên bên tách cafe thơm, cùng em tỉ mỉ nhào nặn nên những kỷ niệm đong đầy tình yêu.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LIGHTBOX POPUP MODAL -->
+    <div id="lightbox-modal">
+      <div class="lightbox-content">
+        <button id="lightbox-close" class="lightbox-close"><i class="fas fa-times"></i></button>
+        <img id="lightbox-img" src="" alt="Zoomed view" class="lightbox-img">
+        <div class="lightbox-caption">
+          <h3 id="lightbox-title"></h3>
+          <p id="lightbox-desc"></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- LOVE JOURNEY TIMELINE SECTION -->
+    <section id="timeline-section" class="timeline-section">
+      <div class="section-header">
+        <span class="section-tag">Hành Trình Yêu Thương</span>
+        <h2 class="section-title">Những Cột Mốc Đáng Nhớ</h2>
+      </div>
+
+      <div class="timeline-container">
+        <div class="timeline-line"></div>
+
+        <!-- Timeline 1 -->
+        <div class="timeline-item left">
+          <div class="timeline-node"><i class="fas fa-heart"></i></div>
+          <div class="timeline-card">
+            <div class="timeline-date">17.03.2026</div>
+            <h3 class="timeline-title">Ngày Đầu Tiên Gặp Nhau</h3>
+            <p class="timeline-desc">Khoảnh khắc kì diệu đầu tiên khi ánh mắt anh chạm ánh mắt em.</p>
+          </div>
+        </div>
+
+        <!-- Timeline 2 -->
+        <div class="timeline-item right">
+          <div class="timeline-node"><i class="fas fa-star"></i></div>
+          <div class="timeline-card">
+            <div class="timeline-date">08.05.2026</div>
+            <h3 class="timeline-title">Lời Tỏ Tình Chân Thành</h3>
+            <p class="timeline-desc">Dưới bầu trời sao lấp lánh, anh đã lấy hết can đảm trao em trái tim này.</p>
+          </div>
+        </div>
+
+        <!-- Timeline 3 -->
+        <div class="timeline-item left">
+          <div class="timeline-node"><i class="fas fa-infinity"></i></div>
+          <div class="timeline-card">
+            <div class="timeline-date">Tương Lai & Mãi Mãi</div>
+            <h3 class="timeline-title">Lời Hứa Cho Tương Lai</h3>
+            <p class="timeline-desc">Cùng nhau đi qua mọi bão giông và viết tiếp những chương hạnh phúc nhất.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LIVE LOVE COUNTDOWN SECTION -->
+    <section id="countdown-section" class="countdown-section">
+      <div class="section-header">
+        <span class="section-tag">Thời Gian Đã Bên Nhau</span>
+        <h2 class="section-title">Hành Trình Tình Yêu Realtime</h2>
+      </div>
+
+      <div class="countdown-box">
+        <div class="time-card">
+          <span id="count-days" class="time-number">00</span>
+          <span class="time-label">Ngày</span>
+        </div>
+        <div class="time-card">
+          <span id="count-hours" class="time-number">00</span>
+          <span class="time-label">Giờ</span>
+        </div>
+        <div class="time-card">
+          <span id="count-mins" class="time-number">00</span>
+          <span class="time-label">Phút</span>
+        </div>
+        <div class="time-card">
+          <span id="count-secs" class="time-number">00</span>
+          <span class="time-label">Giây</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ROMANTIC QUOTES CAROUSEL SECTION -->
+    <section id="quotes-section" class="quotes-section">
+      <div class="section-header">
+        <span class="section-tag">Những Lời Thương</span>
+        <h2 class="section-title">Thông Điệp Yêu Thương</h2>
+      </div>
+
+      <div class="quote-card">
+        <i class="fas fa-quote-left quote-icon"></i>
+        <div id="quote-text" class="quote-text"></div>
+        <button id="quote-next-btn" class="btn-romantic quote-next-btn">
+          Đổi Lời Thấu Cảm <i class="fas fa-sparkles"></i>
+        </button>
+      </div>
+    </section>
+
+    <!-- GRAND FINALE & FIREWORKS SECTION -->
+    <section id="ending-section" class="ending-section">
+      <div class="ending-card">
+        <h2 class="ending-title">Cảm Ơn Em Vì Tất Cả</h2>
+        <p class="ending-text">Trái tim anh sẽ luôn là nơi bình yên nhất dành riêng cho em.</p>
+        <button id="finale-btn" class="btn-romantic">
+          Khám Phá Món Quà Cuối Cùng <i class="fas fa-heart"></i>
+        </button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Custom Scripts (Strict Relative Paths) -->
+  <script src="./js/audio.js"></script>
+  <script src="./js/cursor.js"></script>
+  <script src="./js/galaxy.js"></script>
+  <script src="./js/hearts.js"></script>
+  <script src="./js/sakura.js"></script>
+  <script src="./js/meteor.js"></script>
+  <script src="./js/fireworks.js"></script>
+  <script src="./js/loading.js"></script>
+  <script src="./js/intro.js"></script>
+  <script src="./js/typing.js"></script>
+  <script src="./js/countdown.js"></script>
+  <script src="./js/gallery.js"></script>
+  <script src="./js/timeline.js"></script>
+  <script src="./js/quotes.js"></script>
+  <script src="./js/scroll.js"></script>
+  <script src="./js/app.js"></script>
+
+</body>
+</html>
