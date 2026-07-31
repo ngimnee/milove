@@ -6,20 +6,20 @@ const AudioEngine = (function() {
   'use strict';
 
   // Sound file mappings (relative paths)
+  // Uses existing don-gian-anh-yeu-em.mp3 to avoid 404 errors
   const SOUND_PATHS = {
-    background: ['./sounds/background.mp3', './sounds/don-gian-anh-yeu-em.mp3'],
-    typing: ['./sounds/typing.mp3'],
-    click: ['./sounds/click.mp3'],
-    open: ['./sounds/open.mp3'],
-    fireworks: ['./sounds/fireworks.mp3'],
-    ending: ['./sounds/ending.mp3']
+    background: ['./sounds/don-gian-anh-yeu-em.mp3'],
+    typing: [],
+    click: [],
+    open: [],
+    fireworks: [],
+    ending: []
   };
 
   let audioContext = null;
   let bgAudio = null;
   let isMuted = false;
   let isUnlocked = false;
-  const audioCache = {};
 
   // Initialize Web Audio API Context
   function getAudioContext() {
@@ -35,25 +35,11 @@ const AudioEngine = (function() {
     return audioContext;
   }
 
-  // Preload sound files with fallback synthesizer
   function init() {
-    // Setup Background HTML5 Audio
     bgAudio = new Audio();
     bgAudio.loop = true;
     bgAudio.volume = 0.5;
-
-    // Try primary background track, fallback to secondary
-    let bgIndex = 0;
-    function tryLoadBg() {
-      if (bgIndex < SOUND_PATHS.background.length) {
-        bgAudio.src = SOUND_PATHS.background[bgIndex];
-        bgAudio.onerror = () => {
-          bgIndex++;
-          tryLoadBg();
-        };
-      }
-    }
-    tryLoadBg();
+    bgAudio.src = SOUND_PATHS.background[0];
 
     // Listen for first user interaction to unlock audio
     const unlockHandler = () => {
@@ -67,7 +53,7 @@ const AudioEngine = (function() {
     document.addEventListener('keydown', unlockHandler);
   }
 
-  // One-time AudioContext initialization (called on first gesture)
+  // One-time AudioContext initialization on first user gesture
   function unlockAudio() {
     if (isUnlocked) return;
     isUnlocked = true;
@@ -75,21 +61,19 @@ const AudioEngine = (function() {
     bgPlay();
   }
 
-  // Start / resume background music (can be called multiple times)
+  // Start / resume background music
   function bgPlay() {
     if (!bgAudio || isMuted) return;
     bgAudio.play().then(() => {
       updateUIState(true);
-    }).catch(err => {
-      console.log('Audio autoplay blocked, falling back to synth:', err);
+    }).catch(() => {
       startSynthesizedAmbient();
     });
   }
 
-  // Synthesize ambient romantic chord progression if MP3 audio fails
   let synthInterval = null;
   function startSynthesizedAmbient() {
-    if (synthInterval || isMuted) return;
+    if (synthInterval || isMuted || !isUnlocked) return;
     const ctx = getAudioContext();
     if (!ctx) return;
 
@@ -128,26 +112,15 @@ const AudioEngine = (function() {
     synthInterval = setInterval(playChordStep, 4000);
   }
 
-  // Play Sound Effects with Fallback Synth Generators
+  // Play Sound Effects (only after user has unlocked audio)
   function playSound(type) {
-    if (isMuted) return;
-    unlockAudio();
-
-    // Check if HTML5 audio path works
-    const pathList = SOUND_PATHS[type];
-    if (pathList && pathList.length > 0) {
-      const sfx = new Audio(pathList[0]);
-      sfx.volume = type === 'typing' ? 0.25 : 0.6;
-      sfx.play().catch(() => {
-        synthesizeSoundEffect(type);
-      });
-    } else {
-      synthesizeSoundEffect(type);
-    }
+    if (isMuted || !isUnlocked) return;
+    synthesizeSoundEffect(type);
   }
 
   // Web Audio API Sound Effect Generators
   function synthesizeSoundEffect(type) {
+    if (!isUnlocked) return;
     const ctx = getAudioContext();
     if (!ctx || isMuted) return;
     const now = ctx.currentTime;
@@ -176,7 +149,6 @@ const AudioEngine = (function() {
       osc.start(now);
       osc.stop(now + 0.04);
     } else if (type === 'open') {
-      // Warm harp sparkle
       [523.25, 659.25, 783.99, 1046.50].forEach((freq, idx) => {
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
@@ -190,7 +162,6 @@ const AudioEngine = (function() {
         osc.stop(now + idx * 0.08 + 0.6);
       });
     } else if (type === 'fireworks') {
-      // Crackle noise burst
       const bufferSize = ctx.sampleRate * 0.3;
       const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
       const data = buffer.getChannelData(0);
@@ -219,8 +190,11 @@ const AudioEngine = (function() {
           synthInterval = null;
         }
       } else {
-        // Resume: call bgPlay directly (not unlockAudio which is guarded)
-        bgPlay();
+        if (!isUnlocked) {
+          unlockAudio();
+        } else {
+          bgPlay();
+        }
       }
     }
     updateUIState(!isMuted);
