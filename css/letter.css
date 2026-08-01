@@ -185,25 +185,19 @@
   background: linear-gradient(135deg, rgba(25, 20, 48, 0.95), rgba(15, 12, 32, 0.95));
   border: 1px solid rgba(255, 105, 180, 0.3);
   border-radius: 28px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 40px rgba(255, 105, 180, 0.25);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 40px rgba(255, 105, 180, 0.25),
+              inset 0 0 0 12px transparent,
+              inset 0 0 0 13px rgba(255, 255, 255, 0.08);
   padding: 48px 40px 40px;
   overflow-y: auto;
   transform: translateY(40px) scale(0.92);
   transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  outline: 1px solid rgba(255, 255, 255, 0.08);
+  outline-offset: -12px;
 }
 
 #letter-modal.active .letter-paper-wrapper {
   transform: translateY(0) scale(1);
-}
-
-/* Ornate Letter Paper Border */
-.letter-paper-wrapper::before {
-  content: '';
-  position: absolute;
-  inset: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 20px;
-  pointer-events: none;
 }
 
 .letter-close-btn {
