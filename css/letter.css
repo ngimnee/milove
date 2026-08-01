@@ -23,11 +23,27 @@
 }
 
 @keyframes gentleShake {
-  0%, 100% { transform: rotate(0deg) scale(1.05); }
-  20% { transform: rotate(-3deg) scale(1.06); }
-  40% { transform: rotate(3deg) scale(1.06); }
-  60% { transform: rotate(-2deg) scale(1.05); }
-  80% { transform: rotate(2deg) scale(1.05); }
+
+  0%,
+  100% {
+    transform: rotate(0deg) scale(1.05);
+  }
+
+  20% {
+    transform: rotate(-3deg) scale(1.06);
+  }
+
+  40% {
+    transform: rotate(3deg) scale(1.06);
+  }
+
+  60% {
+    transform: rotate(-2deg) scale(1.05);
+  }
+
+  80% {
+    transform: rotate(2deg) scale(1.05);
+  }
 }
 
 /* Envelope 3D Body */
@@ -148,8 +164,15 @@
 }
 
 @keyframes pulseHint {
-  0% { opacity: 0.6; transform: translateY(0); }
-  100% { opacity: 1; transform: translateY(-4px); }
+  0% {
+    opacity: 0.6;
+    transform: translateY(0);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(-4px);
+  }
 }
 
 /* EXPANDED FULL-SCREEN LETTER MODAL */
@@ -186,8 +209,8 @@
   border: 1px solid rgba(255, 105, 180, 0.3);
   border-radius: 28px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 40px rgba(255, 105, 180, 0.25),
-              inset 0 0 0 12px transparent,
-              inset 0 0 0 13px rgba(255, 255, 255, 0.08);
+    inset 0 0 0 12px transparent,
+    inset 0 0 0 13px rgba(255, 255, 255, 0.08);
   padding: 48px 40px 40px;
   overflow-y: auto;
   transform: translateY(40px) scale(0.92);
@@ -231,7 +254,7 @@
   font-size: 2.8rem;
   color: var(--accent-pink);
   text-align: center;
-  margin-bottom: 24px;
+  margin-bottom: 0px;
   text-shadow: 0 0 15px rgba(255, 105, 180, 0.5);
 }
 
@@ -257,12 +280,17 @@
 }
 
 @keyframes blinkCursor {
-  0% { opacity: 0; }
-  100% { opacity: 1; }
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
 }
 
 .letter-footer-signature {
-  margin-top: 36px;
+  margin-top: 0px;
   text-align: right;
   font-family: var(--font-romantic);
   font-size: 2.2rem;
