@@ -260,7 +260,7 @@
 
 .letter-body {
   font-family: var(--font-primary);
-  font-size: 1.15rem;
+  font-size: 1.05rem;
   line-height: 1.95;
   color: var(--text-main);
   min-height: 250px;
@@ -275,8 +275,14 @@
   height: 1.2em;
   background-color: var(--accent-pink);
   margin-left: 4px;
-  vertical-align: middle;
+  vertical-align: text-bottom;
   animation: blinkCursor 0.8s infinite alternate;
+  transition: opacity 0.4s ease;
+}
+
+.typewriter-cursor.hidden {
+  opacity: 0 !important;
+  animation: none;
 }
 
 @keyframes blinkCursor {
@@ -291,13 +297,16 @@
 
 .letter-footer-signature {
   margin-top: 0px;
-  text-align: right;
+  text-align: center;
+  width: fit-content;
+  margin-left: auto;
   font-family: var(--font-romantic);
   font-size: 2.2rem;
   color: var(--accent-cyan);
   text-shadow: 0 0 15px rgba(0, 242, 254, 0.5);
   opacity: 0;
   transition: opacity 1s ease;
+  white-space: pre-wrap;
 }
 
 .letter-footer-signature.show {

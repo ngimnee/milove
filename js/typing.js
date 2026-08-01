@@ -5,9 +5,7 @@
 const TypewriterEngine = (function() {
   'use strict';
 
-  // Customizable Letter Text Content
-  const LETTER_CONTENT = `
-Gửi em, người con gái đã làm thay đổi cả thế giới của anh...
+  const LETTER_CONTENT = `Gửi em, người con gái đã làm thay đổi cả thế giới của anh...
 
 Có những ngày anh ngồi lặng im giữa không gian bao la, ngắm nhìn những vì sao trên bầu trời đêm và tự hỏi: "Điều kỳ diệu nhất trong cuộc đời này là gì?"
 
@@ -19,9 +17,10 @@ Người ta nói vũ trụ này có vô số dải ngân hà, nhưng đối vớ
 
 Cho dù thời gian có trôi đi, cho dù bầu trời đêm ngoài kia có thay đổi, lời hứa này vẫn luôn vẹn nguyên: Anh sẽ luôn ở đây, yêu em nhiều hơn mỗi ngày, trân trọng từng phút giây chúng mình bên nhau.
 
-Yêu em nhiều hơn tất cả những gì anh có thể nói thành lời.`;
+Yêu em nhiều hơn tất cả những gì anh có thể nói thành lời.
+`;
 
-  const SIGNATURE = "Mãi yêu em,\nAnh của em ❤️";
+  const SIGNATURE = "Anh,\nYêu của Em ❤️";
 
   let bodyElement = null;
   let cursorElement = null;
@@ -68,6 +67,11 @@ Yêu em nhiều hơn tất cả những gì anh có thể nói thành lời.`;
       const char = LETTER_CONTENT.charAt(currentIndex);
       bodyElement.textContent += char;
 
+      // Hide cursor temporarily on newline to avoid it jumping to blank line
+      if (cursorElement) {
+        cursorElement.style.display = (char === '\n') ? 'none' : 'inline-block';
+      }
+
       // Play soft typing sound on non-whitespace characters
       if (char.trim() !== '') {
         AudioEngine.playSound('typing');
@@ -110,6 +114,10 @@ Yêu em nhiều hơn tất cả những gì anh có thể nói thành lời.`;
     isTyping = false;
     isPaused = false;
     if (bodyElement) bodyElement.textContent = '';
+    if (cursorElement) {
+      cursorElement.classList.remove('hidden');
+      cursorElement.style.display = 'inline-block';
+    }
     if (signatureElement) {
       signatureElement.textContent = '';
       signatureElement.classList.remove('show');
@@ -118,6 +126,11 @@ Yêu em nhiều hơn tất cả những gì anh có thể nói thành lời.`;
 
   function finish() {
     isTyping = false;
+    // Hide the blinking cursor completely when typing is done
+    if (cursorElement) {
+      cursorElement.style.display = 'none';
+      cursorElement.classList.add('hidden');
+    }
     if (signatureElement) {
       signatureElement.textContent = SIGNATURE;
       signatureElement.classList.add('show');
