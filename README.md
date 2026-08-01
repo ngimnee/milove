@@ -1,9 +1,5 @@
 # 💖 Bức Tâm Thư — Romantic & Cinematic Web Experience
 
-![Bức Tâm Thư Preview](./assets/images/anh-va-em-chibi.png)
-
-**Bức Tâm Thư** là một website phong cách điện ảnh (cinematic), lãng mạn và giàu cảm xúc. Website được thiết kế với chất lượng cao nhất, lấy cảm hứng từ ngôn ngữ thiết kế của **Apple**, **Spotify Wrapped**, **Awwwards**, và các tác phẩm điện ảnh như **Interstellar**, **Your Name**, **Violet Evergarden**.
-
 Website hoạt động hoàn toàn **Client-side (Static Site)**, có thể đưa trực tiếp lên **GitHub Pages** và truy cập ngay mà không cần NodeJS, build tool, server hay database.
 
 ---
@@ -150,7 +146,7 @@ const START_DATE = new Date('2023-02-14T00:00:00');
 ### 4. Thay Đổi Ảnh Kỷ Niệm Trong Album
 Thay các file hình ảnh của bạn vào thư mục `assets/images/` và cập nhật lại đường dẫn trong `index.html`:
 ```html
-<img src="./assets/images/anh-va-em.jpg" alt="Kỷ niệm 1" class="gallery-img">
+<img src="./assets/images/anh-va-em.png" alt="Kỷ niệm 1" class="gallery-img">
 ```
 
 ---
