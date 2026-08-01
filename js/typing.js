@@ -6,7 +6,8 @@ const TypewriterEngine = (function() {
   'use strict';
 
   // Customizable Letter Text Content
-  const LETTER_CONTENT = `Gửi em, người con gái đã làm thay đổi cả thế giới của anh...
+  const LETTER_CONTENT = `
+Gửi em, người con gái đã làm thay đổi cả thế giới của anh...
 
 Có những ngày anh ngồi lặng im giữa không gian bao la, ngắm nhìn những vì sao trên bầu trời đêm và tự hỏi: "Điều kỳ diệu nhất trong cuộc đời này là gì?"
 

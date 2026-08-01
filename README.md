@@ -1,6 +1,6 @@
 # 💖 Bức Tâm Thư — Romantic & Cinematic Web Experience
 
-![Bức Tâm Thư Preview](./assets/images/memory1.svg)
+![Bức Tâm Thư Preview](./assets/images/anh-va-em-chibi.png)
 
 **Bức Tâm Thư** là một website phong cách điện ảnh (cinematic), lãng mạn và giàu cảm xúc. Website được thiết kế với chất lượng cao nhất, lấy cảm hứng từ ngôn ngữ thiết kế của **Apple**, **Spotify Wrapped**, **Awwwards**, và các tác phẩm điện ảnh như **Interstellar**, **Your Name**, **Violet Evergarden**.
 
@@ -30,7 +30,7 @@ Website hoạt động hoàn toàn **Client-side (Static Site)**, có thể đư
 ## 📂 Cấu Trúc Project
 
 ```
-tam-thu/
+milove/
 │
 ├── index.html              # HTML5 Semantic Layout & CDN References
 ├── favicon.ico             # Favicon SVG Icon
@@ -66,7 +66,7 @@ tam-thu/
 │   └── scroll.js           # Cuộn mượt Lenis & GSAP ScrollTrigger
 │
 ├── assets/
-│   ├── images/             # Vector SVG Kỷ niệm nghệ thuật (memory1.svg, ...)
+│   ├── images/             # Vector SVG/Ảnh JPG, PNG Kỷ niệm nghệ thuật (image1.svg, image2.png, ...)
 │   ├── videos/             # Thư mục chứa video (nếu có)
 │   ├── icons/              # Icon hệ thống
 │   └── fonts/              # Font chữ dự phòng
@@ -89,7 +89,7 @@ Website **không cần NodeJS**, **không cần npm**, **không cần build**.
 
 1. Tải source code hoặc clone repository về máy:
    ```bash
-   git clone https://github.com/ngimnee/<repository-name>.git
+   git clone https://github.com/ngimnee/milove.git
    ```
 2. Mở trực tiếp file `index.html` bằng bất kỳ trình duyệt nào (Chrome, Edge, Safari, Firefox) hoặc dùng extension **Live Server** trong VS Code.
 
@@ -100,14 +100,14 @@ Website **không cần NodeJS**, **không cần npm**, **không cần build**.
 Website sử dụng **100% đường dẫn tương đối** (`./css/style.css`, `./sounds/background.mp3`), đảm bảo hoạt động hoàn hảo ngay sau khi bật GitHub Pages:
 
 1. Đăng nhập vào tài khoản [GitHub](https://github.com).
-2. Tạo một Repository mới (ví dụ tên: `love-letter` hoặc `tam-thu`).
+2. Tạo một Repository mới (ví dụ tên: `milove` hoặc `tam-thu`).
 3. Push toàn bộ source code trong thư mục lên Repository:
    ```bash
    git init
    git add .
    git commit -m "Initial commit - Bức Tâm Thư"
    git branch -M main
-   git remote add origin https://github.com/ngimnee/<repository-name>.git
+   git remote add origin https://github.com/ngimnee/milove.git
    git push -u origin main
    ```
 4. Trên GitHub, truy cập vào **Settings** của Repository -> Chọn **Pages** (ở cột bên trái).
@@ -117,7 +117,7 @@ Website sử dụng **100% đường dẫn tương đối** (`./css/style.css`, 
    - Nhấn **Save**.
 6. Sau 1 - 2 phút, website của bạn sẽ hoạt động tại đường dẫn:
    ```
-   https://ngimnee.github.io/<repository-name>/
+   https://ngimnee.github.io/milove/
    ```
 
 ---
@@ -131,7 +131,7 @@ const LETTER_CONTENT = `Gửi em, người con gái đã làm thay đổi cả t
 
 [Nhập nội dung tâm sự của bạn ở đây]`;
 
-const SIGNATURE = "Mãi yêu em,\nAnh của em ❤️";
+const SIGNATURE = "Mãi yêu em, Py của em ❤️";
 ```
 
 ### 2. Thay Đổi Ngày Bắt Đầu Yêu Nhau (Đồng Hồ Đếm)
@@ -150,7 +150,7 @@ const START_DATE = new Date('2023-02-14T00:00:00');
 ### 4. Thay Đổi Ảnh Kỷ Niệm Trong Album
 Thay các file hình ảnh của bạn vào thư mục `assets/images/` và cập nhật lại đường dẫn trong `index.html`:
 ```html
-<img src="./assets/images/memory1.jpg" alt="Kỷ niệm 1" class="gallery-img">
+<img src="./assets/images/anh-va-em.jpg" alt="Kỷ niệm 1" class="gallery-img">
 ```
 
 ---
@@ -169,4 +169,4 @@ Thay các file hình ảnh của bạn vào thư mục `assets/images/` và cậ
 
 ## 📄 Giấy Phép (License)
 
-Dự án được phát triển từ PY. Bạn có thể tùy chỉnh và sử dụng cho mục đích cá nhân.
+Dự án được phát triển bởi [ngimnee]. Bạn có thể tùy chỉnh và sử dụng cho mục đích cá nhân.

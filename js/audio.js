@@ -7,12 +7,10 @@ const AudioEngine = (function() {
 
   // Sound file mappings (relative paths)
   const SOUND_PATHS = {
-    background: ['./sounds/don-gian-anh-yeu-em.mp3', './sounds/background.mp3'],
-    typing: ['./sounds/typing.mp3'],
-    click: ['./sounds/click.mp3'],
-    open: ['./sounds/open.mp3'],
-    fireworks: ['./sounds/fireworks.mp3'],
-    ending: ['./sounds/ending.mp3']
+    background: [
+      './sounds/don-gian-anh-yeu-em.mp3',
+      './sounds/background.mp3'
+    ]
   };
 
   let audioContext = null;
