@@ -169,4 +169,4 @@ Thay các file hình ảnh của bạn vào thư mục `assets/images/` và cậ
 
 ## 📄 Giấy Phép (License)
 
-Dự án được phát triển bởi [ngimnee]. Bạn có thể tùy chỉnh và sử dụng cho mục đích cá nhân.
+Dự án được phát triển bởi [ngimnee]. Vui lòng không sao chép, chỉnh sửa hoặc sử dụng lại dưới bất kỳ hình thức nào khi chưa có sự cho phép của tác giả.
