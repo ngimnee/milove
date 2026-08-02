@@ -24,14 +24,8 @@ document.addEventListener('DOMContentLoaded', () => {
   QuotesEngine.init();
   TypewriterEngine.init();
 
-  // 4. Bind Floating Audio Widget Button
-  const audioWidgetBtn = document.getElementById('audio-widget-btn');
-  if (audioWidgetBtn) {
-    audioWidgetBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      AudioEngine.toggleMute();
-    });
-  }
+  // 4. Initialize Floating Utilities Dock & Memory Book Orchestrator
+  MemoryBookController.init();
 
   // 5. Loading Preloader Flow
   LoadingController.init(() => {
