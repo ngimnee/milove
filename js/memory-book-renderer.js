@@ -1,7 +1,7 @@
-/* ==========================================================================
+/* --------------------------------------------------------------------------
    MEMORY BOOK - RENDERER MODULE
    Dynamic DOM creation for the 3D Leather Album & Smart Image Preloading
-   ========================================================================== */
+   -------------------------------------------------------------------------- */
 
 const MemoryBookRenderer = (function() {
   'use strict';
@@ -140,16 +140,16 @@ const MemoryBookRenderer = (function() {
               </div>
             </div>
 
-            <!-- Inside Pages Container -->
-            <div class="album-pages-container" id="album-pages-container">
-              ${renderPagesHTML()}
+            <!-- Inside Pages Container: perspective wrapper outside overflow:hidden -->
+            <div class="album-pages-perspective">
+              <div class="album-pages-container" id="album-pages-container">
+                ${renderPagesHTML()}
+              </div>
             </div>
 
             <!-- Back Cover Overlay -->
             <div class="album-cover album-cover-back">
-              <div class="cover-gold-border">
-                <p class="back-cover-text">MiLove &bull; Written with love</p>
-              </div>
+              <div class="cover-gold-border"></div>
             </div>
           </div>
         </div>
@@ -159,7 +159,7 @@ const MemoryBookRenderer = (function() {
           <button id="album-prev-btn" class="album-nav-btn prev" aria-label="Trang trước" tabindex="0">
             <i class="fas fa-chevron-left"></i>
           </button>
-          <div id="album-page-indicator" class="album-page-indicator">Trang Bìa (1 / ${PAGES_DATA.length})</div>
+          <div id="album-page-indicator" class="album-page-indicator">Trang Bìa</div>
           <button id="album-next-btn" class="album-nav-btn next" aria-label="Trang tiếp theo" tabindex="0">
             <i class="fas fa-chevron-right"></i>
           </button>
@@ -254,12 +254,14 @@ const MemoryBookRenderer = (function() {
     const indicator = document.getElementById('album-page-indicator');
     if (indicator) {
       const pageData = PAGES_DATA[currentIndex];
+      const totalContentPages = totalPages - 2;
+
       if (pageData && pageData.type === 'cover-front') {
-        indicator.textContent = `Trang Bìa (1 / ${totalPages})`;
+        indicator.textContent = 'Trang Bìa';
       } else if (pageData && pageData.type === 'cover-back') {
-        indicator.textContent = `Trang Kết (${totalPages} / ${totalPages})`;
+        indicator.textContent = 'Trang Kết';
       } else {
-        indicator.textContent = `Trang ${currentIndex + 1} / ${totalPages}`;
+        indicator.textContent = `Trang ${currentIndex} / ${totalContentPages}`;
       }
     }
 

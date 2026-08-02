@@ -1,7 +1,7 @@
-/* ==========================================================================
+/* --------------------------------------------------------------------------
    MEMORY BOOK - ANIMATION MODULE
    GSAP Cinematic 3D opening and closing sequence orchestrator
-   ========================================================================== */
+   -------------------------------------------------------------------------- */
 
 const MemoryBookAnimation = (function() {
   'use strict';
@@ -113,7 +113,7 @@ const MemoryBookAnimation = (function() {
       if (modal) modal.classList.remove('active');
       if (dock) dock.classList.remove('dock-shrunken');
       if (window.AudioEngine && typeof window.AudioEngine.restoreVolume === 'function') {
-        window.AudioEngine.restoreVolume(1500);
+        window.AudioEngine.restoreVolume(500);
       }
       if (onComplete) onComplete();
       return;
@@ -124,40 +124,37 @@ const MemoryBookAnimation = (function() {
         document.body.classList.remove('album-active-blur');
         modal.classList.remove('active');
         if (window.AudioEngine && typeof window.AudioEngine.restoreVolume === 'function') {
-          window.AudioEngine.restoreVolume(1500);
+          window.AudioEngine.restoreVolume(500);
         }
         if (onComplete) onComplete();
       }
     });
 
-    // Step 1 & 2: Close cover
+    // Step 1: Fast cover close
     if (frontCover) {
-      tl.to(frontCover, { rotateY: 0, duration: 0.7, ease: 'power2.inOut' }, 0);
+      tl.to(frontCover, { rotateY: 0, duration: 0.25, ease: 'power2.inOut' }, 0);
     }
 
-    // Step 3: Bookmark settles
+    // Step 2: Bookmark settles fast
     if (bookmark) {
-      tl.to(bookmark, { y: 10, duration: 0.3, ease: 'power1.out' }, 0.4)
-        .to(bookmark, { y: 0, duration: 0.3, ease: 'bounce.out' }, 0.7);
+      tl.to(bookmark, { y: 0, duration: 0.15 }, 0.15);
     }
 
-    // Step 4 & 5: Camera zoom out & Album flies down
-    tl.to(album, { y: '100vh', rotateZ: 12, scale: 0.7, opacity: 0, duration: 0.9, ease: 'power2.in' }, 0.6);
+    // Step 3 & 4: Fast fly down & light fade out
+    tl.to(album, { y: '80vh', rotateZ: 8, scale: 0.7, opacity: 0, duration: 0.35, ease: 'power2.in' }, 0.15);
 
-    // Step 6: Golden light fades
     if (goldenLight) {
-      tl.to(goldenLight, { opacity: 0, scale: 0.5, duration: 0.6 }, 0.6);
+      tl.to(goldenLight, { opacity: 0, scale: 0.5, duration: 0.25 }, 0.1);
     }
 
-    // Step 7: Restore background camera zoom
+    // Step 5 & 6: Restore background camera zoom & dock visibility
     if (mainContent) {
-      tl.to(mainContent, { scale: 1.0, duration: 0.8, ease: 'power2.out' }, 0.6);
+      tl.to(mainContent, { scale: 1.0, duration: 0.35, ease: 'power2.out' }, 0.1);
     }
 
-    // Step 8: Restore Dock visibility
     if (dock) {
       dock.classList.remove('dock-hidden');
-      tl.to(dock, { scale: 1.0, opacity: 1, duration: 0.5 }, 0.8);
+      tl.to(dock, { scale: 1.0, opacity: 1, duration: 0.3 }, 0.15);
     }
   }
 
@@ -170,9 +167,61 @@ const MemoryBookAnimation = (function() {
     }
   }
 
+  function playPageFlip(oldNode, newNode, isNext, onComplete) {
+    const gsap = getGSAP();
+    if (!gsap || !oldNode || !newNode) {
+      if (onComplete) onComplete();
+      return;
+    }
+
+    const tl = gsap.timeline({
+      onComplete: () => {
+        if (onComplete) onComplete();
+      }
+    });
+
+    if (isNext) {
+      // Turn forward: old page flips left with smooth paper arc
+      gsap.set(newNode, { visibility: 'visible', opacity: 1, rotateY: 90, zIndex: 10 });
+      gsap.set(oldNode, { zIndex: 20 });
+
+      tl.to(oldNode, {
+        rotateY: -110,
+        opacity: 0,
+        duration: 0.65,
+        ease: 'power2.inOut'
+      }, 0);
+
+      tl.to(newNode, {
+        rotateY: 0,
+        duration: 0.65,
+        ease: 'power2.inOut'
+      }, 0.08);
+    } else {
+      // Turn backward: new page flips in from left
+      gsap.set(oldNode, { zIndex: 10 });
+      gsap.set(newNode, { visibility: 'visible', opacity: 0, rotateY: -110, zIndex: 20 });
+
+      tl.to(oldNode, {
+        rotateY: 110,
+        opacity: 0,
+        duration: 0.65,
+        ease: 'power2.inOut'
+      }, 0);
+
+      tl.to(newNode, {
+        rotateY: 0,
+        opacity: 1,
+        duration: 0.65,
+        ease: 'power2.inOut'
+      }, 0.05);
+    }
+  }
+
   return {
     playOpenSequence,
     playCloseSequence,
-    triggerAutoSuggestEffect
+    triggerAutoSuggestEffect,
+    playPageFlip
   };
 })();

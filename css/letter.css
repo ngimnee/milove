@@ -1,6 +1,6 @@
-/* ==========================================================================
+/* --------------------------------------------------------------------------
    ENVELOPE & LOVE LETTER STYLES
-   ========================================================================== */
+   -------------------------------------------------------------------------- */
 
 /* 3D ENVELOPE CONTAINER & WRAPPER */
 .envelope-container {
@@ -213,6 +213,7 @@
     inset 0 0 0 13px rgba(255, 255, 255, 0.08);
   padding: 48px 40px 40px;
   overflow-y: auto;
+  overscroll-behavior: contain;
   transform: translateY(40px) scale(0.92);
   transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
   outline: 1px solid rgba(255, 255, 255, 0.08);

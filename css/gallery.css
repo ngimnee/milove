@@ -1,18 +1,18 @@
-/* ==========================================================================
+/* --------------------------------------------------------------------------
    LOVE MEMORY GALLERY STYLES
-   ========================================================================== */
+   -------------------------------------------------------------------------- */
 .gallery-section {
   position: relative;
   width: 100%;
-  padding: 100px 20px;
-  max-width: 1280px;
+  padding: 90px 20px;
+  max-width: 1220px;
   margin: 0 auto;
   z-index: 20;
 }
 
 .section-header {
   text-align: center;
-  margin-bottom: 60px;
+  margin-bottom: 55px;
 }
 
 .section-tag {
@@ -26,23 +26,23 @@
 
 .section-title {
   font-family: var(--font-title);
-  font-size: 3rem;
+  font-size: 2.9rem;
   color: var(--text-main);
   text-shadow: 0 0 20px rgba(255, 105, 180, 0.4);
 }
 
 .gallery-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 32px;
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  gap: 28px;
   padding: 10px;
 }
 
-/* 3D Glassmorphic Photo Card */
+/* 3D Glassmorphic Photo Card (Midway size: 365px height, ~96% scale) */
 .gallery-card {
   position: relative;
-  height: 380px;
-  border-radius: 24px;
+  height: 365px;
+  border-radius: 23px;
   overflow: hidden;
   background: var(--bg-card-glass);
   backdrop-filter: blur(15px);
@@ -88,13 +88,13 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  padding: 28px;
+  padding: 25px;
   opacity: 0.9;
   transition: opacity 0.4s ease;
 }
 
 .gallery-card-date {
-  font-size: 0.85rem;
+  font-size: 0.84rem;
   color: var(--accent-pink);
   letter-spacing: 2px;
   text-transform: uppercase;
@@ -103,7 +103,7 @@
 
 .gallery-card-title {
   font-family: var(--font-serif);
-  font-size: 1.5rem;
+  font-size: 1.44rem;
   color: #fff;
   margin-bottom: 8px;
 }
@@ -123,13 +123,17 @@
 }
 
 /* LIGHTBOX POPUP MODAL */
+body.lightbox-active {
+  overflow: hidden !important;
+}
+
 #lightbox-modal {
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  z-index: 9800;
+  z-index: 99999;
   background: rgba(4, 3, 10, 0.92);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
@@ -138,7 +142,7 @@
   justify-content: center;
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.5s ease, visibility 0.5s ease;
+  transition: opacity 0.4s ease, visibility 0.4s ease;
 }
 
 #lightbox-modal.active {

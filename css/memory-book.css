@@ -1,11 +1,9 @@
-/* ==========================================================================
+/* --------------------------------------------------------------------------
    MEMORY BOOK - STYLESHEET
    Glassmorphism Dock, Ancient Leather Album, 3D Flip Effects & Golden Light
-   ========================================================================== */
-
-/* --------------------------------------------------------------------------
-   1. FLOATING UTILITIES DOCK
    -------------------------------------------------------------------------- */
+
+/* FLOATING UTILITIES DOCK */
 .floating-utilities-dock {
   position: fixed;
   top: 24px;
@@ -162,9 +160,7 @@
   100% { border-color: rgba(255, 215, 0, 0.8); box-shadow: 0 0 30px rgba(255, 215, 0, 0.6); }
 }
 
-/* --------------------------------------------------------------------------
-   2. BACKGROUND BLUR & OVERLAY
-   -------------------------------------------------------------------------- */
+/* 2. BACKGROUND BLUR & OVERLAY */
 body.album-active-blur #main-content {
   filter: blur(12px) brightness(0.65);
   transition: filter 0.8s ease;
@@ -236,9 +232,7 @@ body.album-active-blur #main-content {
   transform: scale(1.15) rotate(90deg);
 }
 
-/* --------------------------------------------------------------------------
-   3. 3D ALBUM STAGE & BOOK DESIGN
-   -------------------------------------------------------------------------- */
+/* 3D ALBUM STAGE & BOOK DESIGN */
 .album-stage {
   display: flex;
   flex-direction: column;
@@ -377,8 +371,8 @@ body.album-active-blur #main-content {
   filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
 }
 
-/* Inside Pages */
-.album-pages-container {
+/* Inside Pages — Perspective wrapper outside any overflow:hidden */
+.album-pages-perspective {
   position: absolute;
   top: 12px;
   left: 12px;
@@ -386,7 +380,16 @@ body.album-active-blur #main-content {
   bottom: 12px;
   z-index: 15;
   border-radius: 12px;
-  overflow: hidden;
+  perspective: 1100px;
+  perspective-origin: 20% center;
+}
+
+.album-pages-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  /* NO overflow:hidden — it kills 3D perspective on children */
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
@@ -403,12 +406,16 @@ body.album-active-blur #main-content {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  opacity: 0;
   visibility: hidden;
-  transform: rotateY(90deg);
+  opacity: 0;
+  /* Spine = left edge */
   transform-origin: left center;
-  transition: transform 0.6s ease, opacity 0.4s ease;
-  box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.08);
+  transform: rotateY(0deg);
+  backface-visibility: hidden;
+  /* No default transition — animations driven by JS inline styles */
+  box-shadow:
+    inset 0 0 30px rgba(0, 0, 0, 0.08),
+    4px 0 12px rgba(0, 0, 0, 0.12);
 }
 
 .album-page.page-type-cover-front,
@@ -425,20 +432,51 @@ body.album-active-blur #main-content {
   height: 100%;
 }
 
+/* Active page: flat open */
 .album-page.active {
-  opacity: 1;
   visibility: visible;
+  opacity: 1;
   transform: rotateY(0deg);
+  z-index: 10;
 }
 
+/* Resting states (off screen — no transition) */
 .album-page.turned-prev {
-  transform: rotateY(-90deg);
+  visibility: hidden;
   opacity: 0;
+  transform: rotateY(-170deg);
+  z-index: 5;
 }
 
 .album-page.turned-next {
-  transform: rotateY(90deg);
+  visibility: hidden;
   opacity: 0;
+  transform: rotateY(0deg);
+  z-index: 5;
+}
+
+/* Spine shadow overlay for depth during flip */
+.album-page::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0);
+  pointer-events: none;
+  z-index: 100;
+  transition: background 0.28s ease;
+}
+
+/* Darkens mid-flip to simulate page curl shadow */
+.album-page.is-flipping::after {
+  animation: page-flip-shadow 0.58s ease-in-out forwards;
+}
+
+@keyframes page-flip-shadow {
+  0%   { background: rgba(0, 0, 0, 0); }
+  40%  { background: rgba(0, 0, 0, 0.28); }
+  70%  { background: rgba(0, 0, 0, 0.18); }
+  100% { background: rgba(0, 0, 0, 0); }
 }
 
 .page-header {
@@ -517,11 +555,11 @@ body.album-active-blur #main-content {
 /* Navigation & Pagination Controls Pill Below Book */
 .album-controls {
   position: relative;
-  margin-top: 24px;
+  margin-top: 20px;
   display: flex;
   align-items: center;
-  gap: 16px;
-  padding: 6px 14px;
+  gap: 10px;
+  padding: 4px 10px;
   background: rgba(20, 10, 30, 0.85);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
@@ -568,17 +606,15 @@ body.album-active-blur #main-content {
 }
 
 .album-page-indicator {
-  padding: 4px 12px;
+  padding: 3px 8px;
   color: #fff4f8;
-  font-size: 0.95rem;
+  font-size: 0.82rem;
   font-weight: 600;
-  letter-spacing: 1px;
+  letter-spacing: 0.5px;
   white-space: nowrap;
 }
 
-/* --------------------------------------------------------------------------
-   4. RESPONSIVE BREAKPOINTS
-   -------------------------------------------------------------------------- */
+/* RESPONSIVE BREAKPOINTS */
 @media screen and (max-width: 992px) {
   .album-book {
     width: 620px;

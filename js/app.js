@@ -1,6 +1,6 @@
-/* ==========================================================================
+/* --------------------------------------------------------------------------
    BỨC TÂM THƯ - MAIN APPLICATION ORCHESTRATOR
-   ========================================================================== */
+   -------------------------------------------------------------------------- */
 
 document.addEventListener('DOMContentLoaded', () => {
   'use strict';
@@ -64,12 +64,37 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Close Letter Modal
+    function closeLetterModal() {
+      AudioEngine.playSound('click');
+      letterModal.classList.remove('active');
+      envelope.classList.remove('open');
+    }
+
     if (letterCloseBtn) {
-      letterCloseBtn.addEventListener('click', () => {
-        AudioEngine.playSound('click');
-        letterModal.classList.remove('active');
-        envelope.classList.remove('open');
-      });
+      letterCloseBtn.addEventListener('click', closeLetterModal);
+    }
+
+    // Close on backdrop click (outside paper)
+    letterModal.addEventListener('click', (e) => {
+      if (e.target === letterModal) {
+        closeLetterModal();
+      }
+    });
+
+    // Priority scroll handling: inside letter paper scrolls letter, outside scrolls webpage
+    const paperWrapper = letterModal.querySelector('.letter-paper-wrapper');
+    if (paperWrapper) {
+      letterModal.addEventListener('wheel', (e) => {
+        if (!letterModal.classList.contains('active')) return;
+
+        if (paperWrapper.contains(e.target)) {
+          // Inside letter paper: isolate scroll from background page
+          e.stopPropagation();
+        } else {
+          // Outside letter paper (on modal backdrop): scroll background webpage
+          window.scrollBy(0, e.deltaY);
+        }
+      }, { passive: true });
     }
   }
 
