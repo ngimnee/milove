@@ -156,6 +156,49 @@ const AudioEngine = (function() {
     return isMuted;
   }
 
+  let originalVolume = 0.5;
+  let volumeFadeTimer = null;
+
+  function fadeVolume(targetRatio = 0.4, durationMs = 1500) {
+    if (!bgAudio) return;
+    if (volumeFadeTimer) clearInterval(volumeFadeTimer);
+    const startVol = bgAudio.volume;
+    const targetVol = originalVolume * targetRatio;
+    const steps = 30;
+    const interval = durationMs / steps;
+    let stepCount = 0;
+
+    volumeFadeTimer = setInterval(() => {
+      stepCount++;
+      const progress = stepCount / steps;
+      bgAudio.volume = Math.max(0.05, startVol + (targetVol - startVol) * progress);
+      if (stepCount >= steps) {
+        clearInterval(volumeFadeTimer);
+        volumeFadeTimer = null;
+      }
+    }, interval);
+  }
+
+  function restoreVolume(durationMs = 1500) {
+    if (!bgAudio) return;
+    if (volumeFadeTimer) clearInterval(volumeFadeTimer);
+    const startVol = bgAudio.volume;
+    const targetVol = originalVolume;
+    const steps = 30;
+    const interval = durationMs / steps;
+    let stepCount = 0;
+
+    volumeFadeTimer = setInterval(() => {
+      stepCount++;
+      const progress = stepCount / steps;
+      bgAudio.volume = Math.min(originalVolume, startVol + (targetVol - startVol) * progress);
+      if (stepCount >= steps) {
+        clearInterval(volumeFadeTimer);
+        volumeFadeTimer = null;
+      }
+    }, interval);
+  }
+
   function updateUIState(playing) {
     const widget = document.getElementById('audio-widget');
     const icon = document.getElementById('audio-icon');
@@ -174,6 +217,8 @@ const AudioEngine = (function() {
     init,
     unlockAudio,
     playSound,
-    toggleMute
+    toggleMute,
+    fadeVolume,
+    restoreVolume
   };
 })();
