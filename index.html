@@ -244,18 +244,6 @@
       </div>
     </section>
 
-    <!-- LIGHTBOX POPUP MODAL -->
-    <div id="lightbox-modal">
-      <div class="lightbox-content">
-        <button id="lightbox-close" class="lightbox-close"><i class="fas fa-times"></i></button>
-        <img id="lightbox-img" src="" alt="Zoomed view" class="lightbox-img">
-        <div class="lightbox-caption">
-          <h3 id="lightbox-title"></h3>
-          <p id="lightbox-desc"></p>
-        </div>
-      </div>
-    </div>
-
     <!-- LOVE JOURNEY TIMELINE SECTION -->
     <section id="timeline-section" class="timeline-section">
       <div class="section-header">
@@ -353,6 +341,18 @@
     </section>
 
   </main>
+
+  <!-- LIGHTBOX POPUP MODAL (Fixed Viewport Overlay) -->
+  <div id="lightbox-modal">
+    <div class="lightbox-content">
+      <button id="lightbox-close" class="lightbox-close" aria-label="Đóng hình ảnh"><i class="fas fa-times"></i></button>
+      <img id="lightbox-img" src="" alt="Zoomed view" class="lightbox-img">
+      <div class="lightbox-caption">
+        <h3 id="lightbox-title"></h3>
+        <p id="lightbox-desc"></p>
+      </div>
+    </div>
+  </div>
 
   <!-- Custom Scripts (Strict Relative Paths) -->
   <script src="./js/audio.js"></script>

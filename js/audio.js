@@ -1,6 +1,6 @@
-/* ==========================================================================
+/* --------------------------------------------------------------------------
    AUDIO ENGINE - HYBRID HTML5 & WEB AUDIO SYNTHESIZER
-   ========================================================================== */
+   -------------------------------------------------------------------------- */
 
 const AudioEngine = (function() {
   'use strict';
@@ -38,6 +38,15 @@ const AudioEngine = (function() {
     bgAudio.loop = true;
     bgAudio.volume = 0.5;
     bgAudio.src = SOUND_PATHS.background[0];
+
+    // Delegate click listener for audio widget / button anywhere in DOM
+    document.addEventListener('click', (e) => {
+      const audioBtn = e.target.closest('#audio-widget-btn, #audio-widget, #dock-audio-item');
+      if (audioBtn) {
+        e.stopPropagation();
+        toggleMute();
+      }
+    });
 
     // Listen for first user interaction to unlock audio
     const unlockHandler = () => {
@@ -135,6 +144,37 @@ const AudioEngine = (function() {
       noise.connect(gain);
       gain.connect(ctx.destination);
       noise.start(now);
+    } else if (type === 'page') {
+      // Resume context explicitly (may be suspended between interactions)
+      if (ctx.state === 'suspended') ctx.resume();
+
+      // Paper-rustle: shaped noise, 180ms, louder so it cuts through background music
+      const bufferSize = Math.floor(ctx.sampleRate * 0.18);
+      const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+      const data = buffer.getChannelData(0);
+      for (let i = 0; i < bufferSize; i++) {
+        // Smooth bell-curve envelope peaking at 20% into buffer
+        const t = i / bufferSize;
+        const env = Math.pow(Math.sin(Math.PI * t), 0.5) * (1 - t * 0.4);
+        data[i] = (Math.random() * 2 - 1) * env;
+      }
+      const noise = ctx.createBufferSource();
+      noise.buffer = buffer;
+
+      // Single gentle low-pass (less attenuation than bandpass chain)
+      const lp = ctx.createBiquadFilter();
+      lp.type = 'lowpass';
+      lp.frequency.value = 2400;
+      lp.Q.value = 0.5;
+
+      const gain = ctx.createGain();
+      gain.gain.setValueAtTime(0.55, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
+
+      noise.connect(lp);
+      lp.connect(gain);
+      gain.connect(ctx.destination);
+      noise.start(now);
     }
   }
 
@@ -200,17 +240,28 @@ const AudioEngine = (function() {
   }
 
   function updateUIState(playing) {
-    const widget = document.getElementById('audio-widget');
-    const icon = document.getElementById('audio-icon');
-    if (widget && icon) {
+    const widgets = [
+      document.getElementById('audio-widget'),
+      document.getElementById('dock-audio-item'),
+      document.getElementById('audio-widget-btn')
+    ].filter(Boolean);
+
+    const icons = [
+      document.getElementById('audio-icon'),
+      ...document.querySelectorAll('.dock-item-audio i')
+    ].filter(Boolean);
+
+    widgets.forEach(w => {
       if (playing) {
-        widget.classList.remove('audio-paused');
-        icon.className = 'fas fa-volume-up';
+        w.classList.remove('audio-paused');
       } else {
-        widget.classList.add('audio-paused');
-        icon.className = 'fas fa-volume-mute';
+        w.classList.add('audio-paused');
       }
-    }
+    });
+
+    icons.forEach(icon => {
+      icon.className = playing ? 'fas fa-music' : 'fas fa-volume-mute';
+    });
   }
 
   return {

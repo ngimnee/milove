@@ -1,6 +1,6 @@
-/* ==========================================================================
+/* --------------------------------------------------------------------------
    TYPEWRITER ENGINE FOR LOVE LETTER
-   ========================================================================== */
+   -------------------------------------------------------------------------- */
 
 const TypewriterEngine = (function() {
   'use strict';
@@ -72,6 +72,12 @@ Yêu em nhiều hơn tất cả những gì anh có thể nói thành lời.
         cursorElement.style.display = (char === '\n') ? 'none' : 'inline-block';
       }
 
+      // Auto-scroll paper wrapper ONLY if user has not manually scrolled up
+      const paperWrapper = document.querySelector('.letter-paper-wrapper');
+      if (paperWrapper && !isScrolledUp(paperWrapper)) {
+        paperWrapper.scrollTop = paperWrapper.scrollHeight;
+      }
+
       // Play soft typing sound on non-whitespace characters
       if (char.trim() !== '') {
         AudioEngine.playSound('typing');
@@ -122,6 +128,14 @@ Yêu em nhiều hơn tất cả những gì anh có thể nói thành lời.
       signatureElement.textContent = '';
       signatureElement.classList.remove('show');
     }
+    const paperWrapper = document.querySelector('.letter-paper-wrapper');
+    if (paperWrapper) paperWrapper.scrollTop = 0;
+  }
+
+  function isScrolledUp(el) {
+    if (!el) return false;
+    const distanceToBottom = el.scrollHeight - el.scrollTop - el.clientHeight;
+    return distanceToBottom > 50;
   }
 
   function finish() {
@@ -134,6 +148,10 @@ Yêu em nhiều hơn tất cả những gì anh có thể nói thành lời.
     if (signatureElement) {
       signatureElement.textContent = SIGNATURE;
       signatureElement.classList.add('show');
+    }
+    const paperWrapper = document.querySelector('.letter-paper-wrapper');
+    if (paperWrapper && !isScrolledUp(paperWrapper)) {
+      paperWrapper.scrollTop = paperWrapper.scrollHeight;
     }
     // Launch celebratory fireworks when reading completes
     FireworksEngine.launchSequence();

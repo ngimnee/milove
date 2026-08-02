@@ -1,6 +1,6 @@
-/* ==========================================================================
+/* --------------------------------------------------------------------------
    LOVE MEMORY GALLERY & LIGHTBOX POPUP CONTROLLER
-   ========================================================================== */
+   -------------------------------------------------------------------------- */
 
 const GalleryController = (function() {
   'use strict';
@@ -13,6 +13,10 @@ const GalleryController = (function() {
     lightboxTitle = document.getElementById('lightbox-title');
     lightboxDesc = document.getElementById('lightbox-desc');
     closeBtn = document.getElementById('lightbox-close');
+
+    if (lightboxModal && lightboxModal.parentNode !== document.body) {
+      document.body.appendChild(lightboxModal);
+    }
 
     const cards = document.querySelectorAll('.gallery-card');
 
@@ -54,18 +58,28 @@ const GalleryController = (function() {
         if (e.target === lightboxModal) closeLightbox();
       });
     }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && lightboxModal && lightboxModal.classList.contains('active')) {
+        closeLightbox();
+      }
+    });
   }
 
   function openLightbox() {
     if (lightboxModal) {
       lightboxModal.classList.add('active');
-      AudioEngine.playSound('open');
+      document.body.classList.add('lightbox-active');
+      if (window.AudioEngine && typeof window.AudioEngine.playSound === 'function') {
+        window.AudioEngine.playSound('open');
+      }
     }
   }
 
   function closeLightbox() {
     if (lightboxModal) {
       lightboxModal.classList.remove('active');
+      document.body.classList.remove('lightbox-active');
     }
   }
 

@@ -1,7 +1,7 @@
-/* ==========================================================================
+/* --------------------------------------------------------------------------
    MEMORY BOOK - ENTRY MODULE (FLOATING UTILITIES DOCK)
    Manages the Floating Utilities Dock (🎵 Audio + 📖 Memory Book Entry)
-   ========================================================================== */
+   -------------------------------------------------------------------------- */
 
 const MemoryBookEntry = (function() {
   'use strict';
@@ -49,7 +49,7 @@ const MemoryBookEntry = (function() {
 
         <!-- Memory Book Utility Item -->
         <div class="dock-item dock-item-book" id="dock-book-item">
-          <button id="memory-book-entry-btn" class="dock-btn memory-book-btn" aria-label="Mở Album Kỷ Niệm" tabindex="0">
+          <button id="memory-book-entry-btn" class="dock-btn memory-book-btn" aria-label="Album Kỷ Niệm" tabindex="0">
             <span class="book-icon-wrapper">
               <i class="fas fa-book-bookmark book-icon"></i>
               <span class="mini-bookmark-ribbon"></span>
@@ -58,7 +58,7 @@ const MemoryBookEntry = (function() {
           
           <!-- Animated Tooltip -->
           <div id="memory-book-tooltip" class="dock-tooltip">
-            <span id="tooltip-text">Mở Album Kỷ Niệm</span>
+            <span id="tooltip-text">Album Kỷ Niệm</span>
           </div>
         </div>
       `;
@@ -69,11 +69,6 @@ const MemoryBookEntry = (function() {
     dockElement = dock;
     bookButtonElement = document.getElementById('memory-book-entry-btn');
     tooltipElement = document.getElementById('memory-book-tooltip');
-
-    // Setup initial tooltip text if unopened
-    if (optionsHasOpened() === false) {
-      showInitialTooltip();
-    }
   }
 
   function optionsHasOpened() {
@@ -97,18 +92,7 @@ const MemoryBookEntry = (function() {
           triggerOpen();
         }
       });
-    }
-
-    const audioBtn = document.getElementById('audio-widget-btn');
-    if (audioBtn) {
-      audioBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        if (window.AudioEngine && typeof window.AudioEngine.toggleMute === 'function') {
-          window.AudioEngine.toggleMute();
-        }
-      });
-    }
-  }
+    }  }
 
   function triggerOpen() {
     hideTooltip();
