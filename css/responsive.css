@@ -42,7 +42,7 @@
   .envelope-flap { border-left-width: 145px; border-right-width: 145px; border-top-width: 110px; }
   .pocket-left, .pocket-bottom { border-left-width: 145px; }
   .pocket-right, .pocket-bottom { border-right-width: 145px; }
-  .pocket-left, .pocket-right { border-bottom-width: 105px; }
+  .pocket-left, .pocket-right { border-top-width: 100px; border-bottom-width: 105px; }
   .pocket-bottom { border-bottom-width: 105px; }
 
   .letter-paper-wrapper { padding: 32px 20px 24px; border-radius: 20px; }
