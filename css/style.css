@@ -110,7 +110,7 @@ p, span, h1, h2, h3, h4, .selectable {
   overflow: hidden;
 }
 
-#galaxy-canvas, #effects-canvas, #fireworks-canvas {
+#galaxy-canvas, #effects-canvas {
   position: absolute;
   top: 0;
   left: 0;
@@ -120,7 +120,17 @@ p, span, h1, h2, h3, h4, .selectable {
 
 #galaxy-canvas { z-index: -10; }
 #effects-canvas { z-index: -8; }
-#fireworks-canvas { z-index: 1000; pointer-events: none; }
+
+/* Fireworks canvas: fixed fullscreen overlay ABOVE all modals */
+#fireworks-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 99000;
+  pointer-events: none;
+}
 
 /* Aurora Dynamic Glow Layer */
 .aurora-overlay {
