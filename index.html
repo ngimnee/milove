@@ -173,7 +173,7 @@
         <!-- Photo Card 1 -->
         <div class="gallery-card">
           <div class="gallery-img-wrapper">
-            <img src="./assets/images/khoanh-khac-dau-tien.png" alt="Khoảnh khắc đầu tiên" class="gallery-img">
+            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E" data-image-key="khoanh-khac-dau-tien" alt="Khoảnh khắc đầu tiên" class="gallery-img">
             <div class="gallery-overlay">
               <span class="gallery-card-date">17 Tháng 03</span>
               <h3 class="gallery-card-title">Khoảnh Khắc Đầu Tiên</h3>
@@ -185,7 +185,7 @@
         <!-- Photo Card 2 -->
         <div class="gallery-card">
           <div class="gallery-img-wrapper">
-            <img src="./assets/images/ho-tay-voi-em.png" alt="Ngày đầu đi chơi" class="gallery-img">
+            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E" data-image-key="ho-tay-voi-em" alt="Ngày đầu đi chơi" class="gallery-img">
             <div class="gallery-overlay">
               <span class="gallery-card-date">25 Tháng 03</span>
               <h3 class="gallery-card-title">Ngày đầu đi chơi</h3>
@@ -197,7 +197,7 @@
         <!-- Photo Card 3 -->
         <div class="gallery-card">
           <div class="gallery-img-wrapper">
-            <img src="./assets/images/bo-hoa-dau-tien.png" alt="Bó hoa đầu tiên tặng em" class="gallery-img">
+            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E" data-image-key="bo-hoa-dau-tien" alt="Bó hoa đầu tiên tặng em" class="gallery-img">
             <div class="gallery-overlay">
               <span class="gallery-card-date">05 Tháng 04</span>
               <h3 class="gallery-card-title">Bó Hoa Đầu Tiên Tặng Em</h3>
@@ -209,7 +209,7 @@
         <!-- Photo Card 4 -->
         <div class="gallery-card">
           <div class="gallery-img-wrapper">
-            <img src="./assets/images/date-cung-thai-binh.png" alt="Date cùng Thái Bình" class="gallery-img">
+            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E" data-image-key="date-cung-thai-binh" alt="Date cùng Thái Bình" class="gallery-img">
             <div class="gallery-overlay">
               <span class="gallery-card-date">30 Tháng 04</span>
               <h3 class="gallery-card-title">Date cùng Thái Bình</h3>
@@ -221,7 +221,7 @@
         <!-- Photo Card 5 -->
         <div class="gallery-card">
           <div class="gallery-img-wrapper">
-            <img src="./assets/images/bo-hoa-to-tinh.png" alt="Lời tỏ tình chân thành" class="gallery-img">
+            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E" data-image-key="bo-hoa-to-tinh" alt="Lời tỏ tình chân thành" class="gallery-img">
             <div class="gallery-overlay">
               <span class="gallery-card-date">08 Tháng 05</span>
               <h3 class="gallery-card-title">Lời Tỏ Tình Chân Thành</h3>
@@ -233,7 +233,7 @@
         <!-- Photo Card 6 -->
         <div class="gallery-card">
           <div class="gallery-img-wrapper">
-            <img src="./assets/images/cafe-dat-set.png" alt="Cafe & nặn đất sét" class="gallery-img">
+            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E" data-image-key="cafe-dat-set" alt="Cafe &amp; nặn đất sét" class="gallery-img">
             <div class="gallery-overlay">
               <span class="gallery-card-date">19 Tháng 07</span>
               <h3 class="gallery-card-title">Cafe & Nặn Đất Sét</h3>
@@ -366,10 +366,18 @@
   <script src="./js/intro.js"></script>
   <script src="./js/typing.js"></script>
   <script src="./js/countdown.js"></script>
+
+  <!-- Image Encryption System (load before gallery & renderers) -->
+  <script src="./js/crypto.js"></script>
+  <script src="./js/image-decoder.js"></script>
+  <script src="./js/image-provider.js"></script>
+  <script src="./js/image-data.js"></script>
+
   <script src="./js/gallery.js"></script>
   <script src="./js/timeline.js"></script>
   <script src="./js/quotes.js"></script>
   <script src="./js/scroll.js"></script>
+
 
   <!-- Memory Book Modular Engines -->
   <script src="./js/memory-book-storage.js"></script>

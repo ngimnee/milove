@@ -521,6 +521,12 @@ body.album-active-blur #main-content {
   height: 100%;
   object-fit: cover;
   border-radius: 2px;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+.page-photo[src^="blob:"] {
+  opacity: 1;
 }
 
 .photo-tape {
