@@ -1,17 +1,23 @@
 /* --------------------------------------------------------------------------
    MEMORY BOOK - STORAGE MODULE
-   Handles persistence of album state (first-time open, active page)
+   Handles persistence of album state (session scoped so closing tab resets to cover page)
    -------------------------------------------------------------------------- */
 
 const MemoryBookStorage = (function() {
   'use strict';
 
   const STORAGE_KEY_OPENED = 'milove_album_opened';
-  const STORAGE_KEY_PAGE = 'milove_album_last_page';
+  const STORAGE_KEY_PAGE   = 'milove_album_last_page';
+
+  // Clean legacy localStorage keys so reopening site starts from cover page
+  try {
+    localStorage.removeItem(STORAGE_KEY_PAGE);
+    localStorage.removeItem(STORAGE_KEY_OPENED);
+  } catch (e) {}
 
   function hasOpenedBefore() {
     try {
-      return localStorage.getItem(STORAGE_KEY_OPENED) === 'true';
+      return sessionStorage.getItem(STORAGE_KEY_OPENED) === 'true';
     } catch (e) {
       return false;
     }
@@ -19,15 +25,15 @@ const MemoryBookStorage = (function() {
 
   function setOpened() {
     try {
-      localStorage.setItem(STORAGE_KEY_OPENED, 'true');
+      sessionStorage.setItem(STORAGE_KEY_OPENED, 'true');
     } catch (e) {
-      console.warn('LocalStorage not available:', e);
+      console.warn('SessionStorage not available:', e);
     }
   }
 
   function getLastPage() {
     try {
-      const val = localStorage.getItem(STORAGE_KEY_PAGE);
+      const val = sessionStorage.getItem(STORAGE_KEY_PAGE);
       return val !== null ? parseInt(val, 10) : 0;
     } catch (e) {
       return 0;
@@ -36,9 +42,9 @@ const MemoryBookStorage = (function() {
 
   function saveLastPage(pageIndex) {
     try {
-      localStorage.setItem(STORAGE_KEY_PAGE, String(pageIndex));
+      sessionStorage.setItem(STORAGE_KEY_PAGE, String(pageIndex));
     } catch (e) {
-      console.warn('LocalStorage write failed:', e);
+      console.warn('SessionStorage write failed:', e);
     }
   }
 

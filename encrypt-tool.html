@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Image Encrypt Tool — MiLove</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    /* ── Reset & Base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-base:       #0d0f14;
+      --bg-surface:    #13161e;
+      --bg-elevated:   #1a1d27;
+      --bg-hover:      #20243300;
+      --border:        #2a2f3f;
+      --border-active: #4f6ef7;
+      --accent:        #4f6ef7;
+      --accent-glow:   rgba(79, 110, 247, 0.25);
+      --accent-2:      #7c5cfc;
+      --success:       #22d3a0;
+      --success-glow:  rgba(34, 211, 160, 0.2);
+      --warning:       #f59e0b;
+      --error:         #f04060;
+      --text-primary:  #e8eaf0;
+      --text-secondary:#8892a4;
+      --text-muted:    #4a5060;
+      --font-mono:     'JetBrains Mono', monospace;
+      --font-sans:     'Inter', -apple-system, sans-serif;
+      --radius-sm:     6px;
+      --radius-md:     10px;
+      --radius-lg:     16px;
+      --transition:    180ms cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    html, body {
+      min-height: 100vh;
+      background: var(--bg-base);
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      font-size: 14px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Layout ── */
+    .app {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 48px 24px 80px;
+    }
+
+    /* ── Header ── */
+    .header {
+      margin-bottom: 40px;
+    }
+    .header-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      background: rgba(79, 110, 247, 0.12);
+      border: 1px solid rgba(79, 110, 247, 0.3);
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 16px;
+    }
+    .header-badge::before {
+      content: '';
+      width: 6px; height: 6px;
+      background: var(--accent);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--accent);
+      animation: pulse-dot 2s ease-in-out infinite;
+    }
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: 0.6; transform: scale(0.8); }
+    }
+    .header h1 {
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -0.02em;
+    }
+    .header h1 span { color: var(--accent); }
+    .header p {
+      margin-top: 8px;
+      color: var(--text-secondary);
+      font-size: 13.5px;
+      max-width: 480px;
+    }
+
+    /* ── Card ── */
+    .card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      margin-bottom: 16px;
+    }
+    .card-title {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+
+    /* ── Drop Zone ── */
+    .drop-zone {
+      border: 2px dashed var(--border);
+      border-radius: var(--radius-md);
+      padding: 40px 24px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color var(--transition), background var(--transition), transform var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+    .drop-zone::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center, var(--accent-glow) 0%, transparent 70%);
+      opacity: 0;
+      transition: opacity var(--transition);
+    }
+    .drop-zone:hover,
+    .drop-zone.drag-over {
+      border-color: var(--accent);
+      background: rgba(79, 110, 247, 0.04);
+      transform: scale(1.002);
+    }
+    .drop-zone:hover::before,
+    .drop-zone.drag-over::before { opacity: 1; }
+    .drop-zone.drag-over { border-style: solid; }
+
+    .drop-icon {
+      width: 52px; height: 52px;
+      margin: 0 auto 16px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      transition: transform var(--transition), border-color var(--transition);
+    }
+    .drop-zone:hover .drop-icon { transform: translateY(-2px); border-color: var(--accent); }
+
+    .drop-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+    }
+    .drop-sub {
+      font-size: 12.5px;
+      color: var(--text-secondary);
+    }
+    .drop-sub strong {
+      color: var(--accent);
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+    .drop-formats {
+      margin-top: 12px;
+      font-size: 11px;
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+    }
+
+    #file-input { display: none; }
+
+    /* ── File Info ── */
+    .file-info {
+      display: none;
+      margin-top: 20px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+    }
+    .file-info.visible { display: block; }
+
+    .file-preview-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .file-thumb {
+      width: 56px; height: 56px;
+      border-radius: var(--radius-sm);
+      object-fit: cover;
+      background: var(--bg-base);
+      border: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .file-meta { flex: 1; min-width: 0; }
+    .file-name {
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--text-primary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-bottom: 4px;
+    }
+    .file-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 8px;
+      background: var(--bg-base);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-size: 11px;
+      color: var(--text-secondary);
+      font-family: var(--font-mono);
+    }
+
+    .file-key-row {
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .key-label {
+      font-size: 12px;
+      color: var(--text-secondary);
+      flex-shrink: 0;
+    }
+    .key-input {
+      flex: 1;
+      background: var(--bg-base);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 6px 10px;
+      font-family: var(--font-mono);
+      font-size: 12.5px;
+      color: var(--text-primary);
+      outline: none;
+      transition: border-color var(--transition);
+    }
+    .key-input:focus { border-color: var(--accent); }
+
+    /* ── Encrypt Button ── */
+    .btn-encrypt {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 14px 24px;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
+      border: none;
+      border-radius: var(--radius-md);
+      color: #fff;
+      font-family: var(--font-sans);
+      font-size: 14.5px;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: opacity var(--transition), transform var(--transition), box-shadow var(--transition);
+      box-shadow: 0 4px 24px rgba(79, 110, 247, 0.3);
+    }
+    .btn-encrypt::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 60%);
+    }
+    .btn-encrypt:hover:not(:disabled) {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 32px rgba(79, 110, 247, 0.45);
+    }
+    .btn-encrypt:active:not(:disabled) { transform: translateY(0); }
+    .btn-encrypt:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+    .btn-encrypt .spinner {
+      display: none;
+      width: 16px; height: 16px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .btn-encrypt.loading .btn-label { display: none; }
+    .btn-encrypt.loading .spinner  { display: block; }
+
+    /* ── Result Card ── */
+    .result-card {
+      display: none;
+      background: var(--bg-surface);
+      border: 1px solid var(--success);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      margin-bottom: 16px;
+    }
+    .result-card.visible { display: block; }
+
+    .result-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 20px;
+      background: rgba(34, 211, 160, 0.07);
+      border-bottom: 1px solid rgba(34, 211, 160, 0.15);
+    }
+    .result-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--success);
+    }
+    .result-title::before {
+      content: '✓';
+      width: 20px; height: 20px;
+      background: var(--success);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      color: #0d0f14;
+      font-weight: 700;
+    }
+
+    .result-stats {
+      display: flex;
+      gap: 20px;
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border);
+    }
+    .stat { display: flex; flex-direction: column; gap: 2px; }
+    .stat-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); }
+    .stat-value { font-size: 13px; font-weight: 600; font-family: var(--font-mono); color: var(--text-primary); }
+
+    .result-textarea-wrapper { position: relative; }
+    .result-textarea {
+      width: 100%;
+      min-height: 120px;
+      max-height: 200px;
+      background: var(--bg-base);
+      border: none;
+      padding: 16px 20px;
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      color: var(--text-secondary);
+      resize: vertical;
+      outline: none;
+      line-height: 1.7;
+      word-break: break-all;
+    }
+
+    .result-actions {
+      display: flex;
+      gap: 10px;
+      padding: 12px 16px;
+      border-top: 1px solid var(--border);
+    }
+    .btn-action {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 10px 16px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--bg-elevated);
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: border-color var(--transition), background var(--transition), transform var(--transition);
+    }
+    .btn-action:hover {
+      border-color: var(--accent);
+      background: rgba(79, 110, 247, 0.08);
+      transform: translateY(-1px);
+    }
+    .btn-action:active { transform: translateY(0); }
+    .btn-action.copied {
+      border-color: var(--success);
+      color: var(--success);
+      background: rgba(34, 211, 160, 0.08);
+    }
+
+    /* ── Batch Card ── */
+    .batch-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      margin-bottom: 16px;
+    }
+    .batch-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+    }
+    .batch-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    .batch-count {
+      font-size: 11px;
+      padding: 3px 10px;
+      background: rgba(79, 110, 247, 0.12);
+      border: 1px solid rgba(79, 110, 247, 0.25);
+      border-radius: 20px;
+      color: var(--accent);
+      font-family: var(--font-mono);
+    }
+    .batch-list {
+      max-height: 240px;
+      overflow-y: auto;
+    }
+    .batch-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 20px;
+      border-bottom: 1px solid var(--border);
+    }
+    .batch-item:last-child { border-bottom: none; }
+    .batch-item-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--success);
+      box-shadow: 0 0 8px var(--success-glow);
+      flex-shrink: 0;
+    }
+    .batch-item-key {
+      flex: 1;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-primary);
+    }
+    .batch-item-size {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+    .batch-actions {
+      display: flex;
+      gap: 10px;
+      padding: 12px 16px;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ── Toast ── */
+    .toast {
+      position: fixed;
+      bottom: 32px;
+      right: 32px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 18px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      font-size: 13px;
+      color: var(--text-primary);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+      transform: translateY(80px);
+      opacity: 0;
+      transition: transform 300ms cubic-bezier(0.34, 1.56, 0.64, 1), opacity 250ms ease;
+      z-index: 1000;
+      pointer-events: none;
+    }
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .toast-icon { font-size: 16px; }
+
+    /* ── Info Row ── */
+    .info-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 14px 16px;
+      background: rgba(245, 158, 11, 0.06);
+      border: 1px solid rgba(245, 158, 11, 0.2);
+      border-radius: var(--radius-md);
+      font-size: 12.5px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      margin-bottom: 16px;
+    }
+    .info-icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+
+    /* ── Scrollbar ── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #3a404f; }
+  </style>
+</head>
+<body>
+  <div class="app">
+
+    <!-- Header -->
+    <header class="header">
+      <div class="header-badge">Offline Tool</div>
+      <h1>Image <span>Encrypt</span> Tool</h1>
+      <p>Mã hóa ảnh bằng AES-256-GCM — chạy hoàn toàn offline. Không cần server, không upload dữ liệu.</p>
+    </header>
+
+    <!-- Info -->
+    <div class="info-row">
+      <span class="info-icon">💡</span>
+      <span>
+        Sau khi encrypt, copy chuỗi Base64 hoặc download JSON rồi dán vào <code style="font-family:var(--font-mono);background:rgba(0,0,0,0.3);padding:1px 5px;border-radius:3px;">js/image-data.js</code> trong project. Website sẽ tự giải mã khi cần hiển thị.
+      </span>
+    </div>
+
+    <!-- Drop Zone Card -->
+    <div class="card">
+      <div class="card-title">Chọn ảnh để mã hóa</div>
+
+      <div class="drop-zone" id="drop-zone" role="button" tabindex="0" aria-label="Kéo thả ảnh vào đây">
+        <div class="drop-icon">🖼</div>
+        <div class="drop-title">Kéo & thả ảnh vào đây</div>
+        <div class="drop-sub">hoặc <strong id="browse-trigger">chọn từ máy tính</strong></div>
+        <div class="drop-formats">PNG · JPEG · WebP · GIF · SVG</div>
+      </div>
+
+      <input type="file" id="file-input" accept="image/*" multiple>
+
+      <!-- File Info (visible after file selected) -->
+      <div class="file-info" id="file-info">
+        <div class="file-preview-row">
+          <img class="file-thumb" id="file-thumb" src="" alt="Preview">
+          <div class="file-meta">
+            <div class="file-name" id="file-name">filename.png</div>
+            <div class="file-tags">
+              <span class="tag" id="tag-size">— KB</span>
+              <span class="tag" id="tag-dims">—×—</span>
+              <span class="tag" id="tag-type">image/png</span>
+            </div>
+          </div>
+        </div>
+        <div class="file-key-row">
+          <span class="key-label">Key:</span>
+          <input type="text" class="key-input" id="key-input" placeholder="anh-va-em-chibi" spellcheck="false">
+        </div>
+      </div>
+    </div>
+
+    <!-- Encrypt Button -->
+    <button class="btn-encrypt" id="btn-encrypt" disabled>
+      <span class="spinner"></span>
+      <span class="btn-label">🔐 &nbsp;Encrypt</span>
+    </button>
+
+    <!-- Single Result Card -->
+    <div class="result-card" id="result-card">
+      <div class="result-header">
+        <div class="result-title">Mã hóa thành công</div>
+        <span id="result-time" style="font-size:11px;color:var(--text-muted);font-family:var(--font-mono);">0ms</span>
+      </div>
+      <div class="result-stats">
+        <div class="stat">
+          <span class="stat-label">Kích thước đầu ra</span>
+          <span class="stat-value" id="stat-bytes">—</span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">Thuật toán</span>
+          <span class="stat-value">AES-256-GCM</span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">Key</span>
+          <span class="stat-value" id="stat-key">—</span>
+        </div>
+      </div>
+      <div class="result-textarea-wrapper">
+        <textarea class="result-textarea" id="result-textarea" readonly></textarea>
+      </div>
+      <div class="result-actions">
+        <button class="btn-action" id="btn-copy">📋 &nbsp;Copy</button>
+        <button class="btn-action" id="btn-add-batch">＋ &nbsp;Thêm vào JSON</button>
+      </div>
+    </div>
+
+    <!-- Batch JSON Card -->
+    <div class="batch-card" id="batch-card" style="display:none;">
+      <div class="batch-header">
+        <span class="batch-title">Danh sách mã hóa</span>
+        <span class="batch-count" id="batch-count">0 ảnh</span>
+      </div>
+      <div class="batch-list" id="batch-list"></div>
+      <div class="batch-actions">
+        <button class="btn-action" id="btn-copy-json">📋 &nbsp;Copy JSON</button>
+        <button class="btn-action" id="btn-download-json">💾 &nbsp;Download JSON</button>
+        <button class="btn-action" id="btn-clear-batch" style="flex:0;padding:10px 14px;color:var(--error);border-color:rgba(240,64,96,0.3);">✕</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast">
+    <span class="toast-icon" id="toast-icon">✓</span>
+    <span id="toast-msg">Đã copy!</span>
+  </div>
+
+  <script>
+    /* ══════════════════════════════════════════════════════════════
+       ENCRYPT TOOL — inline script (no external dependencies)
+       ══════════════════════════════════════════════════════════════ */
+
+    'use strict';
+
+    // ── Crypto constants (must match crypto.js in main project) ──
+    const PASSPHRASE   = 'milove-secret-2026';
+    const SALT_STR     = 'milove-salt-static-v1';
+    const IV_BYTE_LEN  = 12;
+    const ITERATIONS   = 100_000;
+
+    // ── State ──
+    let currentFile    = null;
+    let currentDataURL = null;
+    const batchData    = {};  // { key: base64String }
+
+    // ── DOM refs ──
+    const dropZone      = document.getElementById('drop-zone');
+    const fileInput     = document.getElementById('file-input');
+    const browseTrigger = document.getElementById('browse-trigger');
+    const fileInfoEl    = document.getElementById('file-info');
+    const fileThumbnail = document.getElementById('file-thumb');
+    const fileNameEl    = document.getElementById('file-name');
+    const tagSize       = document.getElementById('tag-size');
+    const tagDims       = document.getElementById('tag-dims');
+    const tagType       = document.getElementById('tag-type');
+    const keyInput      = document.getElementById('key-input');
+    const btnEncrypt    = document.getElementById('btn-encrypt');
+    const resultCard    = document.getElementById('result-card');
+    const resultTime    = document.getElementById('result-time');
+    const statBytes     = document.getElementById('stat-bytes');
+    const statKey       = document.getElementById('stat-key');
+    const resultTextarea= document.getElementById('result-textarea');
+    const btnCopy       = document.getElementById('btn-copy');
+    const btnAddBatch   = document.getElementById('btn-add-batch');
+    const batchCard     = document.getElementById('batch-card');
+    const batchCount    = document.getElementById('batch-count');
+    const batchList     = document.getElementById('batch-list');
+    const btnCopyJson   = document.getElementById('btn-copy-json');
+    const btnDownload   = document.getElementById('btn-download-json');
+    const btnClearBatch = document.getElementById('btn-clear-batch');
+    const toast         = document.getElementById('toast');
+    const toastIcon     = document.getElementById('toast-icon');
+    const toastMsg      = document.getElementById('toast-msg');
+
+    // ── Helpers ──
+    function formatBytes(n) {
+      if (n < 1024)          return n + ' B';
+      if (n < 1024 * 1024)   return (n / 1024).toFixed(1) + ' KB';
+      return (n / 1024 / 1024).toFixed(2) + ' MB';
+    }
+
+    function slugify(name) {
+      return name
+        .replace(/\.[^/.]+$/, '')                          // remove extension
+        .toLowerCase()
+        .normalize('NFD').replace(/[\u0300-\u036f]/g, '')  // remove diacritics
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-|-$/g, '');
+    }
+
+    let toastTimer = null;
+    function showToast(msg, icon = '✓', isError = false) {
+      clearTimeout(toastTimer);
+      toastMsg.textContent  = msg;
+      toastIcon.textContent = icon;
+      toast.style.borderColor = isError ? 'rgba(240,64,96,0.4)' : 'rgba(34,211,160,0.3)';
+      toast.classList.add('show');
+      toastTimer = setTimeout(() => toast.classList.remove('show'), 2400);
+    }
+
+    // ── File handling ──
+    function handleFile(file) {
+      if (!file || !file.type.startsWith('image/')) {
+        showToast('File không hợp lệ — chỉ hỗ trợ ảnh', '⚠', true);
+        return;
+      }
+      currentFile = file;
+      keyInput.value = slugify(file.name);
+
+      // Preview
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        currentDataURL = e.target.result;
+        fileThumbnail.src = currentDataURL;
+
+        // Get dimensions
+        const img = new Image();
+        img.onload = () => {
+          tagDims.textContent = `${img.naturalWidth} × ${img.naturalHeight}`;
+        };
+        img.src = currentDataURL;
+      };
+      reader.readAsDataURL(file);
+
+      fileNameEl.textContent = file.name;
+      tagSize.textContent    = formatBytes(file.size);
+      tagType.textContent    = file.type || 'image/*';
+
+      fileInfoEl.classList.add('visible');
+      btnEncrypt.disabled = false;
+      resultCard.classList.remove('visible');
+    }
+
+    // ── Drag & Drop ──
+    dropZone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      dropZone.classList.add('drag-over');
+    });
+    dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+    dropZone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropZone.classList.remove('drag-over');
+      const file = e.dataTransfer.files[0];
+      if (file) handleFile(file);
+    });
+    dropZone.addEventListener('click', () => fileInput.click());
+    dropZone.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') fileInput.click();
+    });
+    browseTrigger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      fileInput.click();
+    });
+    fileInput.addEventListener('change', () => {
+      if (fileInput.files[0]) handleFile(fileInput.files[0]);
+    });
+
+    // ── Key derivation (PBKDF2 → AES-256-GCM) ──
+    let _cachedCryptoKey = null;
+    async function getKey() {
+      if (_cachedCryptoKey) return _cachedCryptoKey;
+      const enc      = new TextEncoder();
+      const baseKey  = await crypto.subtle.importKey(
+        'raw', enc.encode(PASSPHRASE), { name: 'PBKDF2' }, false, ['deriveKey']
+      );
+      _cachedCryptoKey = await crypto.subtle.deriveKey(
+        { name: 'PBKDF2', salt: enc.encode(SALT_STR), iterations: ITERATIONS, hash: 'SHA-256' },
+        baseKey,
+        { name: 'AES-GCM', length: 256 },
+        false,
+        ['encrypt', 'decrypt']
+      );
+      return _cachedCryptoKey;
+    }
+
+    // ── Encrypt logic ──
+    async function encryptFile(file) {
+      const key      = await getKey();
+      const iv       = crypto.getRandomValues(new Uint8Array(IV_BYTE_LEN));
+      const buffer   = await file.arrayBuffer();
+
+      const cipherBuffer = await crypto.subtle.encrypt(
+        { name: 'AES-GCM', iv },
+        key,
+        buffer
+      );
+
+      // Concatenate IV + Ciphertext → Base64
+      const combined = new Uint8Array(IV_BYTE_LEN + cipherBuffer.byteLength);
+      combined.set(iv, 0);
+      combined.set(new Uint8Array(cipherBuffer), IV_BYTE_LEN);
+
+      // Base64 encode
+      let binary = '';
+      combined.forEach(b => binary += String.fromCharCode(b));
+      return btoa(binary);
+    }
+
+    // ── Encrypt button ──
+    btnEncrypt.addEventListener('click', async () => {
+      if (!currentFile) return;
+
+      const imageKey = keyInput.value.trim() || slugify(currentFile.name);
+
+      btnEncrypt.disabled = true;
+      btnEncrypt.classList.add('loading');
+      resultCard.classList.remove('visible');
+
+      try {
+        const t0          = performance.now();
+        const base64      = await encryptFile(currentFile);
+        const elapsed     = Math.round(performance.now() - t0);
+
+        // Display result
+        resultTime.textContent   = elapsed + 'ms';
+        statBytes.textContent    = formatBytes(base64.length) + ` (${base64.length.toLocaleString()} chars)`;
+        statKey.textContent      = imageKey;
+        resultTextarea.value     = base64;
+        resultCard.classList.add('visible');
+
+        // Scroll into view
+        resultCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      } catch (err) {
+        showToast('Lỗi mã hóa: ' + err.message, '✕', true);
+        console.error('[EncryptTool] Encrypt error:', err);
+      } finally {
+        btnEncrypt.disabled = false;
+        btnEncrypt.classList.remove('loading');
+      }
+    });
+
+    // ── Copy single result ──
+    btnCopy.addEventListener('click', async () => {
+      const text = resultTextarea.value;
+      if (!text) return;
+      try {
+        await navigator.clipboard.writeText(text);
+        btnCopy.classList.add('copied');
+        btnCopy.textContent = '✓  Đã copy!';
+        showToast('Đã copy chuỗi mã hóa vào clipboard');
+        setTimeout(() => {
+          btnCopy.classList.remove('copied');
+          btnCopy.innerHTML = '📋 &nbsp;Copy';
+        }, 2000);
+      } catch {
+        // Fallback
+        resultTextarea.select();
+        document.execCommand('copy');
+        showToast('Đã copy!');
+      }
+    });
+
+    // ── Add to batch ──
+    btnAddBatch.addEventListener('click', () => {
+      const key  = statKey.textContent;
+      const val  = resultTextarea.value;
+      if (!key || !val) return;
+
+      batchData[key] = val;
+      renderBatch();
+      showToast(`Đã thêm "${key}" vào JSON`);
+    });
+
+    function renderBatch() {
+      const keys = Object.keys(batchData);
+      if (keys.length === 0) {
+        batchCard.style.display = 'none';
+        return;
+      }
+      batchCard.style.display = 'block';
+      batchCount.textContent  = keys.length + ' ảnh';
+      batchList.innerHTML = keys.map(k => `
+        <div class="batch-item">
+          <div class="batch-item-dot"></div>
+          <div class="batch-item-key">${k}</div>
+          <div class="batch-item-size">${formatBytes(batchData[k].length)} chars</div>
+        </div>
+      `).join('');
+    }
+
+    // ── Copy JSON ──
+    btnCopyJson.addEventListener('click', async () => {
+      const json = buildJSON();
+      try {
+        await navigator.clipboard.writeText(json);
+        showToast('Đã copy JSON vào clipboard');
+      } catch {
+        showToast('Không thể copy — hãy dùng Download', '⚠', true);
+      }
+    });
+
+    // ── Download JSON ──
+    btnDownload.addEventListener('click', () => {
+      const json = buildJSON();
+      const blob = new Blob([json], { type: 'application/json' });
+      const url  = URL.createObjectURL(blob);
+      const a    = document.createElement('a');
+      a.href     = url;
+      a.download = 'image-data-encrypted.json';
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast('Đang tải xuống image-data-encrypted.json');
+    });
+
+    // ── Clear batch ──
+    btnClearBatch.addEventListener('click', () => {
+      Object.keys(batchData).forEach(k => delete batchData[k]);
+      renderBatch();
+      showToast('Đã xóa danh sách');
+    });
+
+    function buildJSON() {
+      const entries = Object.entries(batchData)
+        .map(([k, v]) => `  "${k}": "${v}"`)
+        .join(',\n');
+      return `{\n${entries}\n}`;
+    }
+  </script>
+</body>
+</html>

@@ -267,6 +267,7 @@
   min-height: 250px;
   white-space: pre-wrap;
   word-wrap: break-word;
+  text-align: justify;
 }
 
 /* Blinking Typewriter Cursor */

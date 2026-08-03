@@ -15,13 +15,14 @@ Website hoạt động hoàn toàn **Client-side (Static Site)**, có thể đư
 7. **Floating Utilities Dock**: Thanh tiện ích nổi cố định góc phải (🎵 Audio + 📖 Memory Book) phong cách Glassmorphism, tự động ẩn gọn khi mở album kỷ niệm và hiển thị tooltip khi rê chuột.
 8. **Hiệu Ứng Trái Tim & Hoa Anh Đào Rơi**: 300 trái tim mây mờ cùng cánh hoa anh đào (Sakura) 3D rơi tự nhiên trên nền canvas.
 9. **Sao Băng (Meteor Streaks)**: Các vệt sao băng rực rỡ lướt qua bầu trời đêm định kỳ từ 5 đến 10 giây.
-10. **Bộ Sưu Tập Khoảnh Khắc (Love Gallery)**: Thẻ hình ảnh kính mờ hiệu ứng nghiêng 3D (card tilt parallax) kèm bộ xem ảnh Lightbox toàn màn hình.
+10. **Bộ Sưu Tập Khoảnh Khắc (Love Gallery)**: Thẻ hình ảnh kính mờ hiệu ứng nghiêng 3D (card tilt parallax) kết hợp hiển thị giải mã ảnh bảo mật cùng bộ xem ảnh Lightbox toàn màn hình.
 11. **Dòng Thời Gian Tình Yêu (Love Journey Timeline)**: Trục thời gian phát sáng dọc thân trang, hiển thị các cột mốc ý nghĩa khi cuộn trang.
 12. **Đồng Hồ Đếm Thời Gian Realtime**: Bộ đếm thời gian bên nhau tính chính xác từng Ngày, Giờ, Phút, Giây.
 13. **Trích Dẫn Lãng Mạn (Quotes Generator)**: Bộ sưu tập những câu nói truyền cảm hứng tình yêu kèm chuyển cảnh hiệu ứng hạt.
 14. **Pháo Hoa & Bão Trái Tim (Grand Finale)**: Màn trình diễn pháo hoa canvas rực rỡ kết hợp Confetti trái tim chúc mừng khi đọc xong lá thư.
 15. **Âm Thanh Hybrids (Sound Engine)**: Tự động phát nhạc nền (`sounds/background.mp3`), đồng bộ nút bấm tiện ích và hiệu ứng âm thanh. Tích hợp bộ tổng hợp âm thanh **Web Audio API Synthesizer** phát tiếng lật trang, nhấp chuột và gõ phím chân thực.
 16. **Con Trỏ Phát Sáng (Custom Glowing Cursor)**: Con trỏ phát sáng với vệt hạt mịn và hiệu ứng sóng nước (ripple) khi nhấp chuột.
+17. **Hệ Thống Bảo Mật & Mã Hóa Hình Ảnh Client-side (AES-256-GCM / Web Crypto API)**: Công cụ mã hóa hình ảnh offline `encrypt-tool.html`. Dữ liệu hình ảnh được mã hóa bảo mật lưu tại `js/image-data.js` và giải mã bất đồng bộ cache-first với `ImageProvider` & `ImageDecoder` thông qua Blob ObjectURL giúp tối ưu trải nghiệm và bảo mật.
 
 ---
 
@@ -31,6 +32,7 @@ Website hoạt động hoàn toàn **Client-side (Static Site)**, có thể đư
 milove/
 │
 ├── index.html              # HTML5 Semantic Layout & CDN References
+├── encrypt-tool.html       # Công cụ mã hóa hình ảnh offline (AES-256-GCM / Web Crypto API)
 ├── favicon.ico             # Favicon SVG Icon
 ├── README.md               # Hướng dẫn chi tiết project
 │
@@ -49,6 +51,10 @@ milove/
 ├── js/
 │   ├── app.js                    # Khởi tạo & Điều phối toàn bộ ứng dụng
 │   ├── audio.js                  # Engine âm thanh (HTML5 + Web Audio Synth paper/click)
+│   ├── crypto.js                 # Thuật toán mã hóa & giải mã AES-256-GCM (Web Crypto API)
+│   ├── image-data.js             # Lưu trữ dữ liệu hình ảnh mã hóa
+│   ├── image-decoder.js          # Khởi tạo khóa & giải mã chuỗi Base64 thành Blob ObjectURL
+│   ├── image-provider.js         # Quản lý bộ nhớ tạm (Cache-first) & Preload ảnh background
 │   ├── cursor.js                 # Con trỏ glowing & Hiệu ứng sóng nước
 │   ├── galaxy.js                 # Engine Three.js 3D Starfield & Nebula
 │   ├── hearts.js                 # Canvas particle trái tim lơ lửng
@@ -151,12 +157,20 @@ Mở file `js/countdown.js`, thay đổi biến `START_DATE`:
 const START_DATE = new Date('2023-02-14T00:00:00');
 ```
 
+### 4. Mã Hóa & Cập Nhật Hình Ảnh Mới (`encrypt-tool.html`)
+Website hỗ trợ công cụ mã hóa ảnh **AES-256-GCM** hoàn toàn offline:
+1. Mở file `encrypt-tool.html` bằng trình duyệt web.
+2. Cấu hình / Nhập **Khóa Mã Hóa (AES Secret Key)**.
+3. Chọn/kéo thả các file ảnh kỷ niệm mới cần cập nhật.
+4. Xuất file `image-data.js` và chép đè vào thư mục `js/image-data.js` của dự án.
+
 ---
 
 ## 🛠️ Công Nghệ Sử Dụng
 
 - **HTML5 & CSS3**: Glassmorphism, 3D Transforms (`perspective`, `transform-origin`), CSS Gradients, Flexbox/Grid, Keyframe Animations.
 - **JavaScript (ES6+)**: Modular IIFE Pattern, Web Audio API Synthesizer (phát âm thanh lật trang & gõ phím).
+- **Web Crypto API (AES-256-GCM)**: Hệ thống mã hóa & giải mã hình ảnh client-side an toàn, hiệu năng cao.
 - **Three.js (r128)**: 3D Particle Starfield & Nebula Shader Scene.
 - **GSAP 3**: Smooth Open/Close Timelines & Dynamic Dock Reveal.
 - **Canvas Confetti**: Celebration Heart Burst Launcher.
