@@ -10,7 +10,7 @@ const TypewriterEngine = (function() {
 Không biết hôm nay em thế nào. Vui không. Cười nhiều không. Chứ anh nhớ em nhiều lắm. Muốn ôm em lắm. 
 
 Anh không biết từ bao giờ anh lại yêu em, thương em nhiều như vậy nữa. Ban đầu là thích em rồi yêu em, thương em. Nhưng đến bây giờ, chính anh cũng không chắc tình cảm của anh cụ thể như nào. Anh chỉ biết là anh yêu em, thương em hơn tất cả những gì anh nói, anh làm. Muốn làm cho em, dành cho em tất cả những gì tốt nhất, chân thành nhất anh có thể.
-Anh không giỏi giang, tâm lý như bao chàng trai ngoài kia. Nên nhiều lúc anh cũng buồn, cũng suy nghĩ lắm. Buồn, suy nghĩ vì so ra tình yêu của anh dành cho em lại chẳng nhiều, chẳng so được như những người ngoài kia cả.
+Anh không giỏi giang, tâm lý như bao chàng trai ngoài kia. Nên nhiều lúc anh cũng buồn, cũng suy nghĩ lắm. Buồn, suy nghĩ vì so ra tình yêu của anh dành cho em lại chẳng nhiều, chẳng so được như những người ngoài kia.
 
 Em hay suy nghĩ và rất nhạy cảm. Anh thì lại tính hay trêu. Anh sợ lắm những lúc mà em suy nghĩ anh lại không biết gì cả. Lúc đấy anh như người dưng. Lại vô tình làm tổn thương em, để em tủi thân. Anh xót lắm🥺. Nên là có gì vui hay không vui cũng đều nói với anh nhé. Anh không dám hứa sẽ xua đi hết những chuyện không vui của em. Nhưng anh hứa sẽ ở cạnh lắng nghe, dỗ dành an ủi và đặc biệt là sẽ ôm em (hun em nữa🤭).
 Cho phép anh mượn câu này của TikTok để thay lời gửi dành tới em nhá: 
@@ -27,10 +27,10 @@ Thời gian này không được gặp em thường xuyên. Anh nhớ em lắm. 
 Và cảm ơn em, cảm ơn chúng ta đã tìm thấy và bước đến bên nhau. Dù là những lúc ốm đau, những ngày vui khi buồn hay cả những lúc "tụt mood" như em vẫn nói, vẫn luôn ở cạnh, quan tâm, chăm sóc và lo lắng cho nhau.
 Cảm ơn em vì đã đến bên anh, đã kiên nhẫn cùng anh qua những giông bão, chia sẻ từng nụ cười, niềm vui, từng giọt nước mắt, và biến những điều tưởng chừng là đơn giản nhất thành những kỷ niệm vô giá.
 
-Anh vẫn luôn ở đây, ở cạnh và yêu thương em hơn mỗi ngày, trân trọng em, trân trọng chúng ta và cả từng giây từng phút trôi qua của chúng ta nữa. Hãy ở cạnh anh, yêu thương anh em nhé. Đến năm em 25 tuổi, anh sẽ đến và thực hiện lời hứa trong lòng của mình. Anh yêu em❤️
+Anh vẫn luôn ở đây, ở cạnh và yêu thương em hơn mỗi ngày, trân trọng em, trân trọng chúng ta và cả từng giây từng phút trôi qua của chúng ta nữa. Hãy ở cạnh anh, yêu thương anh em nhé. Đến năm em 25 tuổi, anh sẽ đến và thực hiện lời hứa trong lòng của mình. Anh yêu Em❤️
 `;
 
-  const SIGNATURE = "Anh,\nYêu của Em ❤️";
+  const SIGNATURE = "Anh,\nYêu của Em❤️";
 
   let bodyElement = null;
   let cursorElement = null;
