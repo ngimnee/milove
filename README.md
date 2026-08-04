@@ -1,4 +1,4 @@
-# 💖 Bức Tâm Thư — Romantic & Cinematic Web Experience
+# 💖 MiLove — Romantic & Cinematic Web Experience
 
 Website hoạt động hoàn toàn **Client-side (Static Site)**, có thể đưa trực tiếp lên **GitHub Pages** và truy cập ngay mà không cần NodeJS, build tool, server hay database.
 
@@ -23,6 +23,7 @@ Website hoạt động hoàn toàn **Client-side (Static Site)**, có thể đư
 15. **Âm Thanh Hybrids (Sound Engine)**: Tự động phát nhạc nền (`sounds/background.mp3`), đồng bộ nút bấm tiện ích và hiệu ứng âm thanh. Tích hợp bộ tổng hợp âm thanh **Web Audio API Synthesizer** phát tiếng lật trang, nhấp chuột và gõ phím chân thực.
 16. **Con Trỏ Phát Sáng (Custom Glowing Cursor)**: Con trỏ phát sáng với vệt hạt mịn và hiệu ứng sóng nước (ripple) khi nhấp chuột.
 17. **Hệ Thống Bảo Mật & Mã Hóa Hình Ảnh Client-side (AES-256-GCM / Web Crypto API)**: Công cụ mã hóa hình ảnh offline `encrypt-tool.html`. Dữ liệu hình ảnh được mã hóa bảo mật lưu tại `js/image-data.js` và giải mã bất đồng bộ cache-first với `ImageProvider` & `ImageDecoder` thông qua Blob ObjectURL giúp tối ưu trải nghiệm và bảo mật.
+18. **Chuẩn Xem Trước Link Chia Sẻ (Open Graph & Social Preview)**: Tích hợp đầy đủ thẻ meta Open Graph cho Facebook, Zalo, Messenger, iMessage với kích thước ảnh xem trước 1200x630 chuẩn sắc nét.
 
 ---
 
@@ -125,6 +126,26 @@ Website sử dụng **100% đường dẫn tương đối** (`./css/style.css`, 
    ```
    https://ngimnee.github.io/milove/
    ```
+
+---
+
+## 🖼️ Tùy Chỉnh Ảnh Preview Khi Chia Sẻ Link (Open Graph)
+
+Để hiển thị ảnh xem trước khi gửi link qua Zalo, Messenger, Facebook, iMessage:
+
+1. Đặt ảnh preview tại đường dẫn: `assets/images/anh-va-em-chibi.png` (Kích thước đề xuất: **1200 x 630 px**).
+2. Kiểm tra khai báo trong `<head>` của `index.html`:
+   ```html
+   <meta property="og:url" content="https://ngimnee.github.io/milove/">
+   <meta property="og:title" content="MiLove — Dành Riêng Cho Em">
+   <meta property="og:description" content="Có những lời anh muốn nói từ rất lâu... Hôm nay anh viết tất cả ở đây">
+   <meta property="og:image" content="https://ngimnee.github.io/milove/assets/images/anh-va-em-chibi.png">
+   <meta property="og:image:width" content="1200">
+   <meta property="og:image:height" content="630">
+   ```
+3. **Cách xóa cache khi ảnh preview không hiện:**
+   - Facebook/Messenger: Dán link vào [Facebook Sharing Debugger](https://developers.facebook.com/tools/debug/) và chọn **Scrape Again**.
+   - Zalo: Dán link vào [Zalo Debugger](https://developers.zalo.me/tools/debug-sharing) và chọn **Xóa Cache**.
 
 ---
 
