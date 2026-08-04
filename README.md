@@ -33,7 +33,7 @@ Website hoạt động hoàn toàn **Client-side (Static Site)**, có thể đư
 milove/
 │
 ├── index.html              # HTML5 Semantic Layout & CDN References
-├── encrypt-tool.html       # Công cụ mã hóa hình ảnh offline (AES-256-GCM / Web Crypto API)
+├── encrypt-tool.html       # Công cụ mã hóa hình ảnh offline
 ├── favicon.ico             # Favicon SVG Icon
 ├── README.md               # Hướng dẫn chi tiết project
 │
