@@ -27,7 +27,7 @@ Thời gian này không được gặp em thường xuyên. Anh nhớ em lắm. 
 Và cảm ơn em, cảm ơn chúng ta đã tìm thấy và bước đến bên nhau. Dù là những lúc ốm đau, những ngày vui khi buồn hay cả những lúc "tụt mood" như em vẫn nói, vẫn luôn ở cạnh, quan tâm, chăm sóc và lo lắng cho nhau.
 Cảm ơn em vì đã đến bên anh, đã kiên nhẫn cùng anh qua những giông bão, chia sẻ từng nụ cười, niềm vui, từng giọt nước mắt, và biến những điều tưởng chừng là đơn giản nhất thành những kỷ niệm vô giá.
 
-Anh vẫn luôn ở đây, ở cạnh và yêu thương em hơn mỗi ngày, trân trọng em, trân trọng chúng ta và cả từng giây từng phút trôi qua của chúng ta nữa. Hãy ở cạnh anh, yêu thương anh em nhé. Đến năm em 25 tuổi, anh sẽ đến và thực hiện lời hứa trong lòng của mình. Anh yêu Em❤️
+Anh vẫn luôn ở đây, ở cạnh và yêu thương em hơn mỗi ngày, trân trọng em, trân trọng chúng ta và cả từng giây từng phút trôi qua của chúng ta nữa. Hãy ở cạnh anh và yêu thương anh em nhé. Đến năm em 25 tuổi, anh sẽ đến và thực hiện lời hứa trong lòng của mình. Anh yêu Em❤️
 `;
 
   const SIGNATURE = "Anh,\nYêu của Em❤️";
