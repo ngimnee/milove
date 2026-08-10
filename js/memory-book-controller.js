@@ -93,9 +93,10 @@ const MemoryBookController = (function() {
 
     AudioEngine.playSound('page');
 
-    const DURATION = 580; // ms — matches CSS @keyframes page-flip-shadow
-    const EASE_FOLD   = 'cubic-bezier(0.455, 0.03, 0.515, 0.955)'; // easeInOutSine — smooth fold into spine
-    const EASE_UNFOLD = 'cubic-bezier(0.25, 0.46, 0.45, 0.94)';   // easeOutQuad — snappy landing
+    const DURATION_NEXT = 550; // ms — perfect middle-ground pace
+    const DURATION_PREV = 550; // ms — smooth backward flip
+    const EASE_FOLD   = 'cubic-bezier(0.455, 0.03, 0.515, 0.955)'; // Gentle easeInOutSine fold
+    const EASE_UNFOLD = 'cubic-bezier(0.22, 0.61, 0.36, 1)';      // Smooth initial sweep for unfolding back
 
     function finalize() {
       [oldNode, newNode].forEach(n => {
@@ -110,39 +111,30 @@ const MemoryBookController = (function() {
     }
 
     if (isNext) {
-      // ── FORWARD: old page folds into spine; new page revealed underneath ──
-      // 1. Place new page flat underneath (instant, no transition)
+      // ── FORWARD: old page folds into spine (-170deg); new page revealed underneath ──
       newNode.style.cssText = 'visibility:visible; opacity:1; transform:rotateY(0deg); z-index:5; transition:none;';
-
-      // 2. Trigger shadow keyframe on old page as it folds
+      oldNode.style.cssText = 'visibility:visible; opacity:1; transform:rotateY(0deg); z-index:20; transition:none;';
       oldNode.classList.add('is-flipping');
 
-      // 3. Fold old page to spine (rotateY 0 → -170°)
-      void oldNode.offsetWidth;
-      oldNode.style.cssText = `visibility:visible; opacity:1; transform:rotateY(0deg); z-index:20; transition:none;`;
-      void oldNode.offsetWidth;
-      oldNode.style.transition = `transform ${DURATION}ms ${EASE_FOLD}`;
-      oldNode.style.transform = 'rotateY(-170deg)';
+      requestAnimationFrame(() => {
+        oldNode.style.transition = `transform ${DURATION_NEXT}ms ${EASE_FOLD}`;
+        oldNode.style.transform = 'rotateY(-170deg)';
+      });
 
-      setTimeout(finalize, DURATION + 20);
+      setTimeout(finalize, DURATION_NEXT + 30);
 
     } else {
-      // ── BACKWARD: old page hides instantly; new page unfolds from spine ──
-      // Hide old page immediately
-      oldNode.style.cssText = 'visibility:hidden; opacity:0; z-index:5; transition:none;';
-
-      // Snap new page to folded start position (no transition)
+      // ── BACKWARD: new page sweeps in from spine (-170deg -> 0deg); old page stays flat underneath ──
+      oldNode.style.cssText = 'visibility:visible; opacity:1; transform:rotateY(0deg); z-index:5; transition:none;';
       newNode.style.cssText = 'visibility:visible; opacity:1; transform:rotateY(-170deg); z-index:20; transition:none;';
-      void newNode.offsetWidth;
 
-      // Trigger shadow keyframe as new page unfolds
-      newNode.classList.add('is-flipping');
+      requestAnimationFrame(() => {
+        newNode.classList.add('is-flipping');
+        newNode.style.transition = `transform ${DURATION_PREV}ms ${EASE_UNFOLD}`;
+        newNode.style.transform = 'rotateY(0deg)';
+      });
 
-      // Unfold new page toward viewer
-      newNode.style.transition = `transform ${DURATION}ms ${EASE_UNFOLD}`;
-      newNode.style.transform = 'rotateY(0deg)';
-
-      setTimeout(finalize, DURATION + 20);
+      setTimeout(finalize, DURATION_PREV + 30);
     }
   }
 

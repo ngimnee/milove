@@ -132,29 +132,29 @@ const MemoryBookAnimation = (function() {
 
     // Step 1: Fast cover close
     if (frontCover) {
-      tl.to(frontCover, { rotateY: 0, duration: 0.25, ease: 'power2.inOut' }, 0);
+      tl.to(frontCover, { rotateY: 0, duration: 0.21, ease: 'power2.inOut' }, 0);
     }
 
     // Step 2: Bookmark settles fast
     if (bookmark) {
-      tl.to(bookmark, { y: 0, duration: 0.15 }, 0.15);
+      tl.to(bookmark, { y: 0, duration: 0.13 }, 0.12);
     }
 
     // Step 3 & 4: Fast fly down & light fade out
-    tl.to(album, { y: '80vh', rotateZ: 8, scale: 0.7, opacity: 0, duration: 0.35, ease: 'power2.in' }, 0.15);
+    tl.to(album, { y: '80vh', rotateZ: 8, scale: 0.7, opacity: 0, duration: 0.30, ease: 'power2.in' }, 0.12);
 
     if (goldenLight) {
-      tl.to(goldenLight, { opacity: 0, scale: 0.5, duration: 0.25 }, 0.1);
+      tl.to(goldenLight, { opacity: 0, scale: 0.5, duration: 0.21 }, 0.09);
     }
 
     // Step 5 & 6: Restore background camera zoom & dock visibility
     if (mainContent) {
-      tl.to(mainContent, { scale: 1.0, duration: 0.35, ease: 'power2.out' }, 0.1);
+      tl.to(mainContent, { scale: 1.0, duration: 0.30, ease: 'power2.out' }, 0.09);
     }
 
     if (dock) {
       dock.classList.remove('dock-hidden');
-      tl.to(dock, { scale: 1.0, opacity: 1, duration: 0.3 }, 0.15);
+      tl.to(dock, { scale: 1.0, opacity: 1, duration: 0.26 }, 0.12);
     }
   }
 
@@ -198,9 +198,9 @@ const MemoryBookAnimation = (function() {
         ease: 'power2.inOut'
       }, 0.08);
     } else {
-      // Turn backward: new page flips in from left
-      gsap.set(oldNode, { zIndex: 10 });
-      gsap.set(newNode, { visibility: 'visible', opacity: 0, rotateY: -110, zIndex: 20 });
+      // Turn backward: mirror of forward — old page flips right (high z), new page sweeps in from left
+      gsap.set(oldNode, { rotateY: 0, opacity: 1, zIndex: 20 });
+      gsap.set(newNode, { visibility: 'visible', opacity: 1, rotateY: -90, zIndex: 10 });
 
       tl.to(oldNode, {
         rotateY: 110,
@@ -211,10 +211,9 @@ const MemoryBookAnimation = (function() {
 
       tl.to(newNode, {
         rotateY: 0,
-        opacity: 1,
         duration: 0.65,
         ease: 'power2.inOut'
-      }, 0.05);
+      }, 0.08);
     }
   }
 
