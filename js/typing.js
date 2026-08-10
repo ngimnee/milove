@@ -40,7 +40,7 @@ Anh vẫn luôn ở đây, ở cạnh và yêu thương em hơn mỗi ngày, tr�
   let isTyping = false;
   let isPaused = false;
   let typingTimer = null;
-  const speed = 45; // ms per character
+  const speed = 46.8; // ms per character
 
   function init() {
     bodyElement = document.getElementById('letter-typewriter-text');
