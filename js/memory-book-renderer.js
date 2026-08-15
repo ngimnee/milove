@@ -5,7 +5,7 @@
    encryption, decryption, or image storage format.
    -------------------------------------------------------------------------- */
 
-const MemoryBookRenderer = (function() {
+const MemoryBookRenderer = (function () {
   'use strict';
 
   // Album Data Pages Definition (Including Cover Front & Cover Back)
@@ -251,7 +251,7 @@ const MemoryBookRenderer = (function() {
                   <h2 class="cover-title">${page.title}</h2>
                   <p class="cover-subtitle">${page.subtitle}</p>
                   <p class="cover-desc-text">${page.description}</p>
-                  <div class="cover-badge">Bìa Sau Album</div>
+                  <!-- <div class="cover-badge">Bìa Sau Album</div> -->
                 </div>
               </div>
             </div>
