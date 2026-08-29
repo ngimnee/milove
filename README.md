@@ -102,48 +102,13 @@ Website **không cần NodeJS**, **không cần npm**, **không cần build**.
 
 ---
 
-## 🌐 Cách Deploy Lên GitHub Pages (Miễn Phí 100%)
-
-Website sử dụng **100% đường dẫn tương đối** (`./css/style.css`, `./sounds/background.mp3`), đảm bảo hoạt động hoàn hảo ngay sau khi bật GitHub Pages:
-
-1. Đăng nhập vào tài khoản [GitHub](https://github.com).
-2. Tạo một Repository mới (ví dụ tên: `milove`).
-3. Push toàn bộ source code trong thư mục lên Repository:
-   ```bash
-   git init
-   git add .
-   git commit -m "First commit"
-   git branch -M main
-   git remote add origin https://github.com/ngimnee/milove.git
-   git push -u origin main
-   ```
-4. Trên GitHub, truy cập vào **Settings** của Repository -> Chọn **Pages** (ở cột bên trái).
-5. Tại mục **Build and deployment**:
-   - **Source**: Chọn `Deploy from a branch`.
-   - **Branch**: Chọn `main` / Thư mục `/ (root)`.
-   - Nhấn **Save**.
-6. Sau 1 - 2 phút, website của bạn sẽ hoạt động tại đường dẫn:
-   ```
-   https://ngimnee.github.io/milove/
-   ```
-
----
-
 ## 🖼️ Tùy Chỉnh Ảnh Preview Khi Chia Sẻ Link (Open Graph)
 
 Để hiển thị ảnh xem trước khi gửi link qua Zalo, Messenger, Facebook, iMessage:
 
 1. Đặt ảnh preview tại đường dẫn: `assets/images/anh-va-em-chibi.png` (Kích thước đề xuất: **1200 x 630 px**).
-2. Kiểm tra khai báo trong `<head>` của `index.html`:
-   ```html
-   <meta property="og:url" content="https://ngimnee.github.io/milove/">
-   <meta property="og:title" content="MiLove — Dành Riêng Cho Em">
-   <meta property="og:description" content="Có những lời anh muốn nói từ rất lâu... Hôm nay anh viết tất cả ở đây">
-   <meta property="og:image" content="https://ngimnee.github.io/milove/assets/images/anh-va-em-chibi.png">
-   <meta property="og:image:width" content="1200">
-   <meta property="og:image:height" content="630">
-   ```
-3. **Cách xóa cache khi ảnh preview không hiện:**
+
+2. **Cách xóa cache khi ảnh preview không hiện:**
    - Facebook/Messenger: Dán link vào [Facebook Sharing Debugger](https://developers.facebook.com/tools/debug/) và chọn **Scrape Again**.
    - Zalo: Dán link vào [Zalo Debugger](https://developers.zalo.me/tools/debug-sharing) và chọn **Xóa Cache**.
 

@@ -69,6 +69,13 @@ const MemoryBookRenderer = (function () {
       description: 'Góc nhỏ bình yên bên tách cafe thơm, cùng em tỉ mỉ nhào nặn nên những hình khối dễ thương đong đầy tình yêu.'
     },
     {
+      type: 'memory',
+      title: 'Lời Yêu Nơi Xa Nhớ',
+      date: '15 Tháng 08',
+      image: 'loi-yeu-noi-xa-nho',
+      description: 'Ở nơi xa, gửi tới em những lời yêu cùng nỗi nhớ nhung từ sâu trong trái tim.'
+    },
+    {
       type: 'finale',
       title: 'Lời Hứa Cho Tương Lai',
       date: 'Mãi Mãi Về Sau',
