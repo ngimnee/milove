@@ -76,6 +76,13 @@ const MemoryBookRenderer = (function () {
       description: 'Ở nơi xa, gửi tới em những lời yêu cùng nỗi nhớ nhung từ sâu trong trái tim.'
     },
     {
+      type: 'memory',
+      title: 'Chuyến Du Lịch Đầu Tiên',
+      date: '05 Tháng 09',
+      image: 'du-lich-nibi',
+      description: 'Chuyến đi đầu tiên của chúng mình, nơi mỗi khoảnh khắc đều trở thành một kỷ niệm thật đẹp để sau này cùng nhau nhớ lại.'
+    },
+    {
       type: 'finale',
       title: 'Lời Hứa Cho Tương Lai',
       date: 'Mãi Mãi Về Sau',
