@@ -92,6 +92,12 @@ body {
   background: linear-gradient(180deg, var(--accent-pink), var(--accent-cyan));
 }
 
+/* Set by SmoothScrollEngine.lock() while a full-screen experience is open */
+html.scroll-locked,
+html.scroll-locked body {
+  overflow: hidden;
+}
+
 /* Enable text selection on specific readable content */
 p, span, h1, h2, h3, h4, .selectable {
   user-select: text;
@@ -198,6 +204,7 @@ p, span, h1, h2, h3, h4, .selectable {
   justify-content: center;
   gap: 12px;
   padding: 16px 36px;
+  font-family: var(--font-primary);
   font-size: 1.1rem;
   font-weight: 600;
   color: #fff;

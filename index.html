@@ -47,6 +47,8 @@
   <link rel="stylesheet" href="./css/timeline.css">
   <link rel="stylesheet" href="./css/effects.css">
   <link rel="stylesheet" href="./css/memory-book.css">
+  <link rel="stylesheet" href="./css/special-events.css">
+  <link rel="stylesheet" href="./css/share.css">
   <link rel="stylesheet" href="./css/responsive.css">
 
   <!-- External Libraries CDN -->
@@ -187,18 +189,6 @@
         <!-- Photo Card 2 -->
         <div class="gallery-card">
           <div class="gallery-img-wrapper">
-            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E" data-image-key="ho-tay-voi-em" alt="Ngày đầu đi chơi" class="gallery-img">
-            <div class="gallery-overlay">
-              <span class="gallery-card-date">25 Tháng 03</span>
-              <h3 class="gallery-card-title">Ngày đầu đi chơi</h3>
-              <p class="gallery-card-desc">Cùng nhau rảo bước qua từng con phố quen, tận hưởng những món ngon và tiếng cười rộn rã.</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Photo Card 3 -->
-        <div class="gallery-card">
-          <div class="gallery-img-wrapper">
             <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E" data-image-key="bo-hoa-dau-tien" alt="Bó hoa đầu tiên tặng em" class="gallery-img">
             <div class="gallery-overlay">
               <span class="gallery-card-date">05 Tháng 04</span>
@@ -208,7 +198,7 @@
           </div>
         </div>
 
-        <!-- Photo Card 4 -->
+        <!-- Photo Card 3 -->
         <div class="gallery-card">
           <div class="gallery-img-wrapper">
             <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E" data-image-key="date-cung-thai-binh" alt="Date cùng Thái Bình" class="gallery-img">
@@ -220,7 +210,7 @@
           </div>
         </div>
 
-        <!-- Photo Card 5 -->
+        <!-- Photo Card 4 -->
         <div class="gallery-card">
           <div class="gallery-img-wrapper">
             <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E" data-image-key="bo-hoa-to-tinh" alt="Lời tỏ tình chân thành" class="gallery-img">
@@ -232,7 +222,7 @@
           </div>
         </div>
 
-        <!-- Photo Card 6 -->
+        <!-- Photo Card 5 -->
         <div class="gallery-card">
           <div class="gallery-img-wrapper">
             <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E" data-image-key="cafe-dat-set" alt="Cafe &amp; nặn đất sét" class="gallery-img">
@@ -240,6 +230,18 @@
               <span class="gallery-card-date">19 Tháng 07</span>
               <h3 class="gallery-card-title">Cafe & Nặn Đất Sét</h3>
               <p class="gallery-card-desc">Góc nhỏ bình yên bên tách cafe thơm, cùng em tỉ mỉ nhào nặn nên những kỷ niệm đong đầy tình yêu.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Photo Card 6 -->
+        <div class="gallery-card">
+          <div class="gallery-img-wrapper">
+            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E" data-image-key="du-lich-nibi" alt="Chuyến du lịch Nibi" class="gallery-img">
+            <div class="gallery-overlay">
+              <span class="gallery-card-date">05 Tháng 09</span>
+              <h3 class="gallery-card-title">Chuyến Du Lịch Nibi</h3>
+              <p class="gallery-card-desc">Chuyến đi đầu tiên của hai đứa, cùng khám phá những nơi mới, thưởng thức món ngon và cười thật nhiều suốt cả quãng đường.</p>
             </div>
           </div>
         </div>
@@ -346,9 +348,14 @@
       <div class="ending-card">
         <h2 class="ending-title">Cảm Ơn Em Vì Tất Cả</h2>
         <p class="ending-text">Trái tim anh sẽ luôn là nơi bình yên nhất dành riêng cho em.</p>
-        <button id="finale-btn" class="btn-romantic">
-          Khám Phá Món Quà Cuối Cùng <i class="fas fa-heart"></i>
-        </button>
+        <div class="ending-actions">
+          <button id="finale-btn" class="btn-romantic">
+            Khám Phá Món Quà Cuối Cùng <i class="fas fa-heart"></i>
+          </button>
+          <button id="share-entry-btn" class="btn-glass" type="button" aria-haspopup="dialog">
+            <i class="fas fa-share-nodes"></i> Chia sẻ
+          </button>
+        </div>
       </div>
     </section>
 
@@ -362,6 +369,47 @@
       <div class="lightbox-caption">
         <h3 id="lightbox-title"></h3>
         <p id="lightbox-desc"></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SHARE MODAL (opened from the floating dock) -->
+  <div id="share-modal" class="share-modal" role="dialog" aria-modal="true" aria-labelledby="share-modal-title" aria-hidden="true">
+    <div class="share-panel">
+      <button id="share-close-btn" class="share-close" type="button" aria-label="Đóng"><i class="fas fa-times"></i></button>
+
+      <header class="share-header">
+        <span class="share-eyebrow">Chia sẻ</span>
+        <h3 id="share-modal-title" class="share-title">Gửi bức thư này đến người em muốn chia sẻ</h3>
+        <p class="share-desc">Quét mã QR bằng điện thoại, hoặc gửi liên kết trực tiếp cho họ.</p>
+      </header>
+
+      <div class="share-media">
+        <img class="share-card-img" src="./assets/qr-milove.png" alt="Thẻ mã QR mở Bức Tâm Thư" width="1080" height="1316" loading="lazy">
+      </div>
+
+      <div class="share-actions">
+        <button id="share-native-btn" class="share-action share-action-primary" type="button" hidden>
+          <span class="share-action-icon"><i class="fas fa-paper-plane"></i></span>
+          <span class="share-action-text">
+            <span class="share-action-label">Gửi qua ứng dụng</span>
+            <span class="share-action-sub">Zalo, Messenger, tin nhắn…</span>
+          </span>
+        </button>
+        <button id="share-copy-btn" class="share-action" type="button">
+          <span class="share-action-icon"><i class="fas fa-link"></i></span>
+          <span class="share-action-text">
+            <span class="share-action-label">Sao chép liên kết</span>
+            <span class="share-action-sub">ngimnee.github.io/milove</span>
+          </span>
+        </button>
+        <a class="share-action" href="./assets/qr-milove.png" download="buc-tam-thu-qr.png">
+          <span class="share-action-icon"><i class="fas fa-download"></i></span>
+          <span class="share-action-text">
+            <span class="share-action-label">Tải thẻ QR</span>
+            <span class="share-action-sub">Ảnh PNG để gửi hoặc in</span>
+          </span>
+        </a>
       </div>
     </div>
   </div>
@@ -399,6 +447,18 @@
   <script src="./js/memory-book-animation.js"></script>
   <script src="./js/memory-book-entry.js"></script>
   <script src="./js/memory-book-controller.js"></script>
+
+  <!-- Special Days (data first: it reads the love date from countdown.js) -->
+  <script src="./js/lunar-calendar.js"></script>
+  <script src="./js/special-events-data.js"></script>
+  <script src="./js/special-events-detector.js"></script>
+  <script src="./js/special-events-effects.js"></script>
+  <script src="./js/special-events-renderer.js"></script>
+  <script src="./js/special-events-heart.js"></script>
+  <script src="./js/special-events-animation.js"></script>
+  <script src="./js/special-events-controller.js"></script>
+
+  <script src="./js/share.js"></script>
 
   <script src="./js/app.js"></script>
 </body>

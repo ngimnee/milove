@@ -5,6 +5,7 @@
 const SmoothScrollEngine = (function() {
   'use strict';
 
+  const SCROLL_LOCK_CLASS = 'scroll-locked';
   let lenis = null;
 
   function init() {
@@ -33,6 +34,18 @@ const SmoothScrollEngine = (function() {
     }
   }
 
+  // Freeze page scrolling while a full-screen experience owns the viewport.
+  // The CSS class also covers native touch scrolling, which Lenis leaves alone.
+  function lock() {
+    if (lenis) lenis.stop();
+    document.documentElement.classList.add(SCROLL_LOCK_CLASS);
+  }
+
+  function unlock() {
+    document.documentElement.classList.remove(SCROLL_LOCK_CLASS);
+    if (lenis) lenis.start();
+  }
+
   function scrollTo(target) {
     if (lenis) {
       lenis.scrollTo(target);
@@ -46,6 +59,8 @@ const SmoothScrollEngine = (function() {
 
   return {
     init,
+    lock,
+    unlock,
     scrollTo
   };
 })();

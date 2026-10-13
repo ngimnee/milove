@@ -27,12 +27,21 @@ document.addEventListener('DOMContentLoaded', () => {
   // 4. Initialize Floating Utilities Dock & Memory Book Orchestrator
   MemoryBookController.init();
 
+  // 4a. Share button in the dock (QR card, copy link, native share sheet)
+  ShareController.init();
+
+  // 4b. Detect today's special day now so its photos are ready when loading ends
+  SpecialEventsController.init();
+
   // 5. Loading Preloader Flow
   LoadingController.init(() => {
-    // When loading finishes, start Intro Sequence
-    IntroController.init(() => {
-      // When Intro finishes, scroll to 3D Galaxy & Envelope view
-      SmoothScrollEngine.scrollTo('#galaxy-section');
+    // On a special day its one-day chapter opens first (its seal tap also unlocks audio);
+    // on normal days this continues straight to the Intro Sequence.
+    SpecialEventsController.start(() => {
+      IntroController.init(() => {
+        // When Intro finishes, scroll to 3D Galaxy & Envelope view
+        SmoothScrollEngine.scrollTo('#galaxy-section');
+      });
     });
   });
 
