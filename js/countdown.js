@@ -45,7 +45,13 @@ const CountdownEngine = (function() {
     return num < 10 ? `0${num}` : `${num}`;
   }
 
+  // Shared with the special-days anniversary so the love date lives in one place
+  function getStartDate() {
+    return new Date(START_DATE.getTime());
+  }
+
   return {
-    init
+    init,
+    getStartDate
   };
 })();

@@ -34,12 +34,12 @@ const IntroController = (function() {
       }
     }, (lines.length + 1) * 1400);
 
-    // Bind Enter Button Click
+    // Bind Enter Button Click (once: a double click must not finish the intro twice)
     if (enterBtn) {
       enterBtn.addEventListener('click', () => {
         AudioEngine.playSound('click');
         dismissIntro(onFinishedCallback);
-      });
+      }, { once: true });
     }
   }
 
