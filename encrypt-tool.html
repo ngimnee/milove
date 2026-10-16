@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Image Encrypt Tool — MiLove</title>
+  <title>Encrypt Tool — MiLove</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -55,8 +55,13 @@
 
     /* ── Header ── */
     .header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 24px;
       margin-bottom: 40px;
     }
+    .header-main { min-width: 0; }
     .header-badge {
       display: inline-flex;
       align-items: center;
@@ -522,6 +527,179 @@
     }
     .info-icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
 
+    /* ── Mode dropdown (top-right of the header) ── */
+    .mode-picker {
+      position: relative;
+      flex-shrink: 0;
+      width: 210px;
+    }
+    .mode-label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+    .mode-trigger {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px 8px 8px;
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      font-size: 14px;
+      font-weight: 600;
+      text-align: left;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: border-color var(--transition), box-shadow var(--transition), background var(--transition);
+    }
+    .mode-trigger:hover { border-color: #3a4160; background: var(--bg-elevated); }
+    .mode-trigger:focus-visible,
+    .mode-picker.open .mode-trigger {
+      outline: none;
+      border-color: var(--border-active);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+    .mode-trigger-text { flex: 1; }
+    .mode-chevron {
+      width: 16px;
+      height: 16px;
+      color: var(--text-secondary);
+      transition: transform var(--transition);
+    }
+    .mode-picker.open .mode-chevron { transform: rotate(180deg); }
+
+    .mode-icon {
+      flex-shrink: 0;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      border-radius: 8px;
+    }
+    .mode-icon svg { width: 16px; height: 16px; }
+
+    .mode-menu {
+      position: absolute;
+      z-index: 20;
+      top: calc(100% + 8px);
+      right: 0;
+      width: 290px;
+      padding: 6px;
+      list-style: none;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+      opacity: 0;
+      transform: translateY(-6px);
+      pointer-events: none;
+      transition: opacity var(--transition), transform var(--transition);
+    }
+    .mode-picker.open .mode-menu {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+    .mode-option {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: background var(--transition);
+    }
+    .mode-option .mode-icon {
+      color: var(--text-secondary);
+      background: var(--bg-base);
+      border: 1px solid var(--border);
+    }
+    .mode-option.focused { background: var(--bg-elevated); }
+    .mode-option[aria-selected="true"] .mode-icon {
+      color: #fff;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      border-color: transparent;
+    }
+    .mode-option-text { flex: 1; display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+    .mode-option-title { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+    .mode-option-sub   { font-size: 12px; line-height: 1.4; color: var(--text-muted); }
+    .mode-option-check {
+      width: 16px;
+      height: 16px;
+      color: var(--accent);
+      opacity: 0;
+    }
+    .mode-option[aria-selected="true"] .mode-option-check { opacity: 1; }
+
+    @media (max-width: 560px) {
+      .header { flex-direction: column; }
+      .mode-picker { width: 100%; }
+      .mode-menu { left: 0; right: auto; width: 100%; }
+    }
+    .panel[hidden] { display: none; }
+
+    /* ── Letter form ── */
+    .letter-form { display: flex; flex-direction: column; gap: 22px; }
+    .field-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+    .field-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    .field-meta {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+    .text-field {
+      display: block;
+      width: 100%;
+      padding: 14px 16px;
+      background: var(--bg-base);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      font-size: 14px;
+      line-height: 1.75;
+      resize: vertical;
+      outline: none;
+      transition: border-color var(--transition), box-shadow var(--transition);
+    }
+    .text-field::placeholder { color: var(--text-muted); }
+    .text-field:hover { border-color: #3a4160; }
+    .text-field:focus {
+      border-color: var(--border-active);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+    .field-hint {
+      margin-top: 8px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    #letter-body { min-height: 280px; }
+    #letter-sig  { min-height: 84px; }
+    #letter-result { min-height: 160px; font-family: var(--font-mono); font-size: 11.5px; color: var(--text-secondary); word-break: break-all; }
+    .letter-status { min-height: 20px; margin: 14px 0 0; font-size: 13px; color: var(--text-secondary); }
+    .letter-status.ok  { color: var(--success); }
+    .letter-status.err { color: var(--error); }
+
     /* ── Scrollbar ── */
     ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: transparent; }
@@ -534,16 +712,50 @@
 
     <!-- Header -->
     <header class="header">
-      <div class="header-badge">Offline Tool</div>
-      <h1>Image <span>Encrypt</span> Tool</h1>
-      <p>Mã hóa ảnh bằng AES-256-GCM — chạy hoàn toàn offline. Không cần server, không upload dữ liệu.</p>
+      <div class="header-main">
+        <div class="header-badge">Offline Tool</div>
+        <h1>MiLove <span>Encrypt</span> Tool</h1>
+        <p>Mã hóa ảnh và nội dung thư bằng AES-256-GCM — chạy hoàn toàn offline. Không cần server, không upload dữ liệu.</p>
+      </div>
+
+      <div class="mode-picker" id="mode-picker">
+        <span class="mode-label" id="mode-label">Loại dữ liệu</span>
+        <button class="mode-trigger" id="mode-trigger" type="button" role="combobox"
+                aria-haspopup="listbox" aria-expanded="false" aria-controls="mode-menu"
+                aria-labelledby="mode-label mode-trigger-text">
+          <span class="mode-icon" id="mode-trigger-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="9" cy="10" r="1.8"/><path d="M21 16l-5.2-5.2a1.5 1.5 0 0 0-2.1 0L5 19.5"/></svg></span>
+          <span class="mode-trigger-text" id="mode-trigger-text">Ảnh</span>
+          <svg class="mode-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <ul class="mode-menu" id="mode-menu" role="listbox" aria-labelledby="mode-label">
+          <li class="mode-option" id="mode-option-image" role="option" aria-selected="true" data-mode="image">
+            <span class="mode-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="9" cy="10" r="1.8"/><path d="M21 16l-5.2-5.2a1.5 1.5 0 0 0-2.1 0L5 19.5"/></svg></span>
+            <span class="mode-option-text">
+              <span class="mode-option-title">Ảnh</span>
+              <span class="mode-option-sub">Mã hóa file ảnh thành chuỗi Base64</span>
+            </span>
+            <svg class="mode-option-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+          </li>
+          <li class="mode-option" id="mode-option-letter" role="option" aria-selected="false" data-mode="letter">
+            <span class="mode-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M4 7.5l8 6 8-6"/></svg></span>
+            <span class="mode-option-text">
+              <span class="mode-option-title">Lá thư</span>
+              <span class="mode-option-sub">Mã hóa nội dung và chữ ký lá thư</span>
+            </span>
+            <svg class="mode-option-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+          </li>
+        </ul>
+      </div>
     </header>
+
+    <!-- ═══════════ IMAGE PANEL ═══════════ -->
+    <section class="panel" id="panel-image">
 
     <!-- Info -->
     <div class="info-row">
       <span class="info-icon">💡</span>
       <span>
-        Sau khi encrypt, copy chuỗi Base64 hoặc download JSON rồi dán vào <code style="font-family:var(--font-mono);background:rgba(0,0,0,0.3);padding:1px 5px;border-radius:3px;">js/image-data.js</code> trong project. Website sẽ tự giải mã khi cần hiển thị.
+        Sau khi encrypt, copy chuỗi Base64 hoặc download JSON rồi dán vào <code style="font-family:var(--font-mono);background:rgba(0,0,0,0.3);padding:1px 5px;border-radius:3px;">js/encrypted-data.js</code> (ảnh album và gallery) hoặc <code style="font-family:var(--font-mono);background:rgba(0,0,0,0.3);padding:1px 5px;border-radius:3px;">js/encrypted-special-data.js</code> (ảnh ngày đặc biệt). Website chỉ giải mã ảnh khi cần hiển thị.
       </span>
     </div>
 
@@ -629,6 +841,55 @@
       </div>
     </div>
 
+    </section>
+
+    <!-- ═══════════ LETTER PANEL ═══════════ -->
+    <section class="panel" id="panel-letter" hidden>
+      <div class="info-row">
+        <span class="info-icon">💡</span>
+        <span>
+          Nhập nội dung thư và chữ ký, bấm <strong>Mã hóa</strong>, rồi thay khối <code style="font-family:var(--font-mono);background:rgba(0,0,0,0.3);padding:1px 5px;border-radius:3px;">const LetterData = {…};</code> ở cuối <code style="font-family:var(--font-mono);background:rgba(0,0,0,0.3);padding:1px 5px;border-radius:3px;">js/encrypted-data.js</code> bằng kết quả. Website sẽ tự giải mã khi mở thư.
+        </span>
+      </div>
+
+      <div class="card letter-form">
+        <div class="field">
+          <div class="field-head">
+            <label class="field-label" for="letter-body">Nội dung thư</label>
+            <span class="field-meta" id="letter-body-count">0 ký tự</span>
+          </div>
+          <textarea class="text-field" id="letter-body" spellcheck="false" placeholder="Gửi em, ..."></textarea>
+        </div>
+
+        <div class="field">
+          <div class="field-head">
+            <label class="field-label" for="letter-sig">Chữ ký cuối thư</label>
+          </div>
+          <textarea class="text-field" id="letter-sig" spellcheck="false" placeholder="Anh,&#10;Yêu của Em❤️">Anh,
+Yêu của Em❤️</textarea>
+          <p class="field-hint">Xuống dòng ở đây là xuống dòng trong chữ ký trên thư.</p>
+        </div>
+      </div>
+
+      <button class="btn-encrypt" id="btn-letter-encrypt" type="button">
+        <span class="btn-label">🔐 &nbsp;Mã hóa thư</span>
+      </button>
+      <div class="letter-status" id="letter-status"></div>
+
+      <div class="result-card" id="letter-result-card" style="margin-top:16px;">
+        <div class="result-header">
+          <div class="result-title">Khối LetterData cho js/encrypted-data.js</div>
+        </div>
+        <div class="result-textarea-wrapper">
+          <textarea class="result-textarea" id="letter-result" readonly spellcheck="false" style="max-height:none;"></textarea>
+        </div>
+        <div class="result-actions">
+          <button class="btn-action" id="btn-letter-verify" type="button">✔ &nbsp;Giải mã thử</button>
+          <button class="btn-action" id="btn-letter-copy" type="button">📋 &nbsp;Copy</button>
+        </div>
+      </div>
+    </section>
+
   </div>
 
   <!-- Toast -->
@@ -637,18 +898,14 @@
     <span id="toast-msg">Đã copy!</span>
   </div>
 
+  <!-- Same module the website uses to decrypt: one algorithm, one key -->
+  <script src="./js/crypto.js"></script>
   <script>
     /* ══════════════════════════════════════════════════════════════
        ENCRYPT TOOL — inline script (no external dependencies)
        ══════════════════════════════════════════════════════════════ */
 
     'use strict';
-
-    // ── Crypto constants (must match crypto.js in main project) ──
-    const PASSPHRASE   = 'milove-secret-2026';
-    const SALT_STR     = 'milove-salt-static-v1';
-    const IV_BYTE_LEN  = 12;
-    const ITERATIONS   = 100_000;
 
     // ── State ──
     let currentFile    = null;
@@ -696,9 +953,11 @@
         .replace(/\.[^/.]+$/, '')                          // remove extension
         .toLowerCase()
         .normalize('NFD').replace(/[\u0300-\u036f]/g, '')  // remove diacritics
+        .replace(/\u0111/g, 'd')                                // \u0111 has no combining mark to strip
         .replace(/[^a-z0-9]+/g, '-')
         .replace(/^-|-$/g, '');
     }
+
 
     let toastTimer = null;
     function showToast(msg, icon = '✓', isError = false) {
@@ -767,52 +1026,18 @@
       if (fileInput.files[0]) handleFile(fileInput.files[0]);
     });
 
-    // ── Key derivation (PBKDF2 → AES-256-GCM) ──
-    let _cachedCryptoKey = null;
-    async function getKey() {
-      if (_cachedCryptoKey) return _cachedCryptoKey;
-      const enc      = new TextEncoder();
-      const baseKey  = await crypto.subtle.importKey(
-        'raw', enc.encode(PASSPHRASE), { name: 'PBKDF2' }, false, ['deriveKey']
-      );
-      _cachedCryptoKey = await crypto.subtle.deriveKey(
-        { name: 'PBKDF2', salt: enc.encode(SALT_STR), iterations: ITERATIONS, hash: 'SHA-256' },
-        baseKey,
-        { name: 'AES-GCM', length: 256 },
-        false,
-        ['encrypt', 'decrypt']
-      );
-      return _cachedCryptoKey;
-    }
-
     // ── Encrypt logic ──
     async function encryptFile(file) {
-      const key      = await getKey();
-      const iv       = crypto.getRandomValues(new Uint8Array(IV_BYTE_LEN));
-      const buffer   = await file.arrayBuffer();
-
-      const cipherBuffer = await crypto.subtle.encrypt(
-        { name: 'AES-GCM', iv },
-        key,
-        buffer
-      );
-
-      // Concatenate IV + Ciphertext → Base64
-      const combined = new Uint8Array(IV_BYTE_LEN + cipherBuffer.byteLength);
-      combined.set(iv, 0);
-      combined.set(new Uint8Array(cipherBuffer), IV_BYTE_LEN);
-
-      // Base64 encode
-      let binary = '';
-      combined.forEach(b => binary += String.fromCharCode(b));
-      return btoa(binary);
+      return AppCrypto.encryptBytes(await file.arrayBuffer());
     }
 
     // ── Encrypt button ──
     btnEncrypt.addEventListener('click', async () => {
       if (!currentFile) return;
 
-      const imageKey = keyInput.value.trim() || slugify(currentFile.name);
+      // The key is a file name and a URL: keep it to a-z, 0-9 and "-"
+      const imageKey = slugify(keyInput.value.trim()) || slugify(currentFile.name);
+      keyInput.value = imageKey;
 
       btnEncrypt.disabled = true;
       btnEncrypt.classList.add('loading');
@@ -841,25 +1066,27 @@
       }
     });
 
+    // ── Clipboard (async API, with a select + execCommand fallback) ──
+    async function copyTextareaValue(textarea) {
+      try {
+        await navigator.clipboard.writeText(textarea.value);
+      } catch {
+        textarea.select();
+        document.execCommand('copy');
+      }
+    }
+
     // ── Copy single result ──
     btnCopy.addEventListener('click', async () => {
-      const text = resultTextarea.value;
-      if (!text) return;
-      try {
-        await navigator.clipboard.writeText(text);
-        btnCopy.classList.add('copied');
-        btnCopy.textContent = '✓  Đã copy!';
-        showToast('Đã copy chuỗi mã hóa vào clipboard');
-        setTimeout(() => {
-          btnCopy.classList.remove('copied');
-          btnCopy.innerHTML = '📋 &nbsp;Copy';
-        }, 2000);
-      } catch {
-        // Fallback
-        resultTextarea.select();
-        document.execCommand('copy');
-        showToast('Đã copy!');
-      }
+      if (!resultTextarea.value) return;
+      await copyTextareaValue(resultTextarea);
+      btnCopy.classList.add('copied');
+      btnCopy.textContent = '✓  Đã copy!';
+      showToast('Đã copy chuỗi mã hóa vào clipboard');
+      setTimeout(() => {
+        btnCopy.classList.remove('copied');
+        btnCopy.innerHTML = '📋 &nbsp;Copy';
+      }, 2000);
     });
 
     // ── Add to batch ──
@@ -927,6 +1154,159 @@
         .join(',\n');
       return `{\n${entries}\n}`;
     }
+
+    /* ══════════════════════════════════════════════════════════════
+       MODE DROPDOWN (Ảnh / Lá thư)
+       ══════════════════════════════════════════════════════════════ */
+    const modePicker  = document.getElementById('mode-picker');
+    const modeTrigger = document.getElementById('mode-trigger');
+    const modeMenu    = document.getElementById('mode-menu');
+    const modes = {
+      image:  { option: document.getElementById('mode-option-image'),  panel: document.getElementById('panel-image'),  label: 'Ảnh' },
+      letter: { option: document.getElementById('mode-option-letter'), panel: document.getElementById('panel-letter'), label: 'Lá thư' }
+    };
+    const modeNames = Object.keys(modes);
+    let currentMode = 'image';
+    let focusedMode = currentMode;   // option highlighted while the menu is open
+
+    function selectMode(name) {
+      currentMode = name;
+      modeNames.forEach((key) => {
+        modes[key].option.setAttribute('aria-selected', String(key === name));
+        modes[key].panel.hidden = key !== name;
+      });
+      document.getElementById('mode-trigger-text').textContent = modes[name].label;
+      document.getElementById('mode-trigger-icon').innerHTML = modes[name].option.querySelector('.mode-icon').innerHTML;
+    }
+
+    function focusMode(name) {
+      focusedMode = name;
+      modeNames.forEach((key) => modes[key].option.classList.toggle('focused', key === name));
+      modeTrigger.setAttribute('aria-activedescendant', modes[name].option.id);
+    }
+
+    function setMenuOpen(open) {
+      modePicker.classList.toggle('open', open);
+      modeTrigger.setAttribute('aria-expanded', String(open));
+      if (open) {
+        focusMode(currentMode);
+      } else {
+        modeTrigger.removeAttribute('aria-activedescendant');
+        modeNames.forEach((key) => modes[key].option.classList.remove('focused'));
+      }
+    }
+
+    function chooseMode(name) {
+      selectMode(name);
+      setMenuOpen(false);
+      modeTrigger.focus();
+    }
+
+    modeTrigger.addEventListener('click', () => setMenuOpen(!modePicker.classList.contains('open')));
+
+    modeMenu.addEventListener('click', (e) => {
+      const option = e.target.closest('.mode-option');
+      if (option) chooseMode(option.dataset.mode);
+    });
+    modeMenu.addEventListener('mousemove', (e) => {
+      const option = e.target.closest('.mode-option');
+      if (option) focusMode(option.dataset.mode);
+    });
+
+    modeTrigger.addEventListener('keydown', (e) => {
+      const isOpen = modePicker.classList.contains('open');
+      const step = e.key === 'ArrowDown' ? 1 : e.key === 'ArrowUp' ? -1 : 0;
+      if (step) {
+        e.preventDefault();
+        if (!isOpen) { setMenuOpen(true); return; }
+        focusMode(modeNames[(modeNames.indexOf(focusedMode) + step + modeNames.length) % modeNames.length]);
+      } else if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        if (isOpen) chooseMode(focusedMode); else setMenuOpen(true);
+      } else if (e.key === 'Escape' && isOpen) {
+        e.preventDefault();
+        setMenuOpen(false);
+      } else if (e.key === 'Tab' && isOpen) {
+        setMenuOpen(false);
+      }
+    });
+
+    // Click anywhere else closes the menu
+    document.addEventListener('click', (e) => {
+      if (!modePicker.contains(e.target)) setMenuOpen(false);
+    });
+
+    /* ══════════════════════════════════════════════════════════════
+       LETTER — {body, signature}, each text → AES-GCM → Base64
+       (same key and IV+ciphertext format as images; decoded by typing.js)
+       ══════════════════════════════════════════════════════════════ */
+    const letterBody     = document.getElementById('letter-body');
+    const letterSig      = document.getElementById('letter-sig');
+    const letterResult   = document.getElementById('letter-result');
+    const letterStatus   = document.getElementById('letter-status');
+    const btnLetterEnc   = document.getElementById('btn-letter-encrypt');
+    const btnLetterVerify = document.getElementById('btn-letter-verify');
+    const btnLetterCopy  = document.getElementById('btn-letter-copy');
+
+    const letterBodyCount = document.getElementById('letter-body-count');
+
+    function updateLetterCount() {
+      const text  = letterBody.value;
+      const lines = text ? text.split('\n').length : 0;
+      letterBodyCount.textContent = `${text.length.toLocaleString('vi-VN')} ký tự · ${lines} dòng`;
+    }
+    letterBody.addEventListener('input', updateLetterCount);
+    updateLetterCount();
+
+    function setLetterStatus(msg, kind = '') {
+      letterStatus.textContent = msg;
+      letterStatus.className = 'letter-status ' + kind;
+    }
+
+    const LETTER_FIELD_RE = (field) => new RegExp(field + ":\\s*'([^']+)'");
+
+    btnLetterEnc.addEventListener('click', async () => {
+      if (!letterBody.value.trim()) {
+        setLetterStatus('Chưa có nội dung thư.', 'err');
+        return;
+      }
+      try {
+        const [body, signature] = await Promise.all([
+          AppCrypto.encryptText(letterBody.value),
+          AppCrypto.encryptText(letterSig.value)
+        ]);
+        letterResult.value = `const LetterData = {\n  body:      '${body}',\n  signature: '${signature}'\n};`;
+        document.getElementById('letter-result-card').classList.add('visible');
+        // Fit the box to its content (only measurable once the card is displayed)
+        letterResult.style.height = 'auto';
+        letterResult.style.height = letterResult.scrollHeight + 'px';
+        setLetterStatus('Đã mã hóa. Thay khối const LetterData ở cuối js/encrypted-data.js bằng kết quả bên dưới.', 'ok');
+      } catch (err) {
+        console.error('[EncryptTool] Letter encrypt error:', err);
+        setLetterStatus('Lỗi mã hóa: ' + err.message, 'err');
+      }
+    });
+
+    btnLetterVerify.addEventListener('click', async () => {
+      try {
+        const [body, signature] = await Promise.all(
+          ['body', 'signature'].map((field) => AppCrypto.decryptText(letterResult.value.match(LETTER_FIELD_RE(field))[1]))
+        );
+        const same = body === letterBody.value && signature === letterSig.value;
+        setLetterStatus(
+          same ? 'Giải mã khớp 100% với nội dung đã nhập.' : 'Giải mã được nhưng KHÔNG khớp nội dung nhập.',
+          same ? 'ok' : 'err'
+        );
+      } catch (err) {
+        setLetterStatus('Giải mã thất bại: ' + err.message, 'err');
+      }
+    });
+
+    btnLetterCopy.addEventListener('click', async () => {
+      await copyTextareaValue(letterResult);
+      showToast('Đã copy khối LetterData');
+    });
+
   </script>
 </body>
 </html>

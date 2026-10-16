@@ -1,10 +1,12 @@
 /* --------------------------------------------------------------------------
    IMAGE PROVIDER MODULE
-   Public API for all consumers (Renderer, Gallery, etc.).
+   Public API for all consumers (Renderer, Gallery, Special Days, ...).
    Responsibilities:
-     - Serve ObjectURLs on demand (cache-first)
+     - Serve ObjectURLs on demand (cache-first): a photo is only decrypted when
+       something asks for it, never "all of them at startup"
      - Prevent duplicate decryptions via an internal Map cache
-     - Immediate background preloading on startup for zero-latency UI
+     - Download an extra data file (the special-day photos) only when it is needed
+     - Background preloading of the photos a screen will want soon
      - Clean up ObjectURLs to prevent memory leaks
    -------------------------------------------------------------------------- */
 
@@ -24,11 +26,64 @@ const ImageProvider = (function () {
   const _pending = new Map();
 
   /**
-   * Resolves an image key to its encoded string from ImageData.
-   * @param {string} imageKey
-   * @returns {string} encodedString
+   * Extra data files requested through loadData(): src → download promise
+   * @type {Map<string, Promise<void>>}
    */
-  function _resolve(imageKey) {
+  const _dataFiles = new Map();
+  let _downloading = 0;
+
+  /**
+   * Whether a photo can be served: its data is already in ImageData, or a data
+   * file that may still bring it is downloading.
+   * @param {string} imageKey
+   * @returns {boolean}
+   */
+  function has(imageKey) {
+    return Boolean(ImageData[imageKey]) || _downloading > 0;
+  }
+
+  /**
+   * Downloads an extra data file (a script that adds photos to ImageData) once.
+   * Resolves when its code has run, rejects if it could not be downloaded
+   * (a later call tries again).
+   * @param {string} src
+   * @returns {Promise<void>}
+   */
+  function loadData(src) {
+    if (_dataFiles.has(src)) return _dataFiles.get(src);
+
+    _downloading++;
+    // A <script>, not fetch(): index.html keeps working when opened straight from disk
+    const download = new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = src;
+      script.async = true;
+      script.onload = () => {
+        script.remove();
+        resolve();
+      };
+      script.onerror = () => {
+        script.remove();
+        reject(new Error(`[ImageProvider] Could not download ${src}`));
+      };
+      document.head.appendChild(script);
+    }).finally(() => { _downloading--; });
+
+    _dataFiles.set(src, download);
+    download.catch(() => _dataFiles.delete(src));
+    return download;
+  }
+
+  /**
+   * Resolves an image key to its encoded string from ImageData, first waiting
+   * for the data files still downloading if the key is not there yet.
+   * @param {string} imageKey
+   * @returns {Promise<string>} encodedString
+   */
+  async function _resolve(imageKey) {
+    if (!ImageData[imageKey]) {
+      await Promise.allSettled([..._dataFiles.values()]);
+    }
     const encoded = ImageData[imageKey];
     if (!encoded) {
       throw new Error(`[ImageProvider] Unknown image key: "${imageKey}"`);
@@ -56,14 +111,14 @@ const ImageProvider = (function () {
 
     // 3. Decode & cache result
     const decodePromise = (async () => {
-      const encoded   = _resolve(imageKey);
-      if (!encoded || encoded.length === 0) {
-        throw new Error(`[ImageProvider] Empty string for key "${imageKey}"`);
+      try {
+        const encoded = await _resolve(imageKey);
+        const objectUrl = await ImageDecoder.decode(encoded);
+        _cache.set(imageKey, objectUrl);
+        return objectUrl;
+      } finally {
+        _pending.delete(imageKey);
       }
-      const objectUrl = await ImageDecoder.decode(encoded);
-      _cache.set(imageKey, objectUrl);
-      _pending.delete(imageKey);
-      return objectUrl;
     })();
 
     _pending.set(imageKey, decodePromise);
@@ -77,7 +132,7 @@ const ImageProvider = (function () {
    */
   async function preload(imageKeys) {
     const tasks = imageKeys
-      .filter(key => key && !_cache.has(key) && ImageData[key] && ImageData[key].length > 0)
+      .filter(key => key && !_cache.has(key) && has(key))
       .map(key => get(key).catch(err => {
         // Silently handle empty placeholder or unpopulated key
       }));
@@ -96,23 +151,5 @@ const ImageProvider = (function () {
     _pending.clear();
   }
 
-  // ── Immediate Auto Preload ─────────────────────────────────────────────
-  // Start decoding all images immediately on page load so all 7 images are ready instantly
-  if (typeof window !== 'undefined') {
-    const _startImmediatePreload = () => {
-      if (typeof ImageData !== 'object') return;
-      const validKeys = Object.keys(ImageData).filter(k => ImageData[k] && ImageData[k].length > 0);
-      if (validKeys.length > 0) {
-        preload(validKeys);
-      }
-    };
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', _startImmediatePreload);
-    } else {
-      setTimeout(_startImmediatePreload, 0);
-    }
-  }
-
-  return { get, preload, clearCache };
+  return { has, loadData, get, preload, clearCache };
 })();

@@ -188,11 +188,25 @@ const SpecialEventsEffects = (function () {
     ctx.bezierCurveTo(r * 0.7, -r * 0.8, r * 0.95, r * 0.35, 0, r);
   }
 
+  // ctx.roundRect is missing before Safari 16 / Firefox 112: the same shape from arcs there
+  function roundRect(ctx, x, y, w, h, radius) {
+    if (typeof ctx.roundRect === 'function') {
+      ctx.roundRect(x, y, w, h, radius);
+      return;
+    }
+    ctx.moveTo(x + radius, y);
+    ctx.arcTo(x + w, y, x + w, y + h, radius);
+    ctx.arcTo(x + w, y + h, x, y + h, radius);
+    ctx.arcTo(x, y + h, x, y, radius);
+    ctx.arcTo(x, y, x + w, y, radius);
+    ctx.closePath();
+  }
+
   // Paint shapes: the theme colour is already the fillStyle; details are pale overlays
   function paintCake(ctx, r) {
     ctx.beginPath();
-    ctx.roundRect(-r * 0.95, r * 0.2, r * 1.9, r * 0.75, r * 0.14);   // bottom tier
-    ctx.roundRect(-r * 0.6, -r * 0.3, r * 1.2, r * 0.55, r * 0.12);   // top tier
+    roundRect(ctx, -r * 0.95, r * 0.2, r * 1.9, r * 0.75, r * 0.14);   // bottom tier
+    roundRect(ctx, -r * 0.6, -r * 0.3, r * 1.2, r * 0.55, r * 0.12);   // top tier
     ctx.fill();
 
     ctx.fillStyle = HIGHLIGHT;                                         // icing line + candle
@@ -208,8 +222,8 @@ const SpecialEventsEffects = (function () {
 
   function paintGift(ctx, r) {
     ctx.beginPath();
-    ctx.roundRect(-r * 0.8, -r * 0.05, r * 1.6, r * 0.95, r * 0.1);   // box
-    ctx.roundRect(-r * 0.92, -r * 0.4, r * 1.84, r * 0.4, r * 0.1);   // lid
+    roundRect(ctx, -r * 0.8, -r * 0.05, r * 1.6, r * 0.95, r * 0.1);   // box
+    roundRect(ctx, -r * 0.92, -r * 0.4, r * 1.84, r * 0.4, r * 0.1);   // lid
     ctx.fill();
 
     ctx.fillStyle = HIGHLIGHT;                                         // ribbon + bow

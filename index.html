@@ -374,7 +374,7 @@
   </div>
 
   <!-- SHARE MODAL (opened from the floating dock) -->
-  <div id="share-modal" class="share-modal" role="dialog" aria-modal="true" aria-labelledby="share-modal-title" aria-hidden="true">
+  <div id="share-modal" class="share-modal" role="dialog" aria-modal="true" aria-labelledby="share-modal-title" aria-hidden="true" data-lenis-prevent>
     <div class="share-panel">
       <button id="share-close-btn" class="share-close" type="button" aria-label="Đóng"><i class="fas fa-times"></i></button>
 
@@ -385,7 +385,7 @@
       </header>
 
       <div class="share-media">
-        <img class="share-card-img" src="./assets/qr-milove.png" alt="Thẻ mã QR mở Bức Tâm Thư" width="1080" height="1316" loading="lazy">
+        <img class="share-card-img" src="./assets/qr-milove-heart.png" alt="Thẻ mã QR hình trái tim mở Bức Tâm Thư" width="1080" height="1316" loading="lazy">
       </div>
 
       <div class="share-actions">
@@ -403,7 +403,7 @@
             <span class="share-action-sub">ngimnee.github.io/milove</span>
           </span>
         </button>
-        <a class="share-action" href="./assets/qr-milove.png" download="buc-tam-thu-qr.png">
+        <a class="share-action" href="./assets/qr-milove-heart.png" download="buc-tam-thu-qr.png">
           <span class="share-action-icon"><i class="fas fa-download"></i></span>
           <span class="share-action-text">
             <span class="share-action-label">Tải thẻ QR</span>
@@ -417,6 +417,7 @@
   <!-- Custom Scripts (Strict Relative Paths) -->
   <script src="./js/audio.js"></script>
   <script src="./js/cursor.js"></script>
+  <script src="./js/ambient-loop.js"></script>
   <script src="./js/galaxy.js"></script>
   <script src="./js/hearts.js"></script>
   <script src="./js/sakura.js"></script>
@@ -427,17 +428,18 @@
   <script src="./js/typing.js"></script>
   <script src="./js/countdown.js"></script>
 
-  <!-- Image Encryption System (load before gallery & renderers) -->
+  <!-- Image Encryption System (load before gallery & renderers).
+       encrypted-data.js holds the album & gallery photos and the letter. The special-day
+       photos are in encrypted-special-data.js, which ImageProvider downloads only on a special day. -->
   <script src="./js/crypto.js"></script>
   <script src="./js/image-decoder.js"></script>
   <script src="./js/image-provider.js"></script>
-  <script src="./js/image-data.js"></script>
+  <script src="./js/encrypted-data.js"></script>
 
   <script src="./js/gallery.js"></script>
   <script src="./js/timeline.js"></script>
   <script src="./js/quotes.js"></script>
   <script src="./js/scroll.js"></script>
-
 
   <!-- Memory Book Modular Engines -->
   <script src="./js/memory-book-storage.js"></script>
@@ -459,7 +461,6 @@
   <script src="./js/special-events-controller.js"></script>
 
   <script src="./js/share.js"></script>
-
   <script src="./js/app.js"></script>
 </body>
 </html>

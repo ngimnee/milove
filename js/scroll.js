@@ -17,19 +17,23 @@ const SmoothScrollEngine = (function() {
         smoothTouch: false
       });
 
-      function raf(time) {
-        lenis.raf(time);
-        requestAnimationFrame(raf);
-      }
-      requestAnimationFrame(raf);
-
-      // Connect with GSAP ScrollTrigger if available
-      if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
-        lenis.on('scroll', ScrollTrigger.update);
+      // Lenis works out its step from the time between two raf() calls, so exactly ONE clock may
+      // drive it: two (its own requestAnimationFrame loop plus gsap.ticker) hand it alternating
+      // timestamps and the page scroll stutters.
+      if (typeof gsap !== 'undefined') {
+        if (typeof ScrollTrigger !== 'undefined') {
+          lenis.on('scroll', ScrollTrigger.update);
+        }
         gsap.ticker.add((time) => {
           lenis.raf(time * 1000);
         });
         gsap.ticker.lagSmoothing(0);
+      } else {
+        const raf = (time) => {
+          lenis.raf(time);
+          requestAnimationFrame(raf);
+        };
+        requestAnimationFrame(raf);
       }
     }
   }

@@ -1,13 +1,21 @@
 /* --------------------------------------------------------------------------
    FALLING SAKURA (CHERRY BLOSSOM) PETALS CANVAS ENGINE
+   One pre-rendered petal sprite (gradient included) drawn with a transform,
+   instead of a new gradient per petal per frame. Driven by AmbientLoop.
    -------------------------------------------------------------------------- */
 
 const SakuraEngine = (function() {
   'use strict';
 
+  const SPRITE_SIZE = 20;                 // petal radius inside the sprite (px)
+  const SPRITE_PX = SPRITE_SIZE * 2;
+  const SMALL_SCREEN_QUERY = '(max-width: 768px)';
+  const SMALL_SCREEN_DENSITY = 0.6;
+
   let canvas, ctx;
   let width, height;
   let petals = [];
+  let petalSprite = null;
   const petalCount = 45;
 
   function init() {
@@ -23,21 +31,31 @@ const SakuraEngine = (function() {
     document.getElementById('bg-canvas-container').appendChild(canvas);
 
     ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    petalSprite = createPetalSprite();
     resize();
     createPetals();
 
     window.addEventListener('resize', resize);
-    animate();
+    if (AmbientLoop.reducedMotion) {
+      draw();
+    } else {
+      AmbientLoop.add(step);
+    }
   }
 
   function resize() {
     width = canvas.width = window.innerWidth;
     height = canvas.height = window.innerHeight;
+    if (AmbientLoop.reducedMotion) draw();
   }
 
   function createPetals() {
     petals = [];
-    for (let i = 0; i < petalCount; i++) {
+    const density = window.matchMedia(SMALL_SCREEN_QUERY).matches ? SMALL_SCREEN_DENSITY : 1;
+    const count = Math.round(petalCount * density);
+
+    for (let i = 0; i < count; i++) {
       petals.push({
         x: Math.random() * width,
         y: Math.random() * height,
@@ -53,35 +71,51 @@ const SakuraEngine = (function() {
     }
   }
 
-  function drawPetal(x, y, size, rotation, opacity) {
-    ctx.save();
-    ctx.translate(x, y);
-    ctx.rotate(rotation);
-    ctx.globalAlpha = opacity;
+  // Sakura pink gradient, painted once; petals are this sprite scaled to their own size
+  function createPetalSprite() {
+    const sprite = document.createElement('canvas');
+    sprite.width = sprite.height = SPRITE_PX;
+    const c = sprite.getContext('2d');
+    const size = SPRITE_SIZE;
+    c.translate(SPRITE_SIZE, SPRITE_SIZE);
 
-    // Sakura Pink Gradient
-    const gradient = ctx.createLinearGradient(-size, -size, size, size);
+    const gradient = c.createLinearGradient(-size, -size, size, size);
     gradient.addColorStop(0, '#ffb7c5');
     gradient.addColorStop(0.6, '#ff69b4');
     gradient.addColorStop(1, '#ff3385');
-    ctx.fillStyle = gradient;
+    c.fillStyle = gradient;
 
-    ctx.beginPath();
-    ctx.moveTo(0, -size);
-    ctx.bezierCurveTo(size * 0.8, -size * 0.5, size * 0.8, size * 0.5, 0, size);
-    ctx.bezierCurveTo(-size * 0.8, size * 0.5, -size * 0.8, -size * 0.5, 0, -size);
-    ctx.fill();
-    ctx.restore();
+    c.beginPath();
+    c.moveTo(0, -size);
+    c.bezierCurveTo(size * 0.8, -size * 0.5, size * 0.8, size * 0.5, 0, size);
+    c.bezierCurveTo(-size * 0.8, size * 0.5, -size * 0.8, -size * 0.5, 0, -size);
+    c.fill();
+    return sprite;
   }
 
-  function animate() {
+  function draw() {
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.clearRect(0, 0, width, height);
+    for (const p of petals) {
+      const scale = p.size / SPRITE_SIZE;
+      const cos = Math.cos(p.rotation) * scale;
+      const sin = Math.sin(p.rotation) * scale;
+      ctx.setTransform(cos, sin, -sin, cos, p.x, p.y);
+      ctx.globalAlpha = p.opacity;
+      ctx.drawImage(petalSprite, -SPRITE_SIZE, -SPRITE_SIZE);
+    }
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.globalAlpha = 1;
+  }
+
+  function step(dt) {
+    const f = dt * 60; // 1 = one 60 fps frame
 
     petals.forEach(p => {
-      p.oscillation += p.oscillationSpeed;
-      p.x += Math.sin(p.oscillation) * 1.5 + p.speedX;
-      p.y += p.speedY;
-      p.rotation += p.rotationSpeed;
+      p.oscillation += p.oscillationSpeed * f;
+      p.x += (Math.sin(p.oscillation) * 1.5 + p.speedX) * f;
+      p.y += p.speedY * f;
+      p.rotation += p.rotationSpeed * f;
 
       if (p.y > height + 20) {
         p.y = -20;
@@ -89,11 +123,9 @@ const SakuraEngine = (function() {
       }
       if (p.x > width + 20) p.x = -20;
       if (p.x < -20) p.x = width + 20;
-
-      drawPetal(p.x, p.y, p.size, p.rotation, p.opacity);
     });
 
-    requestAnimationFrame(animate);
+    draw();
   }
 
   return {

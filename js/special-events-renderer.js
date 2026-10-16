@@ -7,8 +7,10 @@
              photos along its rim, stepping out and in — drawn by SpecialEventsHeart), beside a
              letter-paper card
    Config text is only ever assigned through textContent.
-   Images: ImageData keys go through ImageProvider (already decrypted and cached
-   at startup); anything else is treated as a relative asset path.
+   Images: keys in ImageData (js/encrypted-data.js, and js/encrypted-special-data.js
+   on a special day) go through ImageProvider, which decrypts only the photos
+   asked for while the loading screen shows; anything else is treated as a
+   relative asset path.
    -------------------------------------------------------------------------- */
 
 const SpecialEventsRenderer = (function () {
@@ -18,7 +20,8 @@ const SpecialEventsRenderer = (function () {
   const GATE_TITLE_ID = 'special-event-gate-title';
   const TITLE_ID = 'special-event-title';
   const MAX_PHOTOS = 8;
-  const YEARS_TOKEN = /\{years\}/g;
+  const YEARS_TOKEN = /\{years\}/g;       // 1 → "1"
+  const YEARS_2_TOKEN = /\{years2\}/g;    // 1 → "01"
   const DAYS_TOKEN = /\{days\}/g;
 
   const PILL = `
@@ -74,9 +77,33 @@ const SpecialEventsRenderer = (function () {
 
   // ── Images ──────────────────────────────────────────────────────────────
 
+  // A bare name (no "/" or ".") is an encrypted photo's key (in ImageData), not a file path
+  const isPhotoKey = src => !/[/.]/.test(src);
+
   function resolveSource(ref) {
-    if (typeof ImageData === 'object' && ImageData[ref]) return ImageProvider.get(ref);
-    return Promise.resolve(ref);
+    return isPhotoKey(ref) ? ImageProvider.get(ref) : Promise.resolve(ref);
+  }
+
+  /**
+   * The encrypted-photo keys among the entries (file paths and empty entries left out)
+   * @param {Array<string|{src: string}|null|undefined>} entries
+   * @returns {string[]}
+   */
+  function photoKeys(entries) {
+    return (entries || [])
+      .filter(Boolean)
+      .map(entry => (typeof entry === 'string' ? entry : entry.src))
+      .filter(src => src && isPhotoKey(src));
+  }
+
+  // A key with no encrypted photo behind it (a placeholder waiting for its photo) has nothing to
+  // show: leave it out instead of requesting a file that does not exist. While the special-day data
+  // file is still downloading every key may yet turn up there, so none is dropped before it arrives.
+  function hasImage(src) {
+    if (!isPhotoKey(src)) return true;
+    const available = ImageProvider.has(src);
+    if (!available) console.info(`[SpecialEvents] Skipped "${src}": no encrypted image in js/encrypted-data.js or js/encrypted-special-data.js yet.`);
+    return available;
   }
 
   /**
@@ -84,32 +111,59 @@ const SpecialEventsRenderer = (function () {
    * are loading/decoded long before the reveal needs them.
    * @param {Array<string|{src: string, caption?: string}>} entries
    * @param {{ skip?: string|{src: string} }} options skip: an image to leave out (the featured one is not repeated on the ring)
-   * @returns {{ img: HTMLImageElement, caption: string }[]}
+   * @returns {{ img: HTMLImageElement, caption: string, ready: Promise<void> }[]}
+   *   ready settles once the photo has loaded or failed (it never rejects), for the loading screen
    */
   function prepareImages(entries, { skip } = {}) {
     const skipSrc = skip && (typeof skip === 'string' ? skip : skip.src);
     return (entries || [])
-      .filter(entry => (typeof entry === 'string' ? entry : entry.src) !== skipSrc)
+      .filter(entry => entry && (typeof entry === 'string' ? entry : entry.src) !== skipSrc)
+      .filter(entry => hasImage(typeof entry === 'string' ? entry : entry.src))
       .slice(0, MAX_PHOTOS)
       .map(entry => {
-      const { src, caption = '' } = typeof entry === 'string' ? { src: entry } : entry;
+      const { src, caption = '', focus = null } = typeof entry === 'string' ? { src: entry } : entry;
       const img = new Image();
       img.alt = caption;
       img.decoding = 'async';
-      img.addEventListener('load', () => img.classList.add('is-loaded'), { once: true });
-      // A missing file just leaves the moon's soft placeholder showing
-      img.addEventListener('error', () => {
-        console.warn(`[SpecialEvents] Image not found: "${src}"`);
-        img.remove();
-      }, { once: true });
-      resolveSource(src)
-        .then(url => { img.src = url; })
-        .catch(err => {
-          console.warn(`[SpecialEvents] Image "${src}" could not be decoded:`, err);
+      const ready = new Promise(resolve => {
+        img.addEventListener('load', () => {
+          applyFocus(img, focus);
+          img.classList.add('is-loaded');
+          resolve();
+        }, { once: true });
+        // A missing file just leaves the moon's soft placeholder showing
+        img.addEventListener('error', () => {
+          console.warn(`[SpecialEvents] Image not found: "${src}"`);
           img.remove();
-        });
-      return { img, caption };
+          resolve();
+        }, { once: true });
+        resolveSource(src)
+          .then(url => { img.src = url; })
+          .catch(err => {
+            console.warn(`[SpecialEvents] Image "${src}" could not be decoded:`, err);
+            img.remove();
+            resolve();
+          });
+      });
+      return { img, caption, focus, ready };
     });
+  }
+
+  // A photo is shown in a round (square) frame with object-fit: cover, which keeps the middle and cuts the
+  // rest. With a focus point [x, y] (0–1, the centre of the subject) the visible square is centred on it
+  // instead (and kept inside the photo), so a face near the top or edge of a tall or wide photo stays in view.
+  function applyFocus(img, focus) {
+    if (!Array.isArray(focus) || !img.naturalWidth || !img.naturalHeight) return;
+    const [fx, fy] = focus;
+    const { naturalWidth: w, naturalHeight: h } = img;
+    const toPercent = (center, size, visible) => {
+      const spare = size - visible;
+      if (spare <= 0) return 50;
+      const offset = Math.min(spare, Math.max(0, center * size - visible / 2));
+      return (offset / spare) * 100;
+    };
+    const visible = Math.min(w, h);
+    img.style.objectPosition = `${toPercent(fx, w, visible)}% ${toPercent(fy, h, visible)}%`;
   }
 
   // ── DOM ─────────────────────────────────────────────────────────────────
@@ -123,7 +177,10 @@ const SpecialEventsRenderer = (function () {
     const { event } = occurrence;
     const content = event.content;
     const days = occurrence.days === null ? '' : occurrence.days.toLocaleString('vi-VN');   // 1000 → "1.000"
-    const fill = text => (text || '').replace(YEARS_TOKEN, occurrence.years ?? '').replace(DAYS_TOKEN, days);
+    // {years} → "1", {years2} → "01" (same number, two digits); the day count keeps its thousands separator
+    const years = occurrence.years === null ? "" : String(occurrence.years);
+    const years2 = years.padStart(2, "0");
+    const fill = text => (text || "").replace(YEARS_2_TOKEN, years2).replace(YEARS_TOKEN, years).replace(DAYS_TOKEN, days);
 
     const root = document.createElement('div');
     root.id = ROOT_ID;
@@ -179,6 +236,7 @@ const SpecialEventsRenderer = (function () {
       galaxy: galaxy ? galaxy.panel : null,
       moons: galaxy ? galaxy.moons : [],
       hero: galaxy ? galaxy.hero : null,
+      heroFocus: galaxy ? galaxy.heroFocus : null,
       galaxyCanvas: galaxy ? galaxy.canvas : null,
       contentItems: [label, q('.se-title'), q('.se-divider'), q('.se-letter'), q('.se-action')].filter(Boolean),
       action: q('.se-action'),
@@ -218,7 +276,7 @@ const SpecialEventsRenderer = (function () {
     panel.append(...moons);
 
     // The featured photo is painted into the heart's canvas, so only its image is handed over
-    return { panel, canvas, moons, hero: feature ? feature.img : null };
+    return { panel, canvas, moons, hero: feature ? feature.img : null, heroFocus: feature ? feature.focus : null };
   }
 
   function createMoon({ img, caption }) {
@@ -282,5 +340,5 @@ const SpecialEventsRenderer = (function () {
     return `${pad(day)} · ${pad(month)}`;
   }
 
-  return { prepareImages, render };
+  return { prepareImages, photoKeys, render };
 })();

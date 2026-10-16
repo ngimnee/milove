@@ -39,7 +39,8 @@ const CustomCursor = (function() {
     // Click Ripple Effect
     window.addEventListener('click', (e) => {
       createRipple(e.clientX, e.clientY);
-      AudioEngine.playSound('click');
+      // Many elements play their own sound for the click that reached them first
+      AudioEngine.playSound('click', { unlessRecent: true });
     });
 
     // Detect Hover Elements

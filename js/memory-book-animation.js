@@ -6,8 +6,29 @@
 const MemoryBookAnimation = (function() {
   'use strict';
 
+  // The open / close sequence now running. A close that starts while the album is still
+  // opening (Esc pressed early) takes over from where the opening got to, instead of both
+  // timelines tweening the same elements at once.
+  let activeSequence = null;
+
   function getGSAP() {
     return window.gsap || null;
+  }
+
+  function track(timeline) {
+    activeSequence = timeline;
+    return timeline;
+  }
+
+  function endSequence(timeline) {
+    if (activeSequence === timeline) activeSequence = null;
+  }
+
+  function killActiveSequence() {
+    if (activeSequence) {
+      activeSequence.kill();
+      activeSequence = null;
+    }
   }
 
   function playOpenSequence(onComplete) {
@@ -45,11 +66,13 @@ const MemoryBookAnimation = (function() {
       return;
     }
 
-    const tl = gsap.timeline({
+    killActiveSequence();
+    const tl = track(gsap.timeline({
       onComplete: () => {
+        endSequence(tl);
         if (onComplete) onComplete();
       }
-    });
+    }));
 
     // Step 1: Hide Floating Utilities Dock completely while album is open
     if (dock) {
@@ -119,8 +142,10 @@ const MemoryBookAnimation = (function() {
       return;
     }
 
-    const tl = gsap.timeline({
+    killActiveSequence();
+    const tl = track(gsap.timeline({
       onComplete: () => {
+        endSequence(tl);
         document.body.classList.remove('album-active-blur');
         modal.classList.remove('active');
         if (window.AudioEngine && typeof window.AudioEngine.restoreVolume === 'function') {
@@ -128,7 +153,7 @@ const MemoryBookAnimation = (function() {
         }
         if (onComplete) onComplete();
       }
-    });
+    }));
 
     // Step 1: Fast cover close
     if (frontCover) {

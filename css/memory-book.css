@@ -619,6 +619,12 @@ body.album-active-blur #main-content {
   font-weight: 600;
   letter-spacing: 0.5px;
   white-space: nowrap;
+  transition: opacity 0.27s ease;
+}
+
+/* Dimmed while a page turns; the text changes at the middle of the flip */
+.album-page-indicator.is-turning {
+  opacity: 0.35;
 }
 
 /* RESPONSIVE BREAKPOINTS */

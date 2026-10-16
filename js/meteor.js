@@ -1,15 +1,24 @@
 /* --------------------------------------------------------------------------
    SHOOTING STAR & METEOR STREAKS CANVAS ENGINE
+   Driven by AmbientLoop (frame-rate independent). Meteors are only started
+   while the background is actually animating, so none pile up unseen while it
+   rests, and the canvas is cleared once, not every frame, when nothing flies.
    -------------------------------------------------------------------------- */
 
 const MeteorEngine = (function() {
   'use strict';
 
+  const MAX_METEORS = 6;
+
   let canvas, ctx;
   let width, height;
   let meteors = [];
+  let isClear = true;
 
   function init() {
+    // Shooting stars only move: with reduced motion there is nothing to draw
+    if (AmbientLoop.reducedMotion) return;
+
     canvas = document.createElement('canvas');
     canvas.id = 'meteor-canvas';
     canvas.style.position = 'fixed';
@@ -22,18 +31,20 @@ const MeteorEngine = (function() {
     document.getElementById('bg-canvas-container').appendChild(canvas);
 
     ctx = canvas.getContext('2d');
+    if (!ctx) return;
     resize();
 
     window.addEventListener('resize', resize);
 
     // Schedule shooting stars every 4 to 8 seconds
     scheduleMeteor();
-    animate();
+    AmbientLoop.add(step);
   }
 
   function resize() {
     width = canvas.width = window.innerWidth;
     height = canvas.height = window.innerHeight;
+    isClear = true;
   }
 
   function scheduleMeteor() {
@@ -43,6 +54,8 @@ const MeteorEngine = (function() {
   }
 
   function createMeteor() {
+    if (!ctx || document.hidden || !AmbientLoop.isRunning() || meteors.length >= MAX_METEORS) return;
+
     const startX = Math.random() * (width * 0.8) + width * 0.2;
     const startY = Math.random() * (height * 0.3);
     const length = Math.random() * 150 + 120;
@@ -62,14 +75,24 @@ const MeteorEngine = (function() {
     });
   }
 
-  function animate() {
+  function step(dt) {
+    if (meteors.length === 0) {
+      if (!isClear) {
+        ctx.clearRect(0, 0, width, height);
+        isClear = true;
+      }
+      return;
+    }
+
+    const f = dt * 60; // 1 = one 60 fps frame
     ctx.clearRect(0, 0, width, height);
+    isClear = false;
 
     for (let i = meteors.length - 1; i >= 0; i--) {
       const m = meteors[i];
-      m.x += m.dx;
-      m.y += m.dy;
-      m.opacity -= m.decay;
+      m.x += m.dx * f;
+      m.y += m.dy * f;
+      m.opacity -= m.decay * f;
 
       if (m.opacity <= 0 || m.y > height || m.x < 0) {
         meteors.splice(i, 1);
@@ -106,8 +129,6 @@ const MeteorEngine = (function() {
 
       ctx.restore();
     }
-
-    requestAnimationFrame(animate);
   }
 
   return {

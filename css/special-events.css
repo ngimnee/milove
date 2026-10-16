@@ -601,7 +601,7 @@ body.special-event-open .floating-utilities-dock {
   box-shadow: 0 0 8px var(--se-glow);
 }
 
-/* She touched or scrolled the card: no automatic close, so the timer disappears */
+/* The event time is up and she had touched the card: it stays a few seconds longer, and the bar has nothing left to show */
 .se-held .se-progress {
   opacity: 0;
 }

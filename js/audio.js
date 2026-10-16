@@ -5,23 +5,16 @@
 const AudioEngine = (function() {
   'use strict';
 
-  // Sound file mappings (relative paths)
-  const SOUND_PATHS = {
-    background: [
-      './sounds/don-gian-anh-yeu-em.mp3',
-      './sounds/background.mp3'
-    ]
-  };
-
   // Anything matching this toggles mute; extra toggles can opt in with data-audio-toggle
   const AUDIO_TOGGLE_SELECTOR = '#audio-widget-btn, #audio-widget, #dock-audio-item, [data-audio-toggle]';
   const UNLOCK_EVENTS = ['click', 'touchstart', 'keydown', 'pointerdown'];
 
-  const BACKGROUND_TRACK = { src: SOUND_PATHS.background[0], volume: 0.5 };
+  const BACKGROUND_TRACK = { src: './sounds/don-gian-anh-yeu-em.mp3', volume: 0.5 };
   const SPECIAL_DEFAULT_VOLUME = 0.6;
   const TRACK_FADE_OUT_MS = 1200;
   const TRACK_FADE_IN_MS = 1500;
   const FADE_STEPS = 30;
+  const RECENT_EFFECT_MS = 150;
 
   // Lifecycle of a special-day track temporarily replacing the background track
   const MUSIC_STATE = Object.freeze({
@@ -45,6 +38,7 @@ const AudioEngine = (function() {
   let isMuted = false;
   let isUnlocked = false;
   let isUnlockArmed = false;
+  let lastEffectAt = -Infinity;
 
   // Initialize Web Audio API Context (ONLY after user gesture unlock)
   function getAudioContext() {
@@ -145,8 +139,14 @@ const AudioEngine = (function() {
   }
 
   // Play Sound Effects (only after user has unlocked audio)
-  function playSound(type) {
+  // options.unlessRecent: skip it if another sound just played (the page-wide click sound
+  // must not double up with the sound a button already plays for the same click)
+  function playSound(type, options = {}) {
     if (isMuted || !isUnlocked) return;
+    const now = performance.now();
+    if (options.unlessRecent && now - lastEffectAt < RECENT_EFFECT_MS) return;
+    // Typing ticks come every few dozen ms and are not a click's sound: they do not count
+    if (type !== 'typing') lastEffectAt = now;
     synthesizeSoundEffect(type);
   }
 
@@ -407,3 +407,6 @@ const AudioEngine = (function() {
     stopSpecialMusic
   };
 })();
+
+// A top-level `const` is not a property of window; gallery, share and the album read it as window.AudioEngine
+window.AudioEngine = AudioEngine;

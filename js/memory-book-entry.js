@@ -71,13 +71,6 @@ const MemoryBookEntry = (function() {
     tooltipElement = document.getElementById('memory-book-tooltip');
   }
 
-  function optionsHasOpened() {
-    if (window.MemoryBookStorage && typeof window.MemoryBookStorage.hasOpenedBefore === 'function') {
-      return window.MemoryBookStorage.hasOpenedBefore();
-    }
-    return false;
-  }
-
   function bindEntryEvents() {
     if (bookButtonElement) {
       bookButtonElement.addEventListener('click', (e) => {
@@ -92,7 +85,8 @@ const MemoryBookEntry = (function() {
           triggerOpen();
         }
       });
-    }  }
+    }
+  }
 
   function triggerOpen() {
     hideTooltip();

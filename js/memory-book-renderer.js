@@ -9,7 +9,7 @@ const MemoryBookRenderer = (function () {
   'use strict';
 
   // Album Data Pages Definition (Including Cover Front & Cover Back)
-  // `image` field uses ImageData keys — not file paths.
+  // `image` field uses the photo keys listed in js/encrypted-data.js — not file paths.
   const PAGES_DATA = [
     {
       type: 'cover-front',
@@ -98,30 +98,32 @@ const MemoryBookRenderer = (function () {
     }
   ];
 
-  // ── Image Preloading ────────────────────────────────────────────────────
+  // ── Image Loading ───────────────────────────────────────────────────────
+
+  /** Every photo key the album shows, once each (for the background preload) */
+  function getImageKeys() {
+    return [...new Set(PAGES_DATA.filter(page => page.image).map(page => page.image))];
+  }
 
   /**
-   * Preloads images for the current page and adjacent pages.
+   * Shows the photos of the current page and its neighbours (a flip reveals
+   * the next page at once, so it must already be there), then queues the
+   * rest of the album for a background download.
    * Delegates entirely to ImageProvider — no crypto logic here.
    * @param {number} currentIndex
    */
   function preloadImagesAround(currentIndex) {
     const total = PAGES_DATA.length;
-    const indicesToLoad = [
+    [
       currentIndex,
       (currentIndex + 1) % total,
-      (currentIndex + 2) % total,
       (currentIndex - 1 + total) % total,
+      (currentIndex + 2) % total,
       (currentIndex - 2 + total) % total,
-    ];
-
-    const keysToPreload = indicesToLoad
-      .map(idx => PAGES_DATA[idx])
-      .filter(page => page && page.image)
-      .map(page => page.image);
+    ].forEach(_hydratePageImage);
 
     // Non-blocking preload — errors are handled inside ImageProvider
-    ImageProvider.preload(keysToPreload);
+    ImageProvider.preload(getImageKeys());
   }
 
   /**
@@ -149,15 +151,6 @@ const MemoryBookRenderer = (function () {
     } catch (err) {
       console.error(`[Renderer] Failed to load image "${page.image}":`, err);
     }
-  }
-
-  /** Hydrates all page images in parallel immediately upon render */
-  function _hydrateAllPageImages() {
-    PAGES_DATA.forEach((page, idx) => {
-      if (page && page.image) {
-        _hydratePageImage(idx);
-      }
-    });
   }
 
   // ── DOM Rendering ───────────────────────────────────────────────────────
@@ -225,8 +218,8 @@ const MemoryBookRenderer = (function () {
       </div>
     `;
 
+    // Photos are filled in by updatePageDisplay(), starting from the page the album opens on
     document.body.appendChild(modal);
-    _hydrateAllPageImages();
   }
 
   /**
@@ -317,29 +310,34 @@ const MemoryBookRenderer = (function () {
       }
     });
 
-    const indicator = document.getElementById('album-page-indicator');
-    if (indicator) {
-      const pageData = PAGES_DATA[currentIndex];
-      const totalContentPages = totalPages - 2;
-
-      if (pageData && pageData.type === 'cover-front') {
-        indicator.textContent = 'Trang Bìa';
-      } else if (pageData && pageData.type === 'cover-back') {
-        indicator.textContent = 'Trang Kết';
-      } else {
-        indicator.textContent = `Trang ${currentIndex} / ${totalContentPages}`;
-      }
-    }
-
-    // Hydrate current page image immediately, then preload adjacent
-    _hydratePageImage(currentIndex);
+    updatePageIndicator(currentIndex, totalPages);
     preloadImagesAround(currentIndex);
+  }
+
+  // Separate from updatePageDisplay so a flip can update the label the moment it starts,
+  // instead of after the animation, which made it lag behind quick page turns
+  function updatePageIndicator(currentIndex, totalPages) {
+    const indicator = document.getElementById('album-page-indicator');
+    if (!indicator) return;
+
+    const pageData = PAGES_DATA[currentIndex];
+    const totalContentPages = totalPages - 2;
+
+    if (pageData && pageData.type === 'cover-front') {
+      indicator.textContent = 'Trang Bìa';
+    } else if (pageData && pageData.type === 'cover-back') {
+      indicator.textContent = 'Trang Kết';
+    } else {
+      indicator.textContent = `Trang ${currentIndex} / ${totalContentPages}`;
+    }
   }
 
   return {
     renderAlbum,
     updatePageDisplay,
+    updatePageIndicator,
     preloadImagesAround,
+    getImageKeys,
     getPagesCount: () => PAGES_DATA.length
   };
 })();

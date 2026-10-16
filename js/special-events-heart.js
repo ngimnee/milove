@@ -289,7 +289,7 @@ const SpecialEventsHeart = (function () {
    * @param {{ canvas: HTMLCanvasElement, moons: HTMLElement[], hero?: HTMLImageElement|null, reducedMotion: boolean }} options
    * @returns {{ start: Function, destroy: Function }}
    */
-  function create(panel, { canvas, moons, hero = null, reducedMotion }) {
+  function create(panel, { canvas, moons, hero = null, heroFocus = null, reducedMotion }) {
     const ctx = panel && canvas ? canvas.getContext('2d') : null;
     if (!ctx) return { start() {}, destroy() {} };
 
@@ -503,7 +503,12 @@ const SpecialEventsHeart = (function () {
       let sh = h;
       if (w / h > BOX_ASPECT) sw = h * BOX_ASPECT;
       else sh = w / BOX_ASPECT;
-      ctx.drawImage(hero, (w - sw) / 2, (h - sh) * HERO.bias, sw, sh, -1, BOX_TOP, 2, BOX_BOTTOM - BOX_TOP);
+      // With a focus point [x, y] (the subject's centre, 0–1) the visible window is centred on it, kept
+      // inside the photo; without one it is centred sideways and cut by HERO.bias from the top/bottom
+      const place = (center, size, visible) => Math.min(size - visible, Math.max(0, center * size - visible / 2));
+      const sx = heroFocus ? place(heroFocus[0], w, sw) : (w - sw) / 2;
+      const sy = heroFocus ? place(heroFocus[1], h, sh) : (h - sh) * HERO.bias;
+      ctx.drawImage(hero, sx, sy, sw, sh, -1, BOX_TOP, 2, BOX_BOTTOM - BOX_TOP);
     }
 
     function tracePhotoOutline() {

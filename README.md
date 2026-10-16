@@ -9,21 +9,22 @@
 3. **Vũ Trụ 3D Three.js**: Hàng nghìn ngôi sao lấp lánh, tinh vân huyền ảo, phản ứng tương tác theo chuyển động con trỏ chuột.
 4. **Phong Bì 3D Tương Tác (Interactive Envelope)**: Phong bì 3D với con dấu sáp (wax seal), hiệu ứng lắc nhẹ khi di chuột, tự động mở nắp và đẩy lá thư lên toàn màn hình.
 5. **Lá Thư Typewriter & Cuộn Thông Minh**: Hiệu ứng gõ chữ từng ký tự đồng bộ âm thanh phím chân thực. Tự động cuộn theo dòng chữ gõ, tích hợp nhận diện cuộn thông minh (`isScrolledUp`) không gây giật lag và phân định vùng cuộn độc lập giữa thư và trang web.
-6. **Album Kỷ Niệm 3D (Love Memory Book)**: Quyển album da 3D với hiệu ứng lật trang gập gáy chân thực (`transform-origin: left center`), bóng cuộn trang nghệ thuật, âm thanh xào giấy Web Audio API, đánh số trang thông minh (*Trang Bìa*, *Trang 1 / 8* ... *Trang 8 / 8*, *Trang Kết*) và lưu trữ trạng thái trang mở gần nhất (`localStorage`).
+6. **Album Kỷ Niệm 3D (Love Memory Book)**: Quyển album da 3D với hiệu ứng lật trang gập gáy chân thực (`transform-origin: left center`), bóng cuộn trang nghệ thuật, âm thanh xào giấy Web Audio API, đánh số trang thông minh (*Trang Bìa*, *Trang 1 / 10* ... *Trang 10 / 10*, *Trang Kết*) và nhớ trang đang xem trong phiên (`sessionStorage`: đóng tab là album về lại trang bìa). Ảnh chỉ được tải cho trang đang xem và các trang kề bên, phần còn lại tải ngầm.
 7. **Floating Utilities Dock**: Thanh tiện ích nổi cố định góc phải (🎵 Audio + 📖 Memory Book) phong cách Glassmorphism, tự động ẩn gọn khi mở album kỷ niệm và hiển thị tooltip khi rê chuột.
-8. **Hiệu Ứng Trái Tim & Hoa Anh Đào Rơi**: 300 trái tim mây mờ cùng cánh hoa anh đào (Sakura) 3D rơi tự nhiên trên nền canvas.
+8. **Hiệu Ứng Trái Tim & Hoa Anh Đào Rơi**: 180 trái tim mờ (ít hơn trên điện thoại) cùng 45 cánh hoa anh đào (Sakura) rơi tự nhiên trên nền canvas, vẽ bằng sprite dựng sẵn nên nhẹ máy.
 9. **Sao Băng (Meteor Streaks)**: Các vệt sao băng rực rỡ lướt qua bầu trời đêm định kỳ từ 5 đến 10 giây.
 10. **Bộ Sưu Tập Khoảnh Khắc (Love Gallery)**: Thẻ hình ảnh kính mờ hiệu ứng nghiêng 3D (card tilt parallax) kết hợp hiển thị giải mã ảnh bảo mật cùng bộ xem ảnh Lightbox toàn màn hình.
 11. **Dòng Thời Gian Tình Yêu (Love Journey Timeline)**: Trục thời gian phát sáng dọc thân trang, hiển thị các cột mốc ý nghĩa khi cuộn trang.
 12. **Đồng Hồ Đếm Thời Gian Realtime**: Bộ đếm thời gian bên nhau tính chính xác từng Ngày, Giờ, Phút, Giây.
 13. **Trích Dẫn Lãng Mạn (Quotes Generator)**: Bộ sưu tập những câu nói truyền cảm hứng tình yêu kèm chuyển cảnh hiệu ứng hạt.
 14. **Pháo Hoa & Bão Trái Tim (Grand Finale)**: Màn trình diễn pháo hoa canvas rực rỡ kết hợp Confetti trái tim chúc mừng khi đọc xong lá thư.
-15. **Âm Thanh Hybrids (Sound Engine)**: Tự động phát nhạc nền (`sounds/background.mp3`), đồng bộ nút bấm tiện ích và hiệu ứng âm thanh. Tích hợp bộ tổng hợp âm thanh **Web Audio API Synthesizer** phát tiếng lật trang, nhấp chuột và gõ phím chân thực.
+15. **Âm Thanh Hybrids (Sound Engine)**: Tự động phát nhạc nền (`sounds/don-gian-anh-yeu-em.mp3`), đồng bộ nút bấm tiện ích và hiệu ứng âm thanh. Tích hợp bộ tổng hợp âm thanh **Web Audio API Synthesizer** phát tiếng lật trang, nhấp chuột và gõ phím chân thực.
 16. **Con Trỏ Phát Sáng (Custom Glowing Cursor)**: Con trỏ phát sáng với vệt hạt mịn và hiệu ứng sóng nước (ripple) khi nhấp chuột.
-17. **Hệ Thống Bảo Mật & Mã Hóa Hình Ảnh Client-side (AES-256-GCM / Web Crypto API)**: Công cụ mã hóa hình ảnh offline `encrypt-tool.html`. Dữ liệu hình ảnh được mã hóa bảo mật lưu tại `js/image-data.js` và giải mã bất đồng bộ cache-first với `ImageProvider` & `ImageDecoder` thông qua Blob ObjectURL giúp tối ưu trải nghiệm và bảo mật.
+17. **Bảo Vệ Ảnh & Lá Thư**: Ảnh và nội dung thư không nằm trong code dạng đọc được. Công cụ offline `encrypt-tool.html` (tab Ảnh và tab Lá thư) tạo dữ liệu đã mã hóa: ảnh album/gallery và lá thư nằm ở `js/encrypted-data.js`, ảnh Ngày đặc biệt nằm riêng ở `js/encrypted-special-data.js`; website chỉ giải mã ảnh nào cần hiển thị (ảnh được cache để không giải mã lại). Lưu ý: đây là làm mờ để người xem thông thường không đọc được, không phải bảo mật tuyệt đối, vì khóa nằm trong `js/crypto.js`.
 18. **Chuẩn Xem Trước Link Chia Sẻ (Open Graph & Social Preview)**: Tích hợp đầy đủ thẻ meta Open Graph cho Facebook, Zalo, Messenger, iMessage với kích thước ảnh xem trước 1200x630 chuẩn sắc nét.
-19. **Ngày Đặc Biệt (Special Days — "Dấu Niêm Phong Của Hôm Nay")**: Đúng vào sinh nhật, ngày kỷ niệm, Valentine, 08/03, 20/10…, ngay sau màn loading (trước "Có những lời…") hiện một con dấu sáp khắc ngày hôm đó giữa mưa tim. Chạm vào con dấu → vài lời thì thầm → một thiên hà tình yêu thu nhỏ hiện ra (đĩa xoáy phát sáng, trái tim kết từ ánh sao, ảnh kỷ niệm xoay quanh như hành tinh) cùng lời chúc trên giấy thư, có nhạc riêng nếu cấu hình. Hôm sau website trở lại bình thường. Xem mục **Ngày Đặc Biệt** bên dưới.
+19. **Ngày Đặc Biệt (Special Days — "Dấu Niêm Phong Của Hôm Nay")**: Đúng vào sinh nhật, ngày kỷ niệm, Valentine, 08/03, 1/6, 20/10…, ngay sau màn loading (trước "Có những lời…") hiện một con dấu sáp khắc ngày hôm đó giữa mưa tim. Chạm vào con dấu → vài lời thì thầm → một thiên hà tình yêu thu nhỏ hiện ra (đĩa xoáy phát sáng, trái tim kết từ ánh sao, ảnh kỷ niệm xoay quanh như hành tinh) cùng lời chúc trên giấy thư, có nhạc riêng nếu cấu hình. Hôm sau website trở lại bình thường. Xem mục **Ngày Đặc Biệt** bên dưới.
 20. **Chia Sẻ & Mã QR**: Nút **Chia sẻ** ở khối kết "Cảm Ơn Em Vì Tất Cả" mở một cửa sổ có thẻ QR dẫn thẳng tới website, kèm các nút **Sao chép liên kết**, **Tải thẻ QR** và (trên trình duyệt hỗ trợ, thường là điện thoại) **Gửi qua ứng dụng** để mở bảng chia sẻ của máy (Zalo, Messenger, tin nhắn…). Xem mục **Mã QR Chia Sẻ** bên dưới.
+21. **Tải Nhanh & Chạy Ổn Định**: Ảnh mã hóa chia làm hai file: `js/encrypted-data.js` (album, gallery, lá thư, khoảng 9 MB) luôn tải, còn `js/encrypted-special-data.js` (ảnh Ngày đặc biệt, khoảng 12 MB) chỉ tải vào đúng ngày đặc biệt, nên ngày thường trang nhẹ hơn khoảng 57%. Ảnh nào cần mới được giải mã, không giải mã hết ngay khi vào trang. Thanh loading chạy theo tiến độ tải thật (tối đa 20 giây). Hiệu ứng nền (thiên hà, tim, hoa, sao băng) dùng chung một vòng lặp tính theo thời gian thực, nên màn hình 120 Hz không chạy nhanh gấp đôi, tạm nghỉ khi mở lá thư, và chỉ vẽ một khung tĩnh khi người dùng bật "giảm chuyển động". Một module lỗi (máy không có WebGL, trình duyệt cũ…) chỉ bị bỏ qua và báo ở Console, không làm kẹt trang.
 
 ---
 
@@ -33,7 +34,7 @@
 milove/
 │
 ├── index.html              # HTML5 Semantic Layout & CDN References
-├── encrypt-tool.html       # Công cụ mã hóa hình ảnh offline
+├── encrypt-tool.html       # Công cụ mã hóa ảnh & nội dung lá thư offline
 ├── favicon.ico             # Favicon SVG Icon
 ├── README.md               # Hướng dẫn chi tiết project
 │
@@ -54,11 +55,13 @@ milove/
 ├── js/
 │   ├── app.js                    # Khởi tạo & Điều phối toàn bộ ứng dụng
 │   ├── audio.js                  # Engine âm thanh (HTML5 + Web Audio Synth paper/click)
-│   ├── crypto.js                 # Thuật toán mã hóa & giải mã AES-256-GCM (Web Crypto API)
-│   ├── image-data.js             # Lưu trữ dữ liệu hình ảnh mã hóa
-│   ├── image-decoder.js          # Khởi tạo khóa & giải mã chuỗi Base64 thành Blob ObjectURL
-│   ├── image-provider.js         # Quản lý bộ nhớ tạm (Cache-first) & Preload ảnh background
+│   ├── crypto.js                 # Module mã hóa/giải mã dùng chung cho ảnh (`*Bytes`) và chữ (`*Text`)
+│   ├── encrypted-data.js         # Dữ liệu đã mã hóa luôn tải: ảnh album/gallery (`ImageData`) và nội dung & chữ ký lá thư (`LetterData`)
+│   ├── encrypted-special-data.js # Ảnh Ngày đặc biệt (thêm vào `ImageData`), chỉ tải vào đúng ngày đặc biệt
+│   ├── image-decoder.js          # Giải mã ảnh (qua `AppCrypto`) thành Blob ObjectURL để hiển thị
+│   ├── image-provider.js         # Giải mã đúng ảnh được hỏi (cache-first), tải file ảnh Ngày đặc biệt khi cần, preload nền
 │   ├── cursor.js                 # Con trỏ glowing & Hiệu ứng sóng nước
+│   ├── ambient-loop.js           # Một vòng lặp theo thời gian thực cho hiệu ứng nền; tạm nghỉ khi mở thư
 │   ├── galaxy.js                 # Engine Three.js 3D Starfield & Nebula
 │   ├── hearts.js                 # Canvas particle trái tim lơ lửng
 │   ├── sakura.js                 # Canvas cánh hoa anh đào rơi 3D
@@ -67,7 +70,7 @@ milove/
 │   ├── loading.js                # Preloader % mượt mà
 │   ├── intro.js                  # Chuỗi GSAP reveal lời dẫn Intro
 │   ├── typing.js                 # Typewriter gõ chữ lá thư & Auto-scroll thông minh
-│   ├── memory-book-storage.js    # Quản lý localStorage trạng thái Album
+│   ├── memory-book-storage.js    # Quản lý sessionStorage trạng thái Album (đóng tab là về trang bìa)
 │   ├── memory-book-state.js      # Lưu trữ runtime state của Album
 │   ├── memory-book-renderer.js   # Render DOM 3D Album, Bìa Trước/Sau & Preloading
 │   ├── memory-book-navigation.js # Phím mũi tên, phím Esc, cử chỉ vuốt touch & button
@@ -85,23 +88,28 @@ milove/
 │   ├── share.js                  # Cửa sổ Chia sẻ: thẻ QR, sao chép link, Web Share API
 │   ├── countdown.js              # Bộ đếm ngày yêu nhau realtime
 │   ├── gallery.js                # Hiệu ứng card tilt 3D & Lightbox modal
-│   ├── timeline.js               # ScrollTrigger xuất hiện mốc kỷ niệm
+│   ├── timeline.js               # IntersectionObserver hiện mốc kỷ niệm khi cuộn tới
 │   ├── quotes.js                 # Bộ tạo trích dẫn lãng mạn
-│   └── scroll.js                 # Cuộn mượt Lenis & GSAP ScrollTrigger
+│   └── scroll.js                 # Cuộn mượt Lenis (chạy bằng gsap.ticker, một đồng hồ duy nhất) & ScrollTrigger
 │
 ├── assets/
-│   ├── images/             # Ảnh kỷ niệm JPG, PNG nghệ thuật
-│   ├── icons/              # Icon hệ thống
-│   ├── fonts/              # Font chữ dự phòng
-│   ├── qr-milove.png       # Thẻ QR chia sẻ (hiện trong cửa sổ Chia sẻ, dùng để gửi/in)
-│   └── qr-milove.svg       # QR trơn dạng vector (bản dự phòng, trang không còn dùng)
+│   ├── images/             # Chỉ còn ảnh xem trước khi chia sẻ link (anh-va-em-chibi.png); ảnh kỷ niệm nằm mã hóa trong js/encrypted-*.js
+│   ├── qr-milove-heart.png # Thẻ QR hình trái tim: hiện trong cửa sổ Chia sẻ và là file được tải về (gửi/in)
+│   └── qr-milove.png       # Thẻ QR chấm tròn (bản dự phòng, tạo bằng tools/make-qr-card.js)
 │
 ├── tools/
 │   └── make-qr-card.js     # Script tạo lại thẻ QR (chạy trên máy, không thuộc website)
 │
 └── sounds/
-    ├── background.mp3      # Nhạc nền lãng mạn chính
-    └── don-gian-anh-yeu-em.mp3 # Nhạc nền dự phòng
+    ├── don-gian-anh-yeu-em.mp3  # Nhạc nền chính
+    ├── happy-birthday.mp3       # Sinh nhật em & anh
+    ├── vay-cuoi.mp3             # Kỷ niệm ngày yêu
+    ├── a_thousand_years.mp3     # Mốc ngày yêu
+    ├── perfect.mp3              # Valentine
+    ├── just_the_way_you_are.mp3 # 8/3 & 20/10
+    ├── happy_new_year.mp3       # Tết Dương lịch & Tết Nguyên Đán
+    ├── chiec_den_ong_sao.mp3    # Rằm Trung thu
+    └── cho_toi_xin_mot_ve_di_tuoi_tho.mp3 # Quốc tế Thiếu nhi
 ```
 
 ---
@@ -132,7 +140,7 @@ Website **không cần NodeJS**, **không cần npm**, **không cần build**.
 
 ## 📲 Mã QR Chia Sẻ
 
-Ở cuối trang, khối "Cảm Ơn Em Vì Tất Cả" có nút **Chia sẻ**. Bấm vào sẽ mở cửa sổ hiện thẻ QR `assets/qr-milove.png` cùng các nút sao chép liên kết, tải thẻ QR và (trên trình duyệt hỗ trợ) gửi qua ứng dụng. Người dùng điện thoại gửi link trực tiếp, người ngồi máy tính để người khác quét mã bằng điện thoại.
+Ở cuối trang, khối "Cảm Ơn Em Vì Tất Cả" có nút **Chia sẻ**. Bấm vào sẽ mở cửa sổ hiện thẻ QR hình trái tim `assets/qr-milove-heart.png` cùng các nút sao chép liên kết, tải thẻ QR và (trên trình duyệt hỗ trợ) gửi qua ứng dụng. Người dùng điện thoại gửi link trực tiếp, người ngồi máy tính để người khác quét mã bằng điện thoại.
 
 QR là mã **tĩnh**: link được mã hóa thẳng vào hình ảnh nên **không bao giờ hết hạn**. QR chỉ ngừng hoạt động khi chính đường link bị hỏng.
 
@@ -170,11 +178,11 @@ npx qrcode -t png -o assets/qr-milove.png -w 1024 -e H --margin 2 -d 2a1740 -l f
 | `-d 2a1740` / `-l ffffff` | Màu ô QR (đậm) / màu nền (sáng), dạng hex. Ô QR phải **đậm hơn nền nhiều**, nếu không điện thoại khó quét. |
 | `"https://…"` | Nội dung được mã hóa, thay bằng link của bạn. |
 
-> ℹ️ Trang không còn dùng `assets/qr-milove.svg` (đây là QR trơn kiểu cũ), giữ lại làm bản dự phòng.
+> ℹ️ Lệnh này chỉ tạo QR trơn để dùng riêng (đã bỏ file `assets/qr-milove.svg` khỏi dự án). Trang dùng thẻ hình trái tim `assets/qr-milove-heart.png`; thẻ chấm tròn `assets/qr-milove.png` của Cách 2 giữ làm bản dự phòng.
 
-### Cách 2: Tạo thẻ QR đẹp (bản đang dùng trên website)
+### Cách 2: Tạo thẻ QR chấm tròn bằng script (bản dự phòng)
 
-`assets/qr-milove.png` là một tấm thẻ 1080 × 1316px gồm: tiêu đề "Bức Tâm Thư" chữ thư pháp, QR chấm tròn chuyển màu hồng–tím với ba góc bo tròn, ảnh khuôn mặt cắt tròn ở giữa, dòng "Quét mã để mở thư" và địa chỉ trang. Thẻ được vẽ bằng script `tools/make-qr-card.js` (script chỉ chạy trên máy bạn, **không phải một phần của website**, nên website vẫn không cần npm hay build).
+`assets/qr-milove.png` (thẻ chấm tròn, hiện là bản dự phòng; thẻ đang dùng trên trang là `assets/qr-milove-heart.png`, làm riêng, không do script này tạo) là một tấm thẻ 1080 × 1316px gồm: tiêu đề "Bức Tâm Thư" chữ thư pháp, QR chấm tròn chuyển màu hồng–tím với ba góc bo tròn, ảnh khuôn mặt cắt tròn ở giữa, dòng "Quét mã để mở thư" và địa chỉ trang. Thẻ được vẽ bằng script `tools/make-qr-card.js` (script chỉ chạy trên máy bạn, **không phải một phần của website**, nên website vẫn không cần npm hay build).
 
 **Bước 1 – Cài thư viện ra ngoài dự án** (một lần duy nhất). Cài vào thư mục tạm để dự án không bị thêm `node_modules` hay `package.json`:
 
@@ -233,28 +241,25 @@ Màu sắc (nền, mảng màu, gradient ô QR, vòng viền ảnh) nằm trong 
 ### Lưu ý quan trọng
 
 - **Tránh dịch vụ QR "động" (dynamic)** của các trang tạo QR miễn phí: bản dùng thử thường hết hạn và bắt trả phí, khi đó QR trỏ qua link trung gian của họ và sẽ ngừng hoạt động. Cách trong mục này tạo QR tĩnh ngay trên máy bạn nên không bị vấn đề đó.
-- Cửa sổ Chia sẻ lấy ảnh từ `assets/qr-milove.png`. Nếu đổi tên file, nhớ sửa lại hai chỗ trong `index.html` (ảnh hiển thị `.share-card-img` và nút **Tải thẻ QR**).
+- Cửa sổ Chia sẻ lấy ảnh từ `assets/qr-milove-heart.png`. Nếu đổi tên file, nhớ sửa lại hai chỗ trong `index.html` (ảnh hiển thị `.share-card-img` và nút **Tải thẻ QR**).
+- Cả hai thẻ đều mã hóa sẵn link trong hình: nếu đổi link (`SHARE_URL`), phải làm lại **cả hai** thẻ.
 
 ---
 
 ## ✏️ Hướng Dẫn Tùy Chỉnh Nội Dung
 
 ### 1. Thay Đổi Nội Dung Lá Thư & Chữ Ký
-Mở file `js/typing.js`, thay đổi nội dung biến `LETTER_CONTENT` và `SIGNATURE`:
-```javascript
-const LETTER_CONTENT = `Gửi em, người con gái đã làm thay đổi cả thế giới của anh...
-
-[Nhập nội dung tâm sự của bạn ở đây]`;
-
-const SIGNATURE = "Mãi yêu em ❤️";
-```
+Nội dung thư **không** nằm trong code dạng văn bản thường mà được mã hóa (biến `LetterData` ở cuối `js/encrypted-data.js`, gồm `body` và `signature` mã hóa riêng) và tự giải mã khi mở thư:
+1. Mở `encrypt-tool.html` bằng trình duyệt (offline, không cần server), chọn tab **Lá thư**.
+2. Dán nội dung thư và chữ ký, bấm **Mã hóa** (có nút **Giải mã thử** để kiểm tra).
+3. Bấm **Copy** rồi thay khối `const LetterData = {…};` ở cuối `js/encrypted-data.js` bằng kết quả.
 
 ### 2. Thay Đổi Nội Dung & Ảnh Trong Album Kỷ Niệm
 Mở file `js/memory-book-renderer.js`, cập nhật danh sách `PAGES_DATA`:
 ```javascript
 const PAGES_DATA = [
   { type: 'cover-front', title: 'MiLove', subtitle: 'Album Kỷ Niệm Tình Yêu' },
-  { type: 'memory', title: 'Khoảnh Khắc Đầu Tiên', date: '17 Tháng 03', image: './assets/images/khoanh-khac-dau-tien.png', description: '...' },
+  { type: 'memory', title: 'Khoảnh Khắc Đầu Tiên', date: '17 Tháng 03', image: 'khoanh-khac-dau-tien', description: '...' },   // image = key trong ImageData (js/encrypted-data.js), không phải đường dẫn
   // Thêm các trang kỷ niệm tùy thích...
   { type: 'cover-back', title: 'Trái Tim Anh Luôn Có Em', subtitle: 'Cảm Ơn Em Vì Tất Cả' }
 ];
@@ -263,25 +268,24 @@ const PAGES_DATA = [
 ### 3. Thay Đổi Ngày Bắt Đầu Yêu Nhau (Đồng Hồ Đếm)
 Mở file `js/countdown.js`, thay đổi biến `START_DATE`:
 ```javascript
-const START_DATE = new Date('2023-02-14T00:00:00');
+const START_DATE = new Date('2026-05-08T00:00:00');   // cũng là ngày kỷ niệm và gốc đếm mốc ngày yêu của Ngày đặc biệt
 ```
 
 ### 4. Mã Hóa & Cập Nhật Hình Ảnh Mới (`encrypt-tool.html`)
-Website hỗ trợ công cụ mã hóa ảnh **AES-256-GCM** hoàn toàn offline:
-1. Mở file `encrypt-tool.html` bằng trình duyệt web.
-2. Cấu hình / Nhập **Khóa Mã Hóa (AES Secret Key)**.
-3. Chọn/kéo thả các file ảnh kỷ niệm mới cần cập nhật.
-4. Xuất file `image-data.js` và chép đè vào thư mục `js/image-data.js` của dự án.
+Công cụ mã hóa ảnh chạy hoàn toàn offline:
+1. Mở file `encrypt-tool.html` bằng trình duyệt web, chọn **Ảnh** ở ô **Loại dữ liệu**.
+2. Chọn/kéo thả từng ảnh kỷ niệm mới. Ô **Key** tự rút gọn thành chữ thường, số và dấu gạch ngang (key là tên bạn gọi ảnh trong album, gallery và Ngày đặc biệt). Bấm **Encrypt** rồi **Thêm vào JSON**.
+3. Bấm **Download JSON** và chép các cặp key/chuỗi vào `ImageData`: trong `js/encrypted-data.js` nếu là ảnh album hoặc gallery, hoặc trong khối `Object.assign(ImageData, {…})` của `js/encrypted-special-data.js` nếu là ảnh chỉ dùng cho Ngày đặc biệt (file này chỉ được tải vào đúng ngày đặc biệt).
 
 ---
 
 ## 🎁 Ngày Đặc Biệt (Special Days)
 
-Mỗi ngày đặc biệt là một "chương" chỉ mở **đúng ngày đó theo giờ trên máy người xem** (không lưu trạng thái, không cần server). Thứ tự: Loading → **Ngày đặc biệt** → "Có những lời…" → phong thư. Ngày thường website chạy y như cũ. Nếu nhiều sự kiện trùng ngày, sự kiện có `priority` cao nhất được chọn (sinh nhật 100 > mốc ngày yêu 90 > kỷ niệm 80 > tuỳ chỉnh 60 > ngày lễ 40).
+Mỗi ngày đặc biệt là một "chương" chỉ mở **đúng ngày đó theo giờ trên máy người xem** (không lưu trạng thái, không cần server). Thứ tự: Loading (chờ ảnh của ngày đó tải xong) → **Ngày đặc biệt** → "Có những lời…" → phong thư. Ngày thường website chạy y như cũ. Nếu nhiều sự kiện trùng ngày, sự kiện có `priority` cao nhất được chọn (sinh nhật 100 > mốc ngày yêu 90 > kỷ niệm 80 > tuỳ chỉnh 60 > ngày lễ 40).
 
 Vì trình duyệt chỉ cho phát nhạc sau khi người xem tương tác, trải nghiệm mở đầu bằng con dấu "Chạm vào con dấu để mở món quà" — cú chạm đó vừa là khoảnh khắc mở quà vừa bật nhạc.
 
-Mọi thứ chỉnh ở **một file**: `js/special-events-data.js`. Nếu lỡ gõ sai cú pháp trong file này, website vẫn chạy bình thường (chỉ bỏ qua ngày đặc biệt) và Console sẽ báo lỗi.
+Mọi thứ chỉnh ở **một file**: `js/special-events-data.js`. Nếu lỡ gõ sai cú pháp trong file này, hoặc trình duyệt quá cũ để dựng được màn hình này, website vẫn chạy bình thường (chỉ bỏ qua ngày đặc biệt, vào thẳng "Có những lời…") và Console sẽ báo lỗi.
 
 **Sinh nhật** — điền tháng/ngày ở đầu file (để `null` là tắt):
 ```javascript
@@ -289,9 +293,9 @@ const BIRTHDAY_EM  = { month: 1, day: 2 };
 const BIRTHDAY_ANH = { month: 1, day: 2 };
 ```
 
-**Ngày kỷ niệm** tự lấy từ `START_DATE` trong `js/countdown.js` (bộ đếm ngày yêu), không cần nhập lại. Trong chữ có thể dùng `{years}` → số năm bên nhau.
+**Ngày kỷ niệm** tự lấy từ `START_DATE` trong `js/countdown.js` (bộ đếm ngày yêu), không cần nhập lại. Trong chữ có thể dùng `{years}` (1) hoặc `{years2}` (01) → số năm bên nhau.
 
-**Mốc ngày yêu** (`love-days`) — hiện vào đúng ngày thứ 100, 200, 300, 365, 500, 1000, 1500, 2000, 2500, 3000, 3650, 4000, 5000, 7000, 10000 kể từ `START_DATE`, đếm y như bộ đếm trên trang (ngày yêu nhau là ngày 0). Sửa danh sách `milestones` trong `LOVE_DAYS` để thêm/bớt mốc; trong chữ dùng `{days}` (tự định dạng 1.000, 2.000…). Mốc 365 trùng đúng kỷ niệm 1 năm nên hôm đó hiện trải nghiệm mốc ngày (ưu tiên 90 > kỷ niệm 80).
+**Mốc ngày yêu** (`love-days`) — hiện vào đúng ngày thứ 200, 500, 1000, 1500, 2000, 2500, 3000, 3650, 4000, 5000, 6000, 10000 kể từ `START_DATE`, đếm y như bộ đếm trên trang (ngày yêu nhau là ngày 0). Sửa danh sách `milestones` trong `LOVE_DAYS` để thêm/bớt mốc; trong chữ dùng `{days}` (tự định dạng 1.000, 2.000…). Ngày tròn năm đã có trải nghiệm riêng (kỷ niệm), nên 365 không nằm trong danh sách; nếu bạn thêm một mốc trùng ngày kỷ niệm thì hôm đó hiện mốc ngày (ưu tiên 90 > kỷ niệm 80).
 
 **Ngày âm lịch** — `date: { lunar: { month: 8, day: 15 } }` (lặp lại mỗi năm). Đang dùng cho Tết Nguyên Đán (mùng 1 tháng Giêng) và Rằm Trung thu; thêm ngày âm khác chỉ cần đổi tháng/ngày. Đổi âm ↔ dương theo lịch Việt Nam (UTC+7) trong `js/lunar-calendar.js`; tháng nhuận không tính. Thử nhanh bằng `?specialDate=2027-02-06` hoặc `?specialEvent=mid-autumn`.
 
@@ -322,13 +326,15 @@ const BIRTHDAY_ANH = { month: 1, day: 2 };
 
 **Ảnh nổi bật của ngày (`feature`)** — mỗi sự kiện đặt được một ảnh riêng để làm nổi ngày đó (sinh nhật em → "Anh & em", kỷ niệm → "Ngày tỏ tình", …). Ảnh được cắt theo hình trái tim và là phần thân của tim: ngả sang tông hồng của tim, tối dần ra mép, xoay và đập đúng cùng tim (nhìn nghiêng thì mỏng lại, nhìn từ phía sau vẫn đúng chiều); lớp hạt sáng bao quanh, và các hạt sáng nằm phía trước ảnh được làm mờ thành một lớp mỏng (chỉ còn vài hạt lấp lánh) để thấy trọn ảnh mà ánh sáng của tim vẫn chạy trên đó, nên ảnh và tim là một. Ảnh hiện dần ngay sau khi 8 ảnh trên vòng đáp xuống, không có chú thích, và tự bị loại khỏi vòng để không lặp. Đổi ảnh: sửa `feature: PHOTOS.<tên>` hoặc `{ src, caption }` trong `js/special-events-data.js`; `feature: null` (hoặc bỏ dòng) thì không có. Chỉnh độ lớn của ảnh trong tim: `HERO.fill` trong `js/special-events-heart.js`.
 
-**Thời lượng** — theo độ dài nhạc: sinh nhật giữ nguyên bản 44 giây (`duration: 41000`), nhạc dài hơn ~50 giây thì chỉ phát tối đa ~55 giây rồi tự chuyển, không cần cắt file (`vay-cuoi.mp3` dài 1 phút 29, `duration: 55000`); mặc định ngày không có nhạc riêng 45 giây. Tự chuyển sang phần tiếp ngay trước khi hết nhạc, nhạc nhỏ dần rồi nhạc nền quay lại. Chạm/cuộn vào thiệp thì không tự đóng nữa. Lúc nào cũng có thể bấm **Bỏ qua** hoặc **Tâm Thư →**.
+**Thời lượng** — theo độ dài nhạc: sinh nhật giữ nguyên bản 44 giây (`duration: 41000`), nhạc dài hơn ~50 giây thì chỉ phát tối đa ~55 giây rồi tự chuyển, không cần cắt file (`vay-cuoi.mp3` dài 1 phút 29, `duration: 55000`); mặc định ngày không có nhạc riêng 45 giây. Tự chuyển sang phần tiếp ngay trước khi hết nhạc, nhạc nhỏ dần rồi nhạc nền quay lại. Nếu người xem có chạm, kéo trái tim hoặc cuộn thiệp trong lúc đó thì thiệp vẫn chạy đủ thời lượng như trên, rồi ở lại thêm **10 giây** (hằng `GRACE_CLOSE_MS` trong `js/special-events-controller.js`; chạm tiếp trong 10 giây đó thì tính lại từ lần chạm cuối) mới tự đóng. Ngày để `duration: null` thì vẫn chờ người xem bấm. Lúc nào cũng có thể bấm **Bỏ qua** hoặc **Tâm Thư →**.
 
-**Ảnh**: Ảnh dùng chung khai báo một lần trong `PHOTOS` (key trong `js/image-data.js` + chú thích viết tay dưới ảnh). Ảnh mới có thể là file thường, nên là WebP ~1200px: `{ src: './assets/special-events/valentine/photo.webp', caption: 'Hà Nội' }`. Ảnh lỗi/thiếu chỉ để lại khung trống, không làm hỏng trang.
+**Ảnh của từng ngày** — nằm trong `js/special-events-data.js`: `IMAGES` khai báo mỗi ảnh một lần (tên mô tả nội dung ảnh, `src` là key trong `ImageData` (`js/encrypted-special-data.js`, hoặc `js/encrypted-data.js` nếu là ảnh album), `focus: [x, y]` là tâm chủ thể trong ảnh từ 0 đến 1), còn `DAY_PHOTOS` là bộ ảnh của từng ngày (`feature` = ảnh trong trái tim, `ring` = 8 ảnh xoay quanh theo thứ tự). Tết Dương lịch và Tết Nguyên Đán dùng chung một bộ, 8/3 và 20/10 cũng dùng chung một bộ. `focus` giúp khung cắt tròn/trái tim luôn ôm đúng mặt và người thay vì cắt giữa ảnh. Trong `js/encrypted-special-data.js`, mỗi ảnh có ghi chú mô tả và "Dùng cho:" những ngày nào, nhóm theo ngày.
+
+**Ảnh dùng chung (cũ)**: `PHOTOS` (key trong `ImageData` + chú thích viết tay dưới ảnh). Ảnh mới có thể là file thường, nên là WebP ~1200px: `{ src: './assets/special-events/valentine/photo.webp', caption: 'Hà Nội' }`. Ảnh lỗi/thiếu chỉ để lại khung trống, không làm hỏng trang.
 
 **Nhạc riêng** — đặt file vào `assets/special-events/<id>/music.mp3` rồi khai báo `music: { src: './assets/special-events/<id>/music.mp3', volume: 0.6 }`. Nhạc nền nhỏ dần → nhạc riêng → khi kết thúc nhạc nền quay lại đúng đoạn đang phát. `music: null` thì giữ nhạc nền. File lỗi/thiếu → tự quay về nhạc nền, không lỗi.
 
-> **Sinh nhật & kỷ niệm đã có nhạc riêng**: `./sounds/happy-birthday.mp3` và `./sounds/vay-cuoi.mp3` (đặt cạnh `background.mp3` có sẵn). Nếu đổi tên/vị trí file thì nhớ sửa lại đường dẫn `music.src` tương ứng trong `js/special-events-data.js`.
+> **Sinh nhật & kỷ niệm đã có nhạc riêng**: `./sounds/happy-birthday.mp3` và `./sounds/vay-cuoi.mp3` (đặt cạnh nhạc nền `don-gian-anh-yeu-em.mp3`). Nếu đổi tên/vị trí file thì nhớ sửa lại đường dẫn `music.src` tương ứng trong `js/special-events-data.js`.
 
 > Luôn dùng đường dẫn tương đối bắt đầu bằng `./` để chạy đúng cả local lẫn `https://ngimnee.github.io/milove/`.
 
@@ -346,7 +352,7 @@ Ví dụ: `index.html?specialEvent=birthday-em`, hoặc sau khi deploy: `https:/
 
 - **HTML5 & CSS3**: Glassmorphism, 3D Transforms (`perspective`, `transform-origin`), CSS Gradients, Flexbox/Grid, Keyframe Animations.
 - **JavaScript (ES6+)**: Modular IIFE Pattern, Web Audio API Synthesizer (phát âm thanh lật trang & gõ phím).
-- **Web Crypto API (AES-256-GCM)**: Hệ thống mã hóa & giải mã hình ảnh client-side an toàn, hiệu năng cao.
+- **Mã hóa phía trình duyệt**: Ảnh và nội dung thư được mã hóa sẵn, website tự tải từng ảnh khi cần rồi giải mã khi hiển thị.
 - **Three.js (r128)**: 3D Particle Starfield & Nebula Shader Scene.
 - **GSAP 3**: Smooth Open/Close Timelines & Dynamic Dock Reveal.
 - **Canvas Confetti**: Celebration Heart Burst Launcher.

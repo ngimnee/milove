@@ -12,8 +12,10 @@ const GalleryController = (function() {
   /**
    * Hydrates all gallery <img> elements by resolving their data-image-key
    * through ImageProvider. Non-blocking — errors are logged silently.
+   * Called by app.js once the photos the first screen needs are in, so these
+   * downloads never slow the loading screen down.
    */
-  async function _hydrateGalleryImages() {
+  async function hydrateImages() {
     const galleryImgs = document.querySelectorAll('.gallery-img[data-image-key]');
 
     const tasks = Array.from(galleryImgs).map(async (img) => {
@@ -41,9 +43,6 @@ const GalleryController = (function() {
     if (lightboxModal && lightboxModal.parentNode !== document.body) {
       document.body.appendChild(lightboxModal);
     }
-
-    // Hydrate gallery images via ImageProvider (async, non-blocking)
-    _hydrateGalleryImages();
 
     const cards = document.querySelectorAll('.gallery-card');
 
@@ -111,6 +110,7 @@ const GalleryController = (function() {
   }
 
   return {
-    init
+    init,
+    hydrateImages
   };
 })();

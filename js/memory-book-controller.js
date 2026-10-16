@@ -7,6 +7,7 @@ const MemoryBookController = (function() {
   'use strict';
 
   let autoSuggestTimer = null;
+  let isClosing = false;
 
   function init() {
     // 1. Initialize Floating Utilities Dock Entry
@@ -66,9 +67,12 @@ const MemoryBookController = (function() {
   }
 
   function closeAlbum() {
-    if (!MemoryBookState.isOpen() || MemoryBookState.isAnimating()) return;
+    if (!MemoryBookState.isOpen() || MemoryBookState.isAnimating() || isClosing) return;
+    isClosing = true;
 
+    // Closing may start while the opening is still playing; the animation module hands over cleanly
     MemoryBookAnimation.playCloseSequence(() => {
+      isClosing = false;
       MemoryBookState.setOpen(false);
     });
   }
@@ -90,7 +94,6 @@ const MemoryBookController = (function() {
     MemoryBookState.setAnimating(true);
     MemoryBookState.setCurrentPage(newIndex);
     MemoryBookStorage.saveLastPage(newIndex);
-
     AudioEngine.playSound('page');
 
     const DURATION_NEXT = 550; // ms — perfect middle-ground pace
@@ -98,7 +101,19 @@ const MemoryBookController = (function() {
     const EASE_FOLD   = 'cubic-bezier(0.455, 0.03, 0.515, 0.955)'; // Gentle easeInOutSine fold
     const EASE_UNFOLD = 'cubic-bezier(0.22, 0.61, 0.36, 1)';      // Smooth initial sweep for unfolding back
 
+    // The label turns with the page: it fades out over the first half of the flip, swaps at the
+    // midpoint (the page is edge-on and the new one takes over) and fades back in over the second half
+    const indicator = document.getElementById('album-page-indicator');
+    if (indicator) indicator.classList.add('is-turning');
+    const labelTimer = setTimeout(() => {
+      MemoryBookRenderer.updatePageIndicator(newIndex, total);
+      if (indicator) indicator.classList.remove('is-turning');
+    }, DURATION_NEXT / 2);
+
     function finalize() {
+      clearTimeout(labelTimer);
+      MemoryBookRenderer.updatePageIndicator(newIndex, total);
+      if (indicator) indicator.classList.remove('is-turning');
       [oldNode, newNode].forEach(n => {
         n.style.cssText = '';
         n.classList.remove('is-flipping');
