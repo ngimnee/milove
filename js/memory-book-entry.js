@@ -93,16 +93,9 @@ const MemoryBookEntry = (function() {
     if (openCallback) openCallback();
   }
 
-  function showInitialTooltip() {
-    if (!tooltipElement) return;
-    const txt = tooltipElement.querySelector('#tooltip-text');
-    if (txt) txt.textContent = '✨ Khám phá Album Kỷ Niệm';
-    tooltipElement.classList.add('visible', 'first-time');
-  }
-
   function hideTooltip() {
     if (!tooltipElement) return;
-    tooltipElement.classList.remove('visible', 'first-time', 'auto-suggest');
+    tooltipElement.classList.remove('visible', 'auto-suggest');
   }
 
   function getDockElement() {
@@ -115,7 +108,6 @@ const MemoryBookEntry = (function() {
 
   return {
     init,
-    showInitialTooltip,
     hideTooltip,
     getDockElement,
     getTooltipElement

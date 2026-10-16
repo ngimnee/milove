@@ -140,7 +140,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const finaleBtn = document.getElementById('finale-btn');
   if (finaleBtn) {
     finaleBtn.addEventListener('click', () => {
-      AudioEngine.playSound('ending');
       FireworksEngine.launchSequence();
       MeteorEngine.triggerManual();
     });

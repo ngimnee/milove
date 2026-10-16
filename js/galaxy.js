@@ -59,7 +59,6 @@ const GalaxyEngine = (function() {
     const starGeometry = new THREE.BufferGeometry();
     const starPositions = new Float32Array(starCount * 3);
     const starColors = new Float32Array(starCount * 3);
-    const starSizes = new Float32Array(starCount);
 
     const palette = [
       new THREE.Color(0xff69b4), // Pink
@@ -79,13 +78,10 @@ const GalaxyEngine = (function() {
       starColors[i3] = color.r;
       starColors[i3 + 1] = color.g;
       starColors[i3 + 2] = color.b;
-
-      starSizes[i] = Math.random() * 3 + 1;
     }
 
     starGeometry.setAttribute('position', new THREE.BufferAttribute(starPositions, 3));
     starGeometry.setAttribute('color', new THREE.BufferAttribute(starColors, 3));
-    starGeometry.setAttribute('size', new THREE.BufferAttribute(starSizes, 1));
 
     // Particle Texture Generator
     const starMaterial = new THREE.PointsMaterial({

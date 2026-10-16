@@ -11,8 +11,7 @@ const MemoryBookState = (function() {
     isAnimating: false,
     currentPage: 0,
     totalPages: 8,
-    isRendered: false,
-    autoSuggestTriggered: false
+    isRendered: false
   };
 
   function isOpen() {
@@ -41,10 +40,6 @@ const MemoryBookState = (function() {
     }
   }
 
-  function getTotalPages() {
-    return state.totalPages;
-  }
-
   function setTotalPages(val) {
     if (typeof val === 'number' && val > 0) {
       state.totalPages = val;
@@ -59,14 +54,6 @@ const MemoryBookState = (function() {
     state.isRendered = Boolean(val);
   }
 
-  function isAutoSuggestTriggered() {
-    return state.autoSuggestTriggered;
-  }
-
-  function setAutoSuggestTriggered(val) {
-    state.autoSuggestTriggered = Boolean(val);
-  }
-
   return {
     isOpen,
     setOpen,
@@ -74,11 +61,8 @@ const MemoryBookState = (function() {
     setAnimating,
     getCurrentPage,
     setCurrentPage,
-    getTotalPages,
     setTotalPages,
     isRendered,
-    setRendered,
-    isAutoSuggestTriggered,
-    setAutoSuggestTriggered
+    setRendered
   };
 })();

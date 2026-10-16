@@ -23,7 +23,6 @@ const MemoryBookController = (function() {
 
   function checkAutoSuggest() {
     if (!MemoryBookStorage.hasOpenedBefore() && !MemoryBookState.isOpen()) {
-      MemoryBookState.setAutoSuggestTriggered(true);
       MemoryBookAnimation.triggerAutoSuggestEffect(
         MemoryBookEntry.getDockElement(),
         MemoryBookEntry.getTooltipElement()

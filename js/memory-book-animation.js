@@ -192,60 +192,9 @@ const MemoryBookAnimation = (function() {
     }
   }
 
-  function playPageFlip(oldNode, newNode, isNext, onComplete) {
-    const gsap = getGSAP();
-    if (!gsap || !oldNode || !newNode) {
-      if (onComplete) onComplete();
-      return;
-    }
-
-    const tl = gsap.timeline({
-      onComplete: () => {
-        if (onComplete) onComplete();
-      }
-    });
-
-    if (isNext) {
-      // Turn forward: old page flips left with smooth paper arc
-      gsap.set(newNode, { visibility: 'visible', opacity: 1, rotateY: 90, zIndex: 10 });
-      gsap.set(oldNode, { zIndex: 20 });
-
-      tl.to(oldNode, {
-        rotateY: -110,
-        opacity: 0,
-        duration: 0.65,
-        ease: 'power2.inOut'
-      }, 0);
-
-      tl.to(newNode, {
-        rotateY: 0,
-        duration: 0.65,
-        ease: 'power2.inOut'
-      }, 0.08);
-    } else {
-      // Turn backward: mirror of forward — old page flips right (high z), new page sweeps in from left
-      gsap.set(oldNode, { rotateY: 0, opacity: 1, zIndex: 20 });
-      gsap.set(newNode, { visibility: 'visible', opacity: 1, rotateY: -90, zIndex: 10 });
-
-      tl.to(oldNode, {
-        rotateY: 110,
-        opacity: 0,
-        duration: 0.65,
-        ease: 'power2.inOut'
-      }, 0);
-
-      tl.to(newNode, {
-        rotateY: 0,
-        duration: 0.65,
-        ease: 'power2.inOut'
-      }, 0.08);
-    }
-  }
-
   return {
     playOpenSequence,
     playCloseSequence,
-    triggerAutoSuggestEffect,
-    playPageFlip
+    triggerAutoSuggestEffect
   };
 })();

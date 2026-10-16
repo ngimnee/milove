@@ -7,7 +7,6 @@
      - Prevent duplicate decryptions via an internal Map cache
      - Download an extra data file (the special-day photos) only when it is needed
      - Background preloading of the photos a screen will want soon
-     - Clean up ObjectURLs to prevent memory leaks
    -------------------------------------------------------------------------- */
 
 const ImageProvider = (function () {
@@ -140,16 +139,5 @@ const ImageProvider = (function () {
     await Promise.all(tasks);
   }
 
-  /**
-   * Revokes all cached ObjectURLs and clears the cache.
-   */
-  function clearCache() {
-    _cache.forEach(objectUrl => {
-      URL.revokeObjectURL(objectUrl);
-    });
-    _cache.clear();
-    _pending.clear();
-  }
-
-  return { has, loadData, get, preload, clearCache };
+  return { has, loadData, get, preload };
 })();

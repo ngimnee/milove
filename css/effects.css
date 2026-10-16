@@ -166,14 +166,6 @@ body.cursor-hover #custom-cursor-follower {
   justify-content: center;
 }
 
-.quote-author {
-  margin-top: 24px;
-  font-family: var(--font-primary);
-  font-size: 1.1rem;
-  color: var(--accent-cyan);
-  letter-spacing: 2px;
-}
-
 .quote-next-btn {
   margin-top: 30px;
 }
@@ -212,56 +204,3 @@ body.cursor-hover #custom-cursor-follower {
   line-height: 1.8;
   margin-bottom: 40px;
 }
-
-/* SCROLL MOUSE INDICATOR */
-.scroll-indicator {
-  position: absolute;
-  bottom: 36px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  z-index: 30;
-  animation: scrollFadeLoop 2.5s ease-in-out infinite;
-  opacity: 0.75;
-}
-
-.scroll-mouse {
-  width: 28px;
-  height: 46px;
-  border: 2px solid rgba(255, 105, 180, 0.7);
-  border-radius: 14px;
-  display: flex;
-  justify-content: center;
-  padding-top: 8px;
-  box-shadow: 0 0 12px rgba(255, 105, 180, 0.4);
-}
-
-.scroll-wheel {
-  width: 4px;
-  height: 10px;
-  background: linear-gradient(to bottom, var(--accent-pink), var(--accent-purple));
-  border-radius: 4px;
-  animation: scrollWheel 1.4s ease-in-out infinite;
-}
-
-.scroll-label {
-  font-size: 0.8rem;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: rgba(255, 180, 210, 0.8);
-}
-
-@keyframes scrollWheel {
-  0%   { transform: translateY(0); opacity: 1; }
-  80%  { transform: translateY(12px); opacity: 0; }
-  100% { transform: translateY(0); opacity: 0; }
-}
-
-@keyframes scrollFadeLoop {
-  0%, 100% { opacity: 0.55; }
-  50%       { opacity: 1; }
-}
-
